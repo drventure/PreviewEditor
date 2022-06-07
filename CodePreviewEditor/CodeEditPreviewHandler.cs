@@ -58,11 +58,6 @@ namespace CodeEditPreviewHandler
         /// </returns>
         protected override PreviewHandlerControl DoPreview()
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-
-            MessageBox.Show("Main Entry");
-
             //  Create the handler control
             var handlerControl = new CodeEditPreviewHandlerControl();
 

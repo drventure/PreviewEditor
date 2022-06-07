@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Highlighting;
+//using ICSharpCode.AvalonEdit;
+//using ICSharpCode.AvalonEdit.Highlighting;
 using SharpShell.SharpPreviewHandler;
+using FastColoredTextBoxNS;
+using Hb.Windows.Forms;
 
 
 namespace CodeEditPreviewHandler
@@ -64,6 +66,8 @@ namespace CodeEditPreviewHandler
         /// Loading label
         /// </summary>
         private Label _loading;
+        private FastColoredTextBox _textbox;
+        private HexBox _hexbox;
 
 
         public CodeEditPreviewHandlerControl()
@@ -74,63 +78,48 @@ namespace CodeEditPreviewHandler
 
         public void DoPreview(string filePath)
         {
-            MessageBox.Show("Before Doing Preview");
             InvokeOnControlThread(() =>
             {
-                MessageBox.Show("Doing Preview");
                 // Starts loading screen
                 InitializeLoadingScreen();
 
                 // Check if the file is too big.
                 long fileSize = new FileInfo(filePath).Length;
 
-                MessageBox.Show($"FileSize {fileSize}");
                 if (fileSize < 2 * 1000 * 1000)
                 {
                     try
                     {
-                        MessageBox.Show($"Invoking");
                         try
                         {
-                            MessageBox.Show($"Loading {filePath}");
-                            string fileContent;
-                            using (StreamReader fileReader = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                            if (FileUtilities.IsTextFile(filePath))
                             {
-                                fileContent = fileReader.ReadToEnd();
-                                fileReader.Close();
+                                string fileContent;
+                                using (StreamReader fileReader = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                                {
+                                    fileContent = fileReader.ReadToEnd();
+                                    fileReader.Close();
+                                }
+                                _textbox = new FastColoredTextBox();
+                                Controls.Add(_textbox);
+                                _textbox.Dock = DockStyle.Fill;
+                                _textbox.Text = fileContent;
+                                _textbox.Language = FastColoredTextBoxNS.Language.CSharp;
+                                _textbox.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.VisibleRange;
+                                _textbox.SyntaxHighlighter.HighlightSyntax(_textbox.Language, _textbox.Range);
                             }
-
-                            //var t = new FastColoredTextBoxNS.FastColoredTextBox();
-                            //Controls.Add(t);
-                            //t.Dock = DockStyle.Fill;
-                            //t.Text = fileContent;
-                            //t.Language = FastColoredTextBoxNS.Language.CSharp;
-                            //t.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.VisibleRange;
-                            //t.SyntaxHighlighter.HighlightSyntax(t.Language, t.Range);
-
-
-                            //var editorHost = new ElementHost();
-                            //var lbl = new System.Windows.Controls.TextBox();
-                            //lbl.Text = fileContent;
-                            //editorHost.Child = lbl;
-                            //var editor = new TextEditor();
-
-                            //editorHost.Child = editor;
-
-                            //editor.Text = fileContent;
-                            //editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(filePath));
-
-                            //this.Controls.Add(editorHost);
-                            //editorHost.BackColor = Color.Blue;
-                            //editorHost.Dock = DockStyle.Fill;
-
-
-                            var editorHost = new ElementHost();
-                            var h = new WpfHexaEditor.HexEditor();
-                            editorHost.Child = h;
-                            Controls.Add(editorHost);
-                            h.FileName = filePath;
-                            editorHost.Dock = DockStyle.Fill;
+                            else
+                            {
+                                //treat as hex
+                                _hexbox = new HexBox();
+                                var b = new Hb.Windows.Forms.DynamicFileByteProvider(filePath);
+                                _hexbox.ByteProvider = b;
+                                _hexbox.LineInfoVisible = true;
+                                _hexbox.ColumnInfoVisible = true;
+                                _hexbox.StringViewVisible = true;
+                                Controls.Add(_hexbox);
+                                _hexbox.Dock = DockStyle.Fill;
+                            }
                         }
                         finally
                         {
@@ -152,12 +141,7 @@ namespace CodeEditPreviewHandler
                 }
                 else
                 {
-                    Controls.Remove(_loading);
-                    Label errorMessage = new Label();
-                    errorMessage.Text = "Max Filesize Exceeded";
-                    errorMessage.Width = 500;
-                    errorMessage.Height = 50;
-                    Controls.Add(errorMessage);
+                    _loading.Text = "Max file size exceeded.";
                 }
             });
         }
@@ -204,19 +188,17 @@ namespace CodeEditPreviewHandler
 
         private void InitializeLoadingScreen()
         {
-            MessageBox.Show("Loading");
             InvokeOnControlThread(() =>
             {
-                MessageBox.Show("Invoked");
                 _loading = new Label();
                 _loading.Text = "Loading";
                 _loading.Width = this.Width;
                 _loading.Height = this.Height;
+                _loading.TextAlign = ContentAlignment.MiddleCenter;
                 _loading.Font = new Font("MS Sans Serif", 16, FontStyle.Bold);
                 _loading.ForeColor = Color.White; // Settings.TextColor;
                 _loading.BackColor = Color.Black; // Settings.BackgroundColor;
                 Controls.Add(_loading);
-                MessageBox.Show("Done Loading");
             });
         }
 
