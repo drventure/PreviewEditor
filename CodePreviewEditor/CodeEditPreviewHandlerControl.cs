@@ -84,7 +84,8 @@ namespace CodeEditPreviewHandler
                 InitializeLoadingScreen();
 
                 // Check if the file is too big.
-                long fileSize = new FileInfo(filePath).Length;
+                var fi = new FileInfo(filePath);
+                long fileSize = fi.Length;
 
                 if (fileSize < 2 * 1000 * 1000)
                 {
@@ -92,33 +93,13 @@ namespace CodeEditPreviewHandler
                     {
                         try
                         {
-                            if (FileUtilities.IsTextFile(filePath))
+                            if (FileUtilities.IsTextFile(fi))
                             {
-                                string fileContent;
-                                using (StreamReader fileReader = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-                                {
-                                    fileContent = fileReader.ReadToEnd();
-                                    fileReader.Close();
-                                }
-                                _textbox = new FastColoredTextBox();
-                                Controls.Add(_textbox);
-                                _textbox.Dock = DockStyle.Fill;
-                                _textbox.Text = fileContent;
-                                _textbox.Language = FastColoredTextBoxNS.Language.CSharp;
-                                _textbox.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.VisibleRange;
-                                _textbox.SyntaxHighlighter.HighlightSyntax(_textbox.Language, _textbox.Range);
+                                UseTextBox(fi);
                             }
                             else
                             {
-                                //treat as hex
-                                _hexbox = new HexBox();
-                                var b = new Hb.Windows.Forms.DynamicFileByteProvider(filePath);
-                                _hexbox.ByteProvider = b;
-                                _hexbox.LineInfoVisible = true;
-                                _hexbox.ColumnInfoVisible = true;
-                                _hexbox.StringViewVisible = true;
-                                Controls.Add(_hexbox);
-                                _hexbox.Dock = DockStyle.Fill;
+                                UseHexBox(fi);
                             }
                         }
                         finally
@@ -144,6 +125,19 @@ namespace CodeEditPreviewHandler
                     _loading.Text = "Max file size exceeded.";
                 }
             });
+        }
+
+        private void GeneralKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.T && e.Control)
+            {
+                ToggleEditor();
+            }
+        }
+
+        private void CodeEditPreviewHandlerControl_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
 
@@ -218,6 +212,108 @@ namespace CodeEditPreviewHandler
                 func();
             }
 
+        }
+
+
+        private void UseTextBox(FileInfo filePath)
+        {
+            using (StreamReader fileReader = new StreamReader(new FileStream(filePath.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                var buffer = fileReader.ReadToEnd();
+                UseTextBox(buffer);
+                fileReader.Close();
+            }
+        }
+
+
+        private void UseTextBox(HexBox hexBox)
+        {
+            var pos = hexBox.SelectionStart;
+            if (hexBox.ByteProvider is DynamicFileByteProvider)
+            {
+                if (hexBox.ByteProvider.Length > 2 * 1000 * 1000)
+                {
+                    //too long
+                }
+            }
+            var bytes = new byte[(int)hexBox.ByteProvider.Length];
+            for (var i = 0; i < hexBox.ByteProvider.Length; i++)
+            {
+                bytes[i] = hexBox.ByteProvider.ReadByte(i);
+            }
+            UseTextBox(Encoding.ASCII.GetString(bytes));
+            _textbox.SelectionStart = (int)pos;
+        }
+
+
+        private void UseTextBox(string buffer)
+        {
+            _textbox = new FastColoredTextBox();
+            Controls.Clear();
+            Controls.Add(_textbox);
+            _textbox.Dock = DockStyle.Fill;
+            _textbox.Text = buffer;
+            _textbox.Language = FastColoredTextBoxNS.Language.CSharp;
+            _textbox.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.VisibleRange;
+            _textbox.SyntaxHighlighter.HighlightSyntax(_textbox.Language, _textbox.Range);
+            _textbox.KeyDown += GeneralKeyDown;
+        }
+
+
+        private void UseHexBox(FileInfo filePath)
+        {
+            using (StreamReader fileReader = new StreamReader(new FileStream(filePath.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                var buffer = fileReader.ReadToEnd();
+                UseHexBox(buffer);
+                fileReader.Close();
+            }
+        }
+
+
+        /// <summary>
+        /// Switch from a Textbox to a hexbox
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <param name="textBox"></param>
+        private void UseHexBox(FastColoredTextBox textBox)
+        {
+            var pos = textBox.SelectionStart;
+            UseHexBox(textBox.Text);
+            _hexbox.SelectionStart = pos;
+        }
+
+
+        private void UseHexBox(string buffer)
+        {
+            _hexbox = new HexBox();
+            var b = new Hb.Windows.Forms.DynamicByteProvider(Encoding.ASCII.GetBytes(buffer));
+            //var b = new Hb.Windows.Forms.DynamicFileByteProvider(filePath);
+            _hexbox.ByteProvider = b;
+            _hexbox.LineInfoVisible = true;
+            _hexbox.ColumnInfoVisible = true;
+            _hexbox.StringViewVisible = true;
+            Controls.Clear();
+            Controls.Add(_hexbox);
+            _hexbox.Dock = DockStyle.Fill;
+
+            _hexbox.KeyDown += GeneralKeyDown;
+        }
+
+
+        /// <summary>
+        /// Switch between hex and text editors
+        /// </summary>
+        private void ToggleEditor()
+        {
+            if (this.Controls.Contains(_hexbox))
+            {
+                UseTextBox(_hexbox);
+            }
+            else
+            {
+                UseHexBox(_textbox);
+            }
         }
     }
 }

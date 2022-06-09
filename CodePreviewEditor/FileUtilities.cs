@@ -26,9 +26,9 @@ namespace CodeEditPreviewHandler
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static bool IsTextFile(string filePath)
+        public static bool IsTextFile(FileInfo fileInfo)
         {
-            var ext = Path.GetExtension(filePath);
+            var ext = fileInfo.Extension;
             if (ext == null || ext.Length == 0) return false;
 
             return TextFileExtensions().Contains(ext.ToLower());
