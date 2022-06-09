@@ -66,8 +66,12 @@ namespace CodeEditPreviewHandler
         /// Loading label
         /// </summary>
         private Label _loading;
+
         private FastColoredTextBox _textbox;
         private HexBox _hexbox;
+
+        private FileInfo _fileInfo;
+        private bool _isDirty = false;
 
 
         public CodeEditPreviewHandlerControl()
@@ -84,8 +88,9 @@ namespace CodeEditPreviewHandler
                 InitializeLoadingScreen();
 
                 // Check if the file is too big.
-                var fi = new FileInfo(filePath);
-                long fileSize = fi.Length;
+                _fileInfo = new FileInfo(filePath);
+                long fileSize = _fileInfo.Length;
+                _isDirty = false;
 
                 if (fileSize < 2 * 1000 * 1000)
                 {
@@ -93,13 +98,13 @@ namespace CodeEditPreviewHandler
                     {
                         try
                         {
-                            if (FileUtilities.IsTextFile(fi))
+                            if (FileUtilities.IsTextFile(_fileInfo))
                             {
-                                UseTextBox(fi);
+                                UseTextBox(_fileInfo);
                             }
                             else
                             {
-                                UseHexBox(fi);
+                                UseHexBox(_fileInfo);
                             }
                         }
                         finally
@@ -133,7 +138,12 @@ namespace CodeEditPreviewHandler
             {
                 ToggleEditor();
             }
+            else if (e.KeyCode == Keys.S && e.Control)
+            {
+                Save();
+            }
         }
+
 
         private void CodeEditPreviewHandlerControl_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -256,7 +266,12 @@ namespace CodeEditPreviewHandler
             _textbox.Language = FastColoredTextBoxNS.Language.CSharp;
             _textbox.HighlightingRangeType = FastColoredTextBoxNS.HighlightingRangeType.VisibleRange;
             _textbox.SyntaxHighlighter.HighlightSyntax(_textbox.Language, _textbox.Range);
+
             _textbox.KeyDown += GeneralKeyDown;
+            _textbox.TextChanged += (s, e) =>
+            {
+                _isDirty = true;
+            };
         }
 
 
@@ -293,11 +308,16 @@ namespace CodeEditPreviewHandler
             _hexbox.LineInfoVisible = true;
             _hexbox.ColumnInfoVisible = true;
             _hexbox.StringViewVisible = true;
+            _hexbox.VScrollBarVisible = true;
             Controls.Clear();
             Controls.Add(_hexbox);
             _hexbox.Dock = DockStyle.Fill;
 
             _hexbox.KeyDown += GeneralKeyDown;
+            _hexbox.TextChanged += (s, e) =>
+            {
+                _isDirty = true;
+            };
         }
 
 
@@ -306,13 +326,56 @@ namespace CodeEditPreviewHandler
         /// </summary>
         private void ToggleEditor()
         {
-            if (this.Controls.Contains(_hexbox))
+            if (this.IsHexEditing)
             {
                 UseTextBox(_hexbox);
             }
             else
             {
                 UseHexBox(_textbox);
+            }
+        }
+
+
+        private bool IsTextEditing
+        {
+            get
+            {
+                return this.Controls.Contains(_textbox);
+            }
+        }
+
+        private bool IsHexEditing
+        {
+            get 
+            {
+                return !this.IsTextEditing;
+            }
+        }
+
+
+        private void Save()
+        {
+            if (_isDirty)
+            {
+                if (MessageBox.Show("Save Changes?", "File has changed", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    try
+                    {
+                        if (this.IsTextEditing)
+                        {
+                            _textbox.SaveToFile(_fileInfo.FullName, Encoding.Default);
+                        }
+                        else
+                        {
+                            _hexbox.ByteProvider.ApplyChanges();    
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error saving changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
     }
