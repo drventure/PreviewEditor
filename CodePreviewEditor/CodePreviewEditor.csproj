@@ -95,22 +95,51 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FileUtilities.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\BuiltInContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Hb.Windows.Forms.HexBox2\ByteCharConverters.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\ByteCollection.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\BytePositionInfo.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\DataBlock.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\DataMap.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\DynamicByteProvider.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\DynamicFileByteProvider.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\FileByteProvider.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\FileDataBlock.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\FindOptions.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\HexBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Hb.Windows.Forms.HexBox2\HexCasing.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\IByteProvider.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\MemoryDataBlock.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\NativeMethods.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CodeEditPreviewHandlerKey.pfx" />
+    <None Include="Hb.Windows.Forms.HexBox2\HexBox.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CodeEditPreviewHandlerControl.resx">
       <DependentUpon>CodeEditPreviewHandlerControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Hb.Windows.Forms.HexBox2\BuiltInContextMenu.resx">
+      <DependentUpon>BuiltInContextMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hb.Windows.Forms.HexBox2\HexBox.resx">
+      <DependentUpon>HexBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hb.Windows.Forms.HexBox\Hb.Windows.Forms.HexBox2.csproj">
-      <Project>{26c5f25f-b450-4caf-ad8b-b8d11ae73457}</Project>
-      <Name>Hb.Windows.Forms.HexBox2</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Hb.Windows.Forms.HexBox2\HexBox.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AssemblyResources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

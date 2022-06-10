@@ -47,15 +47,24 @@ namespace CodeEditPreviewHandler
         /// </summary>
         private void InitializeComponent()
         {
+            this.pnlEditor = new System.Windows.Forms.Panel();
             this.SuspendLayout();
+            // 
+            // pnlEditor
+            // 
+            this.pnlEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlEditor.Location = new System.Drawing.Point(0, 0);
+            this.pnlEditor.Name = "pnlEditor";
+            this.pnlEditor.Size = new System.Drawing.Size(1174, 699);
+            this.pnlEditor.TabIndex = 0;
             // 
             // CodeEditPreviewHandlerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pnlEditor);
             this.Name = "CodeEditPreviewHandlerControl";
-            this.Size = new System.Drawing.Size(794, 355);
-            this.Load += new System.EventHandler(this.CodeEditPreviewHandlerControl_Load);
+            this.Size = new System.Drawing.Size(1174, 699);
             this.ResumeLayout(false);
 
         }
@@ -71,6 +80,7 @@ namespace CodeEditPreviewHandler
         private HexBox _hexbox;
 
         private FileInfo _fileInfo;
+        private Panel pnlEditor;
         private bool _isDirty = false;
 
 
@@ -109,20 +119,12 @@ namespace CodeEditPreviewHandler
                         }
                         finally
                         {
-                            Controls.Remove(_loading);
+                            this.pnlEditor.Controls.Remove(_loading);
                         }
                     }
                     catch (Exception e)
                     {
-                        Controls.Remove(_loading);
-                        Label text = new Label();
-                        text.Text = "Error";
-                        text.Text += e.Message;
-                        text.Text += "\n" + e.Source;
-                        text.Text += "\n" + e.StackTrace;
-                        text.Width = 500;
-                        text.Height = 10000;
-                        Controls.Add(text);
+                        _loading.Text = $"Error: {e.Message}\r\n{e.Source}\r\n{e.StackTrace}";
                     }
                 }
                 else
@@ -158,7 +160,7 @@ namespace CodeEditPreviewHandler
         /// <param name="color">The color.</param>
         protected override void SetVisualsBackgroundColor(Color color)
         {
-            this.BackColor = color;
+            this.pnlEditor.BackColor = color;
         }
 
 
@@ -169,7 +171,7 @@ namespace CodeEditPreviewHandler
         /// <param name="color">The color.</param>
         protected override void SetVisualsTextColor(Color color)
         {
-            //lblName.ForeColor = color;
+            this.pnlEditor.ForeColor = color;
         }
 
 
@@ -180,13 +182,7 @@ namespace CodeEditPreviewHandler
         /// <param name="font">The font.</param>
         protected override void SetVisualsFont(Font font)
         {
-            this.Font = font;
-        }
-
-
-        private void CodeEditPreviewHandlerControl_Load(object sender, EventArgs e)
-        {
-
+            this.pnlEditor.Font = font;
         }
 
 
@@ -195,14 +191,14 @@ namespace CodeEditPreviewHandler
             InvokeOnControlThread(() =>
             {
                 _loading = new Label();
-                _loading.Text = "Loading";
-                _loading.Width = this.Width;
-                _loading.Height = this.Height;
+                _loading.Dock = DockStyle.Fill;
+                _loading.Text = "Loading...";
                 _loading.TextAlign = ContentAlignment.MiddleCenter;
+                _loading.AutoSize = false;
                 _loading.Font = new Font("MS Sans Serif", 16, FontStyle.Bold);
                 _loading.ForeColor = Color.White; // Settings.TextColor;
                 _loading.BackColor = Color.Black; // Settings.BackgroundColor;
-                Controls.Add(_loading);
+                this.pnlEditor.Controls.Add(_loading);
             });
         }
 
@@ -259,8 +255,8 @@ namespace CodeEditPreviewHandler
         private void UseTextBox(string buffer)
         {
             _textbox = new FastColoredTextBox();
-            Controls.Clear();
-            Controls.Add(_textbox);
+            this.pnlEditor.Controls.Clear();
+            this.pnlEditor.Controls.Add(_textbox);
             _textbox.Dock = DockStyle.Fill;
             _textbox.Text = buffer;
             _textbox.Language = FastColoredTextBoxNS.Language.CSharp;
@@ -309,8 +305,8 @@ namespace CodeEditPreviewHandler
             _hexbox.ColumnInfoVisible = true;
             _hexbox.StringViewVisible = true;
             _hexbox.VScrollBarVisible = true;
-            Controls.Clear();
-            Controls.Add(_hexbox);
+            this.pnlEditor.Controls.Clear();
+            this.pnlEditor.Controls.Add(_hexbox);
             _hexbox.Dock = DockStyle.Fill;
 
             _hexbox.KeyDown += GeneralKeyDown;
@@ -341,7 +337,7 @@ namespace CodeEditPreviewHandler
         {
             get
             {
-                return this.Controls.Contains(_textbox);
+                return this.pnlEditor.Controls.Contains(_textbox);
             }
         }
 
