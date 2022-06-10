@@ -21,7 +21,7 @@ namespace CodeEditPreviewHandler
     [Guid("933A47DF-A6EE-4ECB-9A8F-3DEC6AC9FA07")]
     public class CodeEditPreviewHandler : SharpPreviewHandler, IDisposable
     {
-        public CodeEditPreviewHandler()
+        static CodeEditPreviewHandler()
         {
             //SetupAssemblyInterceptor();
             OverrideAssemblyResolution();
@@ -95,63 +95,11 @@ namespace CodeEditPreviewHandler
 
                 //App.Write($"Resolving {name}");
 
-                if (name.Contains("Azure.Core"))
+                if (name.Contains("SharpShell"))
                 {
-                    asmName.Version = new Version("1.23.0.0");
+                    asmName.Version = new Version("2.7.2.0");
                     return Assembly.Load(asmName);
                 }
-                else if (name.Contains("System.Diagnostics.DiagnosticSource"))
-                {
-                    asmName.Version = new Version("6.0.0.0");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("System.Text.Json"))
-                {
-                    asmName.Version = new Version("6.0.0.2");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("System.Memory.Data"))
-                {
-                    asmName.Version = new Version("6.0.0.0");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("System.Memory"))
-                {
-                    asmName.Version = new Version("4.0.1.1");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("System.Runtime.CompilerServices.Unsafe"))
-                {
-                    asmName.Version = new Version("6.0.0.0");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("System.Reactive"))
-                {
-                    asmName.Version = new Version("5.0.0.0");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("System.Threading.Channels"))
-                {
-                    asmName.Version = new Version("6.0.0.0");
-                    return Assembly.Load(asmName);
-                }
-                else if (name.Contains("FuzzySharp"))
-                {
-                    asmName.Version = new Version("1.0.4.0");
-                    return Assembly.Load(asmName);
-                }
-                //else if (name.Contains("System.Runtime.CompilerServices.Unsafe"))
-                //{
-                //    name = name.Replace("4.0.4.1", "4.0.5.0");
-                //    //name = Path.Combine(curdir, "System.Runtime.CompilerServices.Unsafe.dll");
-                //    return Assembly.Load(name);
-                //}
-                //else if (name.Contains("System.Threading.Tasks.Extensions"))
-                //{
-                //    name = "System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51";
-                //    //name = Path.Combine(curdir, "System.Threading.Tasks.Extensions.dll");
-                //    return Assembly.Load(name);
-                //}
                 else
                 {
                     return null;
@@ -179,24 +127,7 @@ namespace CodeEditPreviewHandler
 
                 var internalDlls = new string[]
                 {
-                    "Azure.Core",
-                    "RestSharp",
-                    "JRiverAPI",
-                    "AssistantServicePubSub",
-                    "Microsoft.Bcl.AsyncInterfaces",
-                    "System.Diagnostics.DiagnosticSource",
-                    "System.Memory.Data",
-                    "Azure.Messaging.WebPubSub",
-                    "System.Buffers",
-                    "System.Numerics.Vectors",
-                    "System.Text.Encodings.Web",
-                    "System.Text.Json",
-                    "System.Memory",
-                    "System.Threading.Tasks.Extensions",
-                    "System.Runtime.CompileServices.Unsafe",
-                    "System.ValueTuple",
-                    "FuzzySharp",
-                    "Websocket.Client"
+                    "SharpShell",
                 };
                 if (internalDlls.Any(s => name.Contains(s)))
                 {
@@ -233,7 +164,7 @@ namespace CodeEditPreviewHandler
         /// <returns></returns>
         private static Assembly LoadResourceAssembly(string assemblyName)
         {
-            String resourceName = $"AssistantService.AssemblyResources.{new AssemblyName(assemblyName).Name}.dll";
+            String resourceName = $"CodePreviewEditor.AssemblyResources.{new AssemblyName(assemblyName).Name}.dll";
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             {

@@ -268,6 +268,8 @@ namespace CodeEditPreviewHandler
             {
                 _isDirty = true;
             };
+
+            _textbox.Focus();
         }
 
 
@@ -314,6 +316,8 @@ namespace CodeEditPreviewHandler
             {
                 _isDirty = true;
             };
+
+            _hexbox.Focus();
         }
 
 
