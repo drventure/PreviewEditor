@@ -60,6 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="TestBinaryFile.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestSourceFile.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

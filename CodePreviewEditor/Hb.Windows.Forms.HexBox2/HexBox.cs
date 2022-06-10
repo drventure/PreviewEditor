@@ -612,7 +612,18 @@ namespace Hb.Windows.Forms
 			/// <returns></returns>
 			protected virtual bool PreProcessWmKeyDown_Home(ref Message m)
 			{
-				return PerformPosMoveHome();
+				return PerformPosMoveHome(false);
+			}
+
+
+			/// <summary>
+			/// goto first of line
+			/// </summary>
+			/// <param name="m"></param>
+			/// <returns></returns>
+			protected virtual bool PreProcessWmKeyDown_ShiftHome(ref Message m)
+			{
+				return PerformPosMoveHome(true);
 			}
 
 
@@ -643,7 +654,13 @@ namespace Hb.Windows.Forms
 
 			protected virtual bool PreProcessWmKeyDown_End(ref Message m)
 			{
-				return PerformPosMoveEnd();
+				return PerformPosMoveEnd(false);
+			}
+
+
+			protected virtual bool PreProcessWmKeyDown_ShiftEnd(ref Message m)
+			{
+				return PerformPosMoveEnd(true);
 			}
 
 
@@ -852,7 +869,9 @@ namespace Hb.Windows.Forms
 						_messageHandlers.Add(Keys.Back, new MessageDelegate(PreProcessWmKeyDown_Back)); // back
 						_messageHandlers.Add(Keys.Delete, new MessageDelegate(PreProcessWmKeyDown_Delete)); // delete
 						_messageHandlers.Add(Keys.Home, new MessageDelegate(PreProcessWmKeyDown_Home)); // move to home
+						_messageHandlers.Add(Keys.Home | Keys.Shift, new MessageDelegate(PreProcessWmKeyDown_ShiftHome)); // move to home shifted
 						_messageHandlers.Add(Keys.End, new MessageDelegate(PreProcessWmKeyDown_End)); // move to end
+						_messageHandlers.Add(Keys.End | Keys.Shift, new MessageDelegate(PreProcessWmKeyDown_ShiftEnd)); // move to end shifted
 						_messageHandlers.Add(Keys.Home | Keys.Control, new MessageDelegate(PreProcessWmKeyDown_ControlHome)); // move to first of line
 						_messageHandlers.Add(Keys.End | Keys.Control, new MessageDelegate(PreProcessWmKeyDown_ControlEnd)); // move to end of line
 						_messageHandlers.Add(Keys.ShiftKey | Keys.Shift, new MessageDelegate(PreProcessWmKeyDown_ShiftShiftKey)); // begin selection process
@@ -954,28 +973,52 @@ namespace Hb.Windows.Forms
 			/// move to first char on line
 			/// </summary>
 			/// <returns></returns>
-			protected virtual bool PerformPosMoveHome()
+			protected virtual bool PerformPosMoveHome(bool select = false)
 			{
 				long pos = _hexBox._bytePos;
+				long newpos = 0;
 				long sel = _hexBox._selectionLength;
 				int cp = _hexBox._byteCharacterPos;
 
-				if (sel != 0)
+				if (pos == 0 && cp == 0)
+					return true;
+
+				var selstart = sel == 0 ? pos : _bpiStart.Index;
+
+				if (select)
 				{
-					cp = 0;
-					_hexBox.SetPosition(pos, cp);
-					_hexBox.ReleaseSelection();
+					if (_bpiStart.Index <= pos)
+					{
+						//cursor is at end of selection, shrink selection
+						newpos = pos - _hexBox._currentPositionInLine + 1;
+						sel = sel - (pos - newpos) - cp;
+						if (sel < 0)
+						{
+							sel = -sel;
+							selstart = newpos;
+						}
+						else
+						{
+							selstart = newpos;
+						}
+					}
+					else
+					{
+						//cursor is at start of selection, increase selection by the diff
+						selstart = pos - _hexBox._currentPositionInLine + 1;
+						sel = pos - selstart + 1;
+					}
 				}
 				else
 				{
-					if (pos == 0 && cp == 0)
-						return true;
+					//if we aren't selecting, move to start of first line of selection
+					selstart = pos - _hexBox._currentPositionInLine + 1; 
+				}
 
-					pos = pos - _hexBox._currentPositionInLine + 1;
-					cp = 0;
+				_hexBox.InternalSelect(selstart, sel);
 
-					_hexBox.SetPosition(pos, cp);
-
+				if (!select)
+				{
 					_hexBox.UpdateCaret();
 					_hexBox.Invalidate();
 				}
@@ -989,36 +1032,55 @@ namespace Hb.Windows.Forms
 			/// move to last char on line
 			/// </summary>
 			/// <returns></returns>
-			protected virtual bool PerformPosMoveEnd()
+			protected virtual bool PerformPosMoveEnd(bool select = false)
 			{
 				long pos = _hexBox._bytePos;
+				long newpos = 0;
 				long sel = _hexBox._selectionLength;
 				int cp = _hexBox._byteCharacterPos;
 
-				if (sel != 0)
+				if (pos + sel >= _hexBox._byteProvider.Length) { return true; }
+
+				var selstart = sel == 0 ? pos : _bpiStart.Index;
+
+				if (select)
 				{
-					cp = 0;
-					_hexBox.SetPosition(pos, cp);
-					_hexBox.ReleaseSelection();
-				}
-				else
-				{
-					if (pos == _hexBox._byteProvider.Length)
-                    {
-						cp = 0;
-						_hexBox.SetPosition(pos, cp);
-						return true;
+					if (_bpiStart.Index <= pos)
+					{
+						//cursor is at end of selection, just extend selection
+						newpos = Math.Min(pos + sel + _hexBox.HorizontalByteCount - _hexBox._currentPositionInLine + 1, _hexBox._byteProvider.Length);
+						sel = newpos - selstart;
+						selstart = pos;
 					}
+					else
+					{
+						//cursor is at start of selection, reduce selection by the diff
+						newpos = Math.Min(pos + _hexBox.HorizontalByteCount - _hexBox._currentPositionInLine, _hexBox._byteProvider.Length);
+						sel = sel - (newpos - pos - 1);
+						if (sel < 0)
+                        {
+							sel = -sel;
+							selstart = newpos - sel;
+                        }
+                        else
+                        {
+							selstart = newpos;
+                        }
+					}
+				}
+                else
+                {
+					//if we aren't selecting, but there's and active selection, move to end of selection
+					if (sel != 0) { pos += sel; }
+					selstart = Math.Min(pos + sel + _hexBox.HorizontalByteCount - _hexBox._currentPositionInLine, _hexBox._byteProvider.Length);
+				}
 
-					pos = Math.Min(pos + _hexBox.HorizontalByteCount - _hexBox._currentPositionInLine, _hexBox._byteProvider.Length);
-					cp = 0;
-
-					_hexBox.SetPosition(pos, cp);
-
+				_hexBox.InternalSelect(selstart, sel, 1);
+				if (!select)
+                {
 					_hexBox.UpdateCaret();
 					_hexBox.Invalidate();
 				}
-
 				_hexBox.ScrollByteIntoView();
 				return true;
 			}
@@ -1874,15 +1936,13 @@ namespace Hb.Windows.Forms
 		{
 			System.Diagnostics.Debug.WriteLine("ReleaseSelection()", "HexBox");
 
-			if (_selectionLength == 0)
-				return;
+			if (_selectionLength == 0) { return; }
+
 			_selectionLength = 0;
 			OnSelectionLengthChanged(EventArgs.Empty);
 
-			if (!_caretVisible)
-				CreateCaret();
-			else
-				UpdateCaret();
+			if (!_caretVisible) { CreateCaret(); }
+			else { UpdateCaret(); }
 
 			Invalidate();
 		}
@@ -1892,10 +1952,8 @@ namespace Hb.Windows.Forms
 		/// </summary>
 		public bool CanSelectAll()
 		{
-			if (!this.Enabled)
-				return false;
-			if (_byteProvider == null)
-				return false;
+			if (!this.Enabled) { return false; }
+			if (_byteProvider == null) { return false; }
 
 			return true;
 		}
@@ -1905,8 +1963,8 @@ namespace Hb.Windows.Forms
 		/// </summary>
 		public void SelectAll()
 		{
-			if (this.ByteProvider == null)
-				return;
+			if (this.ByteProvider == null) { return; }
+
 			this.Select(0, this.ByteProvider.Length);
 		}
 
@@ -1917,25 +1975,20 @@ namespace Hb.Windows.Forms
 		/// <param name="length">the length of the selection</param>
 		public void Select(long start, long length)
 		{
-			if (this.ByteProvider == null)
-				return;
-			if (!this.Enabled)
-				return;
+			if (this.ByteProvider == null) { return; }
+			if (!this.Enabled) { return; }
 
 			InternalSelect(start, length);
 			ScrollByteIntoView();
 		}
 
-		void InternalSelect(long start, long length)
+		void InternalSelect(long start, long length, int cp = 0)
 		{
 			long pos = start;
 			long sel = length;
-			int cp = 0;
 
-			if (sel > 0 && _caretVisible)
-				DestroyCaret();
-			else if (sel == 0 && !_caretVisible)
-				CreateCaret();
+			if (sel > 0 && _caretVisible) { DestroyCaret(); }
+			else if (sel == 0 && !_caretVisible) { CreateCaret(); }
 
 			SetPosition(pos, cp);
 			SetSelectionLength(sel);

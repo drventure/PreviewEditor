@@ -23,7 +23,10 @@ namespace ShellTestRig
             var previewControl = new CodeEditPreviewHandler.CodeEditPreviewHandlerControl();
             Controls.Add(previewControl);
             previewControl.Dock = DockStyle.Fill;
-            previewControl.DoPreview(".\\TestSourceFile.cs");
+
+            //switch binary or text modes
+            //previewControl.DoPreview(".\\TestSourceFile.cs");
+            previewControl.DoPreview(".\\TestBinaryFile.bin");
         }
     }
 }
