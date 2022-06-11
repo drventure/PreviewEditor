@@ -175,9 +175,11 @@
     </Compile>
     <Compile Include="Hb.Windows.Forms.HexBox2\HexCasing.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\IByteProvider.cs" />
+    <Compile Include="Hb.Windows.Forms.HexBox2\Log.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\MemoryDataBlock.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\NativeMethods.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\Util.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

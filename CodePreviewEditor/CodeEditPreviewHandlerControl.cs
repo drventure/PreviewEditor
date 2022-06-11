@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
-//using ICSharpCode.AvalonEdit;
-//using ICSharpCode.AvalonEdit.Highlighting;
 using SharpShell.SharpPreviewHandler;
 using FastColoredTextBoxNS;
 using Hb.Windows.Forms;
@@ -86,15 +84,18 @@ namespace CodeEditPreviewHandler
 
         public CodeEditPreviewHandlerControl()
         {
+            Log.Debug("Control: Constructor");
             InitializeComponent();
         }
 
 
         public void DoPreview(string filePath)
         {
+            Log.Debug("Control: DoPreview");
             InvokeOnControlThread(() =>
             {
                 // Starts loading screen
+                Log.Debug("Init Loading screen");
                 InitializeLoadingScreen();
 
                 // Check if the file is too big.
@@ -102,6 +103,7 @@ namespace CodeEditPreviewHandler
                 long fileSize = _fileInfo.Length;
                 _isDirty = false;
 
+                Log.Debug($"FileSize: {fileSize}");
                 if (fileSize < 2 * 1000 * 1000)
                 {
                     try
@@ -110,10 +112,12 @@ namespace CodeEditPreviewHandler
                         {
                             if (FileUtilities.IsTextFile(_fileInfo))
                             {
+                                Log.Debug($"Using TextBox");
                                 UseTextBox(_fileInfo);
                             }
                             else
                             {
+                                Log.Debug($"Using HexBox");
                                 UseHexBox(_fileInfo);
                             }
                         }
@@ -122,9 +126,10 @@ namespace CodeEditPreviewHandler
                             this.pnlEditor.Controls.Remove(_loading);
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        _loading.Text = $"Error: {e.Message}\r\n{e.Source}\r\n{e.StackTrace}";
+                        Log.Error(ex);
+                        _loading.Text = $"Error: {ex.Message}\r\n{ex.Source}\r\n{ex.StackTrace}";
                     }
                 }
                 else
@@ -133,6 +138,7 @@ namespace CodeEditPreviewHandler
                 }
             });
         }
+
 
         private void GeneralKeyDown(object sender, KeyEventArgs e)
         {
@@ -144,12 +150,6 @@ namespace CodeEditPreviewHandler
             {
                 Save();
             }
-        }
-
-
-        private void CodeEditPreviewHandlerControl_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
 

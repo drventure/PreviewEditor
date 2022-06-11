@@ -157,7 +157,7 @@ namespace Hb.Windows.Forms
 			#region Mouse selection methods
 			void BeginMouseSelection(object sender, MouseEventArgs e)
 			{
-				System.Diagnostics.Debug.WriteLine("BeginMouseSelection()", "KeyInterpreter");
+				Log.Debug("KeyInterpreter.BeginMouseSelection");
 
 				if (e.Button != MouseButtons.Left)
 					return;
@@ -217,7 +217,7 @@ namespace Hb.Windows.Forms
 			#region PrePrcessWmKeyDown methods
 			public virtual bool PreProcessWmKeyDown(ref Message m)
 			{
-				System.Diagnostics.Debug.WriteLine("PreProcessWmKeyDown(ref Message m)", "KeyInterpreter");
+				Log.Debug("KeyInterpreter.PreProcessWmKeyDown");
 
 				Keys vc = (Keys)m.WParam.ToInt32();
 
@@ -806,7 +806,7 @@ namespace Hb.Windows.Forms
 			#region PreProcessWmKeyUp methods
 			public virtual bool PreProcessWmKeyUp(ref Message m)
 			{
-				System.Diagnostics.Debug.WriteLine("PreProcessWmKeyUp(ref Message m)", "KeyInterpreter");
+				Log.Debug("KeyInterpreter.PreProcessWmKeyUp");
 
 				Keys vc = (Keys)m.WParam.ToInt32();
 
@@ -1137,7 +1137,7 @@ namespace Hb.Windows.Forms
 
 			public virtual PointF GetCaretPointF(long byteIndex)
 			{
-				System.Diagnostics.Debug.WriteLine("GetCaretPointF()", "KeyInterpreter");
+				Log.Debug("KeyInterpreter.GetCaretPointF");
 
 				return _hexBox.GetBytePointF(byteIndex);
 			}
@@ -1266,7 +1266,7 @@ namespace Hb.Windows.Forms
 			#region Misc
 			public override PointF GetCaretPointF(long byteIndex)
 			{
-				System.Diagnostics.Debug.WriteLine("GetCaretPointF()", "StringKeyInterpreter");
+				Log.Debug("StringKeyInterpreter.GetCaretPointF");
 
 				Point gp = _hexBox.GetGridBytePoint(byteIndex);
 				return _hexBox.GetByteStringPointF(gp);
@@ -1736,7 +1736,7 @@ namespace Hb.Windows.Forms
 
 		void UpdateScrollSize()
 		{
-			System.Diagnostics.Debug.WriteLine("UpdateScrollSize()", "HexBox");
+			Log.Debug("UpdateScrollSize");
 
 			// calc scroll bar info
 			if (VScrollBarVisible && _byteProvider != null && _byteProvider.Length > 0 && _iHexMaxHBytes != 0)
@@ -1774,7 +1774,7 @@ namespace Hb.Windows.Forms
 
 		void UpdateVScroll()
 		{
-			System.Diagnostics.Debug.WriteLine("UpdateVScroll()", "HexBox");
+			Log.Debug("UpdateVScroll");
 
 			int max = ToScrollMax(_scrollVmax);
 
@@ -1901,7 +1901,7 @@ namespace Hb.Windows.Forms
 		/// </summary>
 		public void ScrollByteIntoView()
 		{
-			System.Diagnostics.Debug.WriteLine("ScrollByteIntoView()", "HexBox");
+			Log.Debug("ScrollByteIntoView");
 
 			ScrollByteIntoView(_bytePos);
 		}
@@ -1912,7 +1912,7 @@ namespace Hb.Windows.Forms
 		/// <param name="index">the index of the byte</param>
 		public void ScrollByteIntoView(long index)
 		{
-			System.Diagnostics.Debug.WriteLine("ScrollByteIntoView(long index)", "HexBox");
+			Log.Debug("ScrollByteIntoView");
 
 			if (_byteProvider == null || _keyInterpreter == null)
 				return;
@@ -1934,7 +1934,7 @@ namespace Hb.Windows.Forms
 		#region Selection methods
 		void ReleaseSelection()
 		{
-			System.Diagnostics.Debug.WriteLine("ReleaseSelection()", "HexBox");
+			Log.Debug("ReleaseSelection");
 
 			if (_selectionLength == 0) { return; }
 
@@ -2051,7 +2051,7 @@ namespace Hb.Windows.Forms
 			if (_byteProvider == null || _keyInterpreter == null || _caretVisible || !this.Focused)
 				return;
 
-			System.Diagnostics.Debug.WriteLine("CreateCaret()", "HexBox");
+			Log.Debug("CreateCaret");
 
 			// define the caret width depending on InsertActive mode
 			int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
@@ -2070,7 +2070,7 @@ namespace Hb.Windows.Forms
 			if (_byteProvider == null || _keyInterpreter == null)
 				return;
 
-			System.Diagnostics.Debug.WriteLine("UpdateCaret()", "HexBox");
+			Log.Debug("UpdateCaret");
 
 			long byteIndex = _bytePos - _startByte;
 			PointF p = _keyInterpreter.GetCaretPointF(byteIndex);
@@ -2083,7 +2083,7 @@ namespace Hb.Windows.Forms
 			if (!_caretVisible)
 				return;
 
-			System.Diagnostics.Debug.WriteLine("DestroyCaret()", "HexBox");
+			Log.Debug("DestroyCaret");
 
 			NativeMethods.DestroyCaret();
 			_caretVisible = false;
@@ -2091,7 +2091,7 @@ namespace Hb.Windows.Forms
 
 		void SetCaretPosition(Point p)
 		{
-			System.Diagnostics.Debug.WriteLine("SetCaretPosition()", "HexBox");
+			Log.Debug("SetCaretPosition");
 
 			if (_byteProvider == null || _keyInterpreter == null)
 				return;
@@ -2127,7 +2127,7 @@ namespace Hb.Windows.Forms
 
 		BytePositionInfo GetHexBytePositionInfo(Point p)
 		{
-			System.Diagnostics.Debug.WriteLine("GetHexBytePositionInfo()", "HexBox");
+			Log.Debug("GetHexBytePositionInfo");
 
 			long bytePos;
 			int byteCharaterPos;
@@ -2155,7 +2155,7 @@ namespace Hb.Windows.Forms
 
 		BytePositionInfo GetStringBytePositionInfo(Point p)
 		{
-			System.Diagnostics.Debug.WriteLine("GetStringBytePositionInfo()", "HexBox");
+			Log.Debug("GetStringBytePositionInfo");
 
 			long bytePos;
 			int byteCharacterPos;
@@ -2760,7 +2760,7 @@ namespace Hb.Windows.Forms
 			if (_byteProvider == null)
 				return;
 
-			System.Diagnostics.Debug.WriteLine("OnPaint " + DateTime.Now.ToString(), "HexBox");
+			Log.Debug("OnPaint");
 
 			// draw only in the content rectangle, so exclude the border and the scrollbar.
 			Region r = new Region(ClientRectangle);
@@ -4486,7 +4486,7 @@ namespace Hb.Windows.Forms
 		/// <param name="e">An EventArgs that contains the event data.</param>
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("OnMouseDown()", "HexBox");
+			Log.Debug("OnMouseDown");
 
 			if (!Focused)
 				Focus();
@@ -4526,7 +4526,7 @@ namespace Hb.Windows.Forms
 		/// <param name="e">An EventArgs that contains the event data.</param>
 		protected override void OnGotFocus(EventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("OnGotFocus()", "HexBox");
+			Log.Debug("OnGotFocus");
 
 			base.OnGotFocus(e);
 
@@ -4539,7 +4539,7 @@ namespace Hb.Windows.Forms
 		/// <param name="e">An EventArgs that contains the event data.</param>
 		protected override void OnLostFocus(EventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("OnLostFocus()", "HexBox");
+			Log.Debug("OnLostFocus");
 
 			base.OnLostFocus(e);
 

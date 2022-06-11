@@ -16,7 +16,7 @@ namespace CodeEditPreviewHandler
         /// <returns></returns>
         public static List<string> TextFileExtensions()
         {
-            return new List<string>(new string[] { ".cs", ".vb", ".txt", ".htm", ".html", ".csproj", ".log", ".me", ".readme" });
+            return new List<string>(new string[] { ".cs", ".vb", ".txt", ".htm", ".html", ".csproj", ".log", ".me", ".readme", ".config", ".json" });
         }
 
 

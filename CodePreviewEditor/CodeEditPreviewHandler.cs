@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Windows.Forms;
+using log = CodeEditPreviewHandler.Log;
 using SharpShell.Attributes;
 using SharpShell.SharpPreviewHandler;
 
@@ -23,8 +23,11 @@ namespace CodeEditPreviewHandler
     {
         static CodeEditPreviewHandler()
         {
+            log.Debug("Handler.DoPreview: Constructor");
+            log.Debug("Version: " + typeof(CodeEditPreviewHandler).Assembly.GetName().Version);
+
             //SetupAssemblyInterceptor();
-            OverrideAssemblyResolution();
+            //OverrideAssemblyResolution();
         }
 
 
@@ -67,6 +70,8 @@ namespace CodeEditPreviewHandler
         /// </returns>
         protected override PreviewHandlerControl DoPreview()
         {
+            log.Debug("Handler.DoPreview: Entering");
+            
             //  Create the handler control
             var handlerControl = new CodeEditPreviewHandlerControl();
 
