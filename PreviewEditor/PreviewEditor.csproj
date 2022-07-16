@@ -78,7 +78,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PreviewEditorHandler.cs" />
-    <Compile Include="PreviewEditorHandlerControl.cs">
+    <Compile Include="PreviewEditorControl.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
@@ -107,8 +107,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PreviewEditorHandlerControl.resx">
-      <DependentUpon>PreviewEditorHandlerControl.cs</DependentUpon>
+    <EmbeddedResource Include="PreviewEditorControl.resx">
+      <DependentUpon>PreviewEditorControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

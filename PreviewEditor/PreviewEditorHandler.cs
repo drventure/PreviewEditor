@@ -19,7 +19,7 @@ namespace PreviewEditor
     [ComVisible(true)]
     public sealed class PreviewEditorHandler : FileBasedPreviewHandler
     {
-        PreviewEditorHandlerControl _control;
+        PreviewEditorControl _control;
 
         public override void DoPreview()
         {
@@ -28,7 +28,7 @@ namespace PreviewEditor
 
         protected override IPreviewHandlerControl CreatePreviewHandlerControl()
         {
-            _control = new PreviewEditorHandlerControl();
+            _control = new PreviewEditorControl();
             return _control;
         }
     }

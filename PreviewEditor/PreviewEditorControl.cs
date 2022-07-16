@@ -14,11 +14,22 @@ using PreviewHandler.Sdk.Controls;
 
 namespace PreviewEditor
 {
-    public class PreviewEditorHandlerControl : PreviewHandlerControlBaseWrapper
+    /// <summary>
+    /// The Main PreviewEditorControl
+    /// </summary>
+    public class PreviewEditorControl
+//The Designer doesn't want to view controls based on Abstract classes
+//so wrap the abstract in a concrete class an inherit from it.
+//skip this in release mode because we don't have to use the designer in release mode
+#if DEBUG
+        : PreviewHandlerControlBaseWrapper
+#elif RELEASE
+        : PreviewHandlerControlBase
+#endif
     {
         private TextBox tbxEditor;
 
-        public PreviewEditorHandlerControl()
+        public PreviewEditorControl()
         {
             InitializeComponent();
         }
@@ -96,7 +107,7 @@ namespace PreviewEditor
         {
             try
             {
-                MessageBox.Show($"Previewing");
+                //MessageBox.Show($"Previewing");
                 var buf = "";
                 var filename = "";
 
@@ -117,17 +128,17 @@ namespace PreviewEditor
                 else
                 {
                     MessageBox.Show($"Previewing {dataSource.GetType().Name}");
-                    throw new ArgumentException($"{nameof(dataSource)} for {nameof(PreviewEditorHandlerControl)} must be a stream but was a '{typeof(T)}'");
+                    throw new ArgumentException($"{nameof(dataSource)} for {nameof(PreviewEditorControl)} must be a stream but was a '{typeof(T)}'");
                 }
 
                 this.InvokeOnControlThread(() =>
                 {
                     try
                     {
-                        MessageBox.Show($"Set text");
+                        //MessageBox.Show($"Set text");
                         tbxEditor.Text = buf;
 
-                        MessageBox.Show($"Set Hex");
+                        //MessageBox.Show($"Set Hex");
                         var hexEditor = new WpfHexaEditor.HexEditor();
                         hexEditorHost.Child = hexEditor;
                         hexEditor.FileName = filename;
@@ -137,9 +148,9 @@ namespace PreviewEditor
                         editor.Text = buf;
 
                         //call the base class to finish out
-                        MessageBox.Show($"Call base");
+                        //MessageBox.Show($"Call base");
                         base.DoPreview(dataSource);
-                        MessageBox.Show($"Done calling base");
+                        //MessageBox.Show($"Done calling base");
                     }
                     catch (Exception ex)
                     {
@@ -184,36 +195,6 @@ namespace PreviewEditor
     }
 
 
-    public class AbstractControlDescriptionProvider<TAbstract, TBase> : TypeDescriptionProvider
-    {
-        public AbstractControlDescriptionProvider()
-            : base(TypeDescriptor.GetProvider(typeof(TAbstract)))
-        {
-        }
-
-        public override Type GetReflectionType(Type objectType, object instance)
-        {
-            if (objectType == typeof(TAbstract))
-                return typeof(TBase);
-
-            return base.GetReflectionType(objectType, instance);
-        }
-
-        public override object CreateInstance(IServiceProvider provider, Type objectType, Type[] argTypes, object[] args)
-        {
-            if (objectType == typeof(TAbstract))
-                objectType = typeof(TBase);
-
-            return base.CreateInstance(provider, objectType, argTypes, args);
-        }
-    }
-
-
-    /// <summary>
-    /// Create a wrapper abstract class around the base class
-    /// and inherit from it so we can use the designer
-    /// </summary>
-    [TypeDescriptionProvider(typeof(AbstractControlDescriptionProvider<PreviewHandlerControlBaseWrapper, UserControl>))]
-    public abstract class PreviewHandlerControlBaseWrapper : PreviewHandlerControlBase
+    public class PreviewHandlerControlBaseWrapper : PreviewHandlerControlBase
     { }
 }
