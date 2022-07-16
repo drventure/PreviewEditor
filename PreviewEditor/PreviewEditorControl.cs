@@ -53,6 +53,7 @@ namespace PreviewEditor
             {
                 components.Dispose();
             }
+            Shutdown();
             base.Dispose(disposing);
         }
 
@@ -99,7 +100,32 @@ namespace PreviewEditor
             this.Size = new System.Drawing.Size(1814, 643);
             this.ResumeLayout(false);
             this.PerformLayout();
+        }
 
+
+        public override void Unload()
+        {
+            Shutdown();
+            base.Unload();
+        }
+
+
+        internal void Shutdown()
+        {
+            this.InvokeOnControlThread(() =>
+            {
+                MessageBox.Show("Unloading");
+                if (hexEditorHost != null && hexEditorHost.Child != null)
+                {
+                    ((WpfHexaEditor.HexEditor)hexEditorHost.Child).CloseProvider();
+                    hexEditorHost.Child = null;
+                }
+                if (textEditorHost != null && textEditorHost.Child != null)
+                {
+                    textEditorHost.Child = null;
+                }
+                this.Controls.Clear();
+            });
         }
 
 
@@ -141,7 +167,7 @@ namespace PreviewEditor
                         //MessageBox.Show($"Set Hex");
                         var hexEditor = new WpfHexaEditor.HexEditor();
                         hexEditorHost.Child = hexEditor;
-                        hexEditor.FileName = filename;
+                        hexEditor.Stream = new MemoryStream(Encoding.ASCII.GetBytes(buf));
 
                         var editor = new TextEditor();
                         textEditorHost.Child = editor;
