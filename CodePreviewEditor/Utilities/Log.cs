@@ -15,7 +15,7 @@ namespace CodeEditPreviewHandler
         {
             get
             {
-                return $"{DateTime.Now}";
+                return $"{DateTime.Now:yyyy-MM-ddTHH:mm:ss:fff}";
             }
         }
 

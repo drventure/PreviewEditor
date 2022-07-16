@@ -156,7 +156,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FastColoredTextBox\VisualMarker.cs" />
-    <Compile Include="FileUtilities.cs" />
+    <Compile Include="Utilities\FileUtilities.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\BuiltInContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -179,7 +179,7 @@
     <Compile Include="Hb.Windows.Forms.HexBox2\MemoryDataBlock.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\NativeMethods.cs" />
     <Compile Include="Hb.Windows.Forms.HexBox2\Util.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Utilities\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

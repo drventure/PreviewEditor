@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodePreviewEditor", "CodePr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellTestRig", "ShellTestRig\ShellTestRig.csproj", "{3EDC2D2F-E93C-45CA-83E7-A2FFBE4C62ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewEditor", "PreviewEditor\PreviewEditor.csproj", "{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{3EDC2D2F-E93C-45CA-83E7-A2FFBE4C62ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EDC2D2F-E93C-45CA-83E7-A2FFBE4C62ED}.Release|x86.ActiveCfg = Release|Any CPU
 		{3EDC2D2F-E93C-45CA-83E7-A2FFBE4C62ED}.Release|x86.Build.0 = Release|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Debug|x86.Build.0 = Debug|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|x86.ActiveCfg = Release|Any CPU
+		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,7 +15,7 @@ namespace Hb.Windows.Forms
         {
             get
             {
-                return $"{DateTime.Now}";
+                return $"{DateTime.Now:yyyy-MM-ddTHH:mm:ss:fff}";
             }
         }
 

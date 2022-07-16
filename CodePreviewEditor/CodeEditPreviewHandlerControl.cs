@@ -91,6 +91,10 @@ namespace CodeEditPreviewHandler
 
         public void DoPreview(string filePath)
         {
+            InitializeLoadingScreen();
+            return;
+
+
             Log.Debug("Control: DoPreview");
             InvokeOnControlThread(() =>
             {

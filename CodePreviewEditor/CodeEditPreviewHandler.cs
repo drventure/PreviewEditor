@@ -16,19 +16,20 @@ namespace CodeEditPreviewHandler
 {
     [ComVisible(true)]
     [COMServerAssociation(AssociationType.AllFiles)]
+    //[COMServerAssociation(AssociationType.ClassOfExtension, "cs")]
     [DisplayName("Code Edit PreviewHandler")]
     [PreviewHandler(DisableLowILProcessIsolation = false)]
     [Guid("933A47DF-A6EE-4ECB-9A8F-3DEC6AC9FA07")]
     public class CodeEditPreviewHandler : SharpPreviewHandler, IDisposable
     {
-        static CodeEditPreviewHandler()
-        {
-            log.Debug("Handler.DoPreview: Constructor");
-            log.Debug("Version: " + typeof(CodeEditPreviewHandler).Assembly.GetName().Version);
+        //static CodeEditPreviewHandler()
+        //{
+        //    //log.Debug("Handler.DoPreview: Constructor");
+        //    //log.Debug("Version: " + typeof(CodeEditPreviewHandler).Assembly.GetName().Version);
 
-            //SetupAssemblyInterceptor();
-            //OverrideAssemblyResolution();
-        }
+        //    //SetupAssemblyInterceptor();
+        //    //OverrideAssemblyResolution();
+        //}
 
 
         private bool _disposedValue;     
