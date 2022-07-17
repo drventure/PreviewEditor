@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PreviewEditor</RootNamespace>
+    <AssemblyName>PreviewEditor</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PreviewEditor.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.1.3.50, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.6.1.3.50\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PreviewHandler.Sdk.Managed, Version=1.0.1.0, Culture=neutral, PublicKeyToken=8d978d0ea5ae8d21, processorArchitecture=MSIL">
+      <HintPath>..\packages\PreviewHandler.Sdk.Managed.1.0.1\lib\net47\PreviewHandler.Sdk.Managed.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="hexEditorUserControl.xaml.cs">
+      <DependentUpon>hexEditorUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Installer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PreviewEditorHandler.cs" />
+    <Compile Include="PreviewEditorControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registration.cs" />
+    <Compile Include="Utilities\FileUtilities.cs" />
+    <Compile Include="Utilities\Log.cs" />
+    <Compile Include="WPFHexaEditor\BaseByte.cs" />
+    <Compile Include="WPFHexaEditor\Core\BookMark.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\ByteConverters.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\ByteDifference.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\ByteModified.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\ByteProvider.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\Byte_16bit.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\Byte_32bit.cs" />
+    <Compile Include="WPFHexaEditor\Core\Bytes\Byte_8bit.cs" />
+    <Compile Include="WPFHexaEditor\Core\Caret.cs" />
+    <Compile Include="WPFHexaEditor\Core\CharacterTable\DTE.cs" />
+    <Compile Include="WPFHexaEditor\Core\CharacterTable\Enum.cs" />
+    <Compile Include="WPFHexaEditor\Core\CharacterTable\TBLStream.cs" />
+    <Compile Include="WPFHexaEditor\Core\ConstantReadOnly.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\BoolInverterConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\ByteToHexStringConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\HexToLongStringConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\LongToHexStringConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\PathToFilenameConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\Converters\VisibilityToBooleanConverter.cs" />
+    <Compile Include="WPFHexaEditor\Core\CustomBackgroundBlock.cs" />
+    <Compile Include="WPFHexaEditor\Core\Enumeration.cs" />
+    <Compile Include="WPFHexaEditor\Core\EventArguments\ByteDifferenceEventArgs.cs" />
+    <Compile Include="WPFHexaEditor\Core\EventArguments\ByteEventArgs.cs" />
+    <Compile Include="WPFHexaEditor\Core\EventArguments\CustomBackgroundBlockEventArgs.cs" />
+    <Compile Include="WPFHexaEditor\Core\Interfaces\IByte.cs" />
+    <Compile Include="WPFHexaEditor\Core\Interfaces\IByteControl.cs" />
+    <Compile Include="WPFHexaEditor\Core\Interfaces\IByteModified.cs" />
+    <Compile Include="WPFHexaEditor\Core\KeyValidator.cs" />
+    <Compile Include="WPFHexaEditor\Core\MethodExtention\ApplicationExtention.cs" />
+    <Compile Include="WPFHexaEditor\Core\MethodExtention\ByteArrayExtention.cs" />
+    <Compile Include="WPFHexaEditor\Core\MethodExtention\DoubleExtension.cs" />
+    <Compile Include="WPFHexaEditor\Core\MethodExtention\StringExtension.cs" />
+    <Compile Include="WPFHexaEditor\Core\MethodExtention\TrackExtention.cs" />
+    <Compile Include="WPFHexaEditor\Core\MethodExtention\WithMethodExtention.cs" />
+    <Compile Include="WPFHexaEditor\Core\Native\NativeMethods.cs" />
+    <Compile Include="WPFHexaEditor\Core\RandomBrushes.cs" />
+    <Compile Include="WPFHexaEditor\Dialog\FindReplaceWindow.xaml.cs">
+      <DependentUpon>FindReplaceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFHexaEditor\Dialog\FindWindow.xaml.cs">
+      <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFHexaEditor\Dialog\GiveByteWindow.xaml.cs">
+      <DependentUpon>GiveByteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFHexaEditor\Dialog\ReplaceByteWindow.xaml.cs">
+      <DependentUpon>ReplaceByteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFHexaEditor\FastTextLine.cs" />
+    <Compile Include="WPFHexaEditor\GlobalSuppressions.cs" />
+    <Compile Include="WPFHexaEditor\HexBox.xaml.cs">
+      <DependentUpon>HexBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFHexaEditor\HexByte.cs" />
+    <Compile Include="WPFHexaEditor\HexEditor.xaml.cs">
+      <DependentUpon>HexEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPFHexaEditor\Properties\AssemblyInfo.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Resources.Designer.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Resources.fr-CA.Designer.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Resources.pl-PL.Designer.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Resources.pt-BR.Designer.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Resources.ru-RU.Designer.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Resources.zh-CN1.Designer.cs" />
+    <Compile Include="WPFHexaEditor\Properties\Settings.Designer.cs" />
+    <Compile Include="WPFHexaEditor\StringByte.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gacutil\gacutil.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="install.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="PreviewEditor.pfx" />
+    <None Include="RegAsm32\regasm.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="RegAsm64\regasm.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="uninstall.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="WPFHexaEditor\Properties\Settings.settings" />
+    <None Include="WPFHexaEditor\Resources\EBCDIC-NoSpecialChar.tbl" />
+    <None Include="WPFHexaEditor\Resources\EBCDIC.tbl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PreviewEditorControl.resx">
+      <DependentUpon>PreviewEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WPFHexaEditor\Properties\Resources.fr-CA.resx" />
+    <EmbeddedResource Include="WPFHexaEditor\Properties\Resources.pl-PL.resx" />
+    <EmbeddedResource Include="WPFHexaEditor\Properties\Resources.pt-BR.resx" />
+    <EmbeddedResource Include="WPFHexaEditor\Properties\Resources.resx" />
+    <EmbeddedResource Include="WPFHexaEditor\Properties\Resources.ru-RU.resx" />
+    <EmbeddedResource Include="WPFHexaEditor\Properties\Resources.zh-CN.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gacutil\gacutil.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RegAsm32\RegAsm.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="RegAsm64\RegAsm.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="hexEditorUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPFHexaEditor\Dialog\FindReplaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\Dialog\FindWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\Dialog\GiveByteWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\Dialog\ReplaceByteWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\HexBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\HexEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\Resources\Dictionary\BrushesDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\Resources\Dictionary\MiscelanousDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPFHexaEditor\Resources\Dictionary\ToolTipDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AssemblyResources\icsharpcode.avalonedit.dll" />
+    <EmbeddedResource Include="AssemblyResources\wpfhexaeditor.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AssemblyResources\previewhandler.sdk.managed.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WPFHexaEditor\LICENSE.txt" />
+    <Content Include="WPFHexaEditor\Resources\Icon\0x-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Add-Bookmark-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Clear-Bookmark-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Copy-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Delete-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Find-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Logo-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Logo-Icon.png" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Paste-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Remove-Bookmark-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Sans titre.png" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Settings-Icon.ico" />
+    <Content Include="WPFHexaEditor\Resources\Icon\Undo-Icon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

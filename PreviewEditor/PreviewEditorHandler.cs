@@ -41,11 +41,8 @@ namespace PreviewEditor
         /// </summary>
         static PreviewEditorHandler()
         {
-            //log.Debug("Handler.DoPreview: Constructor");
-            //log.Debug("Version: " + typeof(CodeEditPreviewHandler).Assembly.GetName().Version);
-
-            //SetupAssemblyInterceptor();
-            //OverrideAssemblyResolution();
+            System.Windows.Forms.MessageBox.Show($"Static Constructor");
+            SetupAssemblyInterceptor();
         }
 
 
@@ -67,36 +64,6 @@ namespace PreviewEditor
         /// Intercept loading of assemblies to load certain versions and
         /// to load from resources instead of the file system
         /// </summary>
-        private static void OverrideAssemblyResolution()
-        {
-            //we have to manually help resolve certain assembly references because this is a plugin
-            //and we don't have access to the main application's config file to set binding redirects
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                var name = args.Name;
-
-                var asmName = new AssemblyName(name);
-
-                //App.Write($"Resolving {name}");
-
-                if (name.Contains("SharpShell"))
-                {
-                    asmName.Version = new Version("2.7.2.0");
-                    return Assembly.Load(asmName);
-                }
-                else
-                {
-                    return null;
-                }
-            };
-
-        }
-
-
-        /// <summary>
-        /// Intercept loading of assemblies to load certain versions and
-        /// to load from resources instead of the file system
-        /// </summary>
         private static void SetupAssemblyInterceptor()
         {
             var curdir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -111,8 +78,13 @@ namespace PreviewEditor
 
                 var internalDlls = new string[]
                 {
-                    "SharpShell",
+                    "ICSharpCode.AvalonEdit",
+                    "WPFHexaEditor",
+                    "PreviewHandler.Sdk.Managed"
                 };
+
+                System.Windows.Forms.MessageBox.Show($"Loading {name}");
+
                 if (internalDlls.Any(s => name.Contains(s)))
                 {
                     //App.Write("   loaded from resource...");
@@ -148,15 +120,27 @@ namespace PreviewEditor
         /// <returns></returns>
         private static Assembly LoadResourceAssembly(string assemblyName)
         {
-            String resourceName = $"CodePreviewEditor.AssemblyResources.{new AssemblyName(assemblyName).Name}.dll";
-
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            try
             {
-                Byte[] assemblyData = new Byte[stream.Length];
-                stream.Read(assemblyData, 0, assemblyData.Length);
-                return Assembly.Load(assemblyData);
-            }
-        }
+                String resourceName = $"PreviewEditor.AssemblyResources.{new AssemblyName(assemblyName).Name}.dll";
 
+                System.Windows.Forms.MessageBox.Show($"Loading res for {resourceName}");
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    System.Windows.Forms.MessageBox.Show($"Res is null {stream is null}");
+                    Byte[] assemblyData = new Byte[stream.Length];
+                    System.Windows.Forms.MessageBox.Show($"Size {stream.Length}");
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    System.Windows.Forms.MessageBox.Show($"Read Res");
+                    return Assembly.Load(assemblyData);
+                }
+                //System.Windows.Forms.MessageBox.Show($"Done Loading");
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"Error {ex}");
+            }
+            return null;
+        }
     }
 }

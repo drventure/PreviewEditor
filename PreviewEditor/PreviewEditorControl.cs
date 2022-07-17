@@ -133,7 +133,7 @@ namespace PreviewEditor
             {
                 this.InvokeOnControlThread(() =>
                 {
-                    MessageBox.Show("Unloading");
+                    //MessageBox.Show("Unloading");
                     if (hexEditorHost != null && hexEditorHost.Child != null)
                     {
                         ((WpfHexaEditor.HexEditor)hexEditorHost.Child).CloseProvider();
@@ -182,23 +182,29 @@ namespace PreviewEditor
                 // at this point, we have the filename and we know the file exists
                 _fileInfo = new FileInfo(filename);
 
-                if (_fileInfo.Length > MAXFILESIZE || true)
+                if (_fileInfo.Length > MAXFILESIZE)
                 {
                     ShowStatus("The File is too big to preview.");
                     return;
                 }
 
+                System.Windows.Forms.MessageBox.Show($"this is null {this == null}");
                 this.InvokeOnControlThread(() =>
                 {
                     try
                     {
                         //MessageBox.Show($"Set text");
+                        System.Windows.Forms.MessageBox.Show($"tbxEditor is null {tbxEditor == null}");
                         tbxEditor.Text = buf;
 
                         //MessageBox.Show($"Set Hex");
+                        System.Windows.Forms.MessageBox.Show($"loading hex editor");
                         var hexEditor = new WpfHexaEditor.HexEditor();
+                        System.Windows.Forms.MessageBox.Show($"hex editor is null {hexEditor == null}");
                         hexEditorHost.Child = hexEditor;
+                        System.Windows.Forms.MessageBox.Show($"1");
                         hexEditor.Stream = new MemoryStream(Encoding.ASCII.GetBytes(buf));
+                        System.Windows.Forms.MessageBox.Show($"2");
 
                         var editor = new TextEditor();
                         textEditorHost.Child = editor;
