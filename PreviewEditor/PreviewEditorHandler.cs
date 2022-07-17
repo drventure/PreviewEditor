@@ -41,7 +41,7 @@ namespace PreviewEditor
         /// </summary>
         static PreviewEditorHandler()
         {
-            System.Windows.Forms.MessageBox.Show($"Static Constructor");
+            //System.Windows.Forms.MessageBox.Show($"Static Constructor");
             SetupAssemblyInterceptor();
         }
 
@@ -83,7 +83,7 @@ namespace PreviewEditor
                     "PreviewHandler.Sdk.Managed"
                 };
 
-                System.Windows.Forms.MessageBox.Show($"Loading {name}");
+                //System.Windows.Forms.MessageBox.Show($"Loading {name}");
 
                 if (internalDlls.Any(s => name.Contains(s)))
                 {
@@ -124,14 +124,14 @@ namespace PreviewEditor
             {
                 String resourceName = $"PreviewEditor.AssemblyResources.{new AssemblyName(assemblyName).Name}.dll";
 
-                System.Windows.Forms.MessageBox.Show($"Loading res for {resourceName}");
+                //System.Windows.Forms.MessageBox.Show($"Loading res for {resourceName}");
                 using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 {
-                    System.Windows.Forms.MessageBox.Show($"Res is null {stream is null}");
+                    //System.Windows.Forms.MessageBox.Show($"Res is null {stream is null}");
                     Byte[] assemblyData = new Byte[stream.Length];
-                    System.Windows.Forms.MessageBox.Show($"Size {stream.Length}");
+                    //System.Windows.Forms.MessageBox.Show($"Size {stream.Length}");
                     stream.Read(assemblyData, 0, assemblyData.Length);
-                    System.Windows.Forms.MessageBox.Show($"Read Res");
+                    //System.Windows.Forms.MessageBox.Show($"Read Res");
                     return Assembly.Load(assemblyData);
                 }
                 //System.Windows.Forms.MessageBox.Show($"Done Loading");
