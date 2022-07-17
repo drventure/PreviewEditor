@@ -13,18 +13,34 @@ using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace PreviewEditor.Editors
 {
-    internal class TextEditControl : ElementHost, IPreviewEditorControl
+    /// <summary>
+    /// Since both the TextEditor and the large text file viewer rely on AvalonEdit
+    /// we'll use this base class to abstract out the commonalities between the two
+    /// </summary>
+    internal abstract class TextControlBase : ElementHost, IPreviewEditorControl
     {
-        private string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps" };
+        /// <summary>
+        /// size beyond which control becomes read only and this editor won't handle it
+        /// </summary>
+        protected const int MAXEDITABLESIZE = 2 * 1000 * 1000;
 
-        private FileInfo _fileInfo;
-        private TextEditor _editor;
+        protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps" };
 
-        private DispatcherTimer _foldingUpdateTimer;
-        private FoldingManager _foldingManager;
-        private dynamic _foldingStrategy;
+        protected FileInfo _fileInfo;
+        protected TextEditor _editor;
 
-        public TextEditControl()
+        protected DispatcherTimer _foldingUpdateTimer;
+        protected FoldingManager _foldingManager;
+        protected dynamic _foldingStrategy;
+
+
+        public TextControlBase(FileInfo fileInfo) : this()
+        {
+            _fileInfo = fileInfo;   
+        }
+
+
+        public TextControlBase()
         {
             this.ParentChanged += OnParentChanged;
         }
@@ -36,30 +52,15 @@ namespace PreviewEditor.Editors
             _editor = new TextEditor();
             this.Child = _editor;
 
-            try
-            {
-                var buf = File.ReadAllText(_fileInfo.FullName);
-                _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_fileInfo.Extension);
-                _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
-                _editor.FontSize = 14;
-                SetDarkMode();
-                _editor.Text = buf;
+            _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_fileInfo.Extension);
+            _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
+            _editor.FontSize = 14;
+            SetDarkMode();
 
-                SetFoldingStrategy();
-            }
-            catch (Exception ex)
-            {
-                //TODO update the status label?
-            }
+            SetFoldingStrategy();
 
             //once we've initialized, unhook the event
             this.ParentChanged -= OnParentChanged;
-        }
-
-
-        public TextEditControl(FileInfo fileInfo) : this()
-        {
-            _fileInfo = fileInfo;
         }
 
 
@@ -134,10 +135,13 @@ namespace PreviewEditor.Editors
         {
             get
             {
-                if (EXTENSIONS.Contains(_fileInfo.Extension))
+                if (_fileInfo.Length <= MAXEDITABLESIZE)
                 {
-                    //we can be reasonably sure any of these are text files
-                    return true;
+                    if (EXTENSIONS.Contains(_fileInfo.Extension))
+                    {
+                        //we can be reasonably sure any of these are text files
+                        return true;
+                    }
                 }
 
                 //for now just return false otherwise
