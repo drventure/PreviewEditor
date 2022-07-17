@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
@@ -18,30 +19,41 @@ namespace PreviewEditor
     /// The Main PreviewEditorControl
     /// </summary>
     public class PreviewEditorControl
-//The Designer doesn't want to view controls based on Abstract classes
-//so wrap the abstract in a concrete class an inherit from it.
-//skip this in release mode because we don't have to use the designer in release mode
+        //The Designer doesn't want to view controls based on Abstract classes
+        //so wrap the abstract in a concrete class an inherit from it.
+        //skip this in release mode because we don't have to use the designer in release mode
 #if DEBUG
         : PreviewHandlerControlBaseWrapper
 #elif RELEASE
         : PreviewHandlerControlBase
 #endif
     {
-        private TextBox tbxEditor;
-
-        public PreviewEditorControl()
-        {
-            InitializeComponent();
-        }
-
-        private System.Windows.Forms.Integration.ElementHost hexEditorHost;
-        private System.Windows.Forms.Integration.ElementHost textEditorHost;
-
-
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        private FileInfo _fileInfo;
+        private Panel pnlEditor;
+        private TextBox tbxEditor;
+        private System.Windows.Forms.Integration.ElementHost hexEditorHost;
+        private System.Windows.Forms.Integration.ElementHost textEditorHost;
+
+        private const int MAXFILESIZE = 2 * 1000 * 1000;
+
+
+        public PreviewEditorControl()
+        {
+            InitializeComponent();
+
+            pnlEditor = new Panel();
+            this.Controls.Add(pnlEditor);
+
+            pnlEditor.Dock = DockStyle.Fill;
+
+            InitializeLoadingScreen();
+        }
+
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -53,7 +65,6 @@ namespace PreviewEditor
             {
                 components.Dispose();
             }
-            Shutdown();
             base.Dispose(disposing);
         }
 
@@ -112,6 +123,12 @@ namespace PreviewEditor
 
         internal void Shutdown()
         {
+            if (_statusMsgTimer != null)
+            {
+                _statusMsgTimer.Stop();
+                _statusMsgTimer = null;
+            }
+
             if (this.Handle != IntPtr.Zero)
             {
                 this.InvokeOnControlThread(() =>
@@ -132,13 +149,19 @@ namespace PreviewEditor
         }
 
 
-        public override void DoPreview<T>(T dataSource) 
+        /// <summary>
+        /// Main entry point. dataSource might be a filename or a stream
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataSource"></param>
+        public override void DoPreview<T>(T dataSource)
         {
             try
             {
                 //MessageBox.Show($"Previewing");
                 var buf = "";
-                var filename = "";
+                string filename = null;
+                _fileInfo = null;
 
                 if (dataSource is string stringVal)
                 {
@@ -148,16 +171,21 @@ namespace PreviewEditor
                         buf = File.ReadAllText(stringVal);
                     }
                 }
-                else if (dataSource is IStream streamVal)
-                {
-                    var stream = ToMemoryStream(streamVal);
-                    buf = Encoding.ASCII.GetString(stream.ToArray());
-                    MessageBox.Show($"Previewing STREAM {streamVal}");
-                }
                 else
                 {
-                    MessageBox.Show($"Previewing {dataSource.GetType().Name}");
-                    throw new ArgumentException($"{nameof(dataSource)} for {nameof(PreviewEditorControl)} must be a stream but was a '{typeof(T)}'");
+                    //technically this should never happen because 
+                    //this is based on the FileBasedPreviewControl
+                    ShowStatus("Filename not available, unable to load preview.");
+                    return;
+                }
+
+                // at this point, we have the filename and we know the file exists
+                _fileInfo = new FileInfo(filename);
+
+                if (_fileInfo.Length > MAXFILESIZE || true)
+                {
+                    ShowStatus("The File is too big to preview.");
+                    return;
                 }
 
                 this.InvokeOnControlThread(() =>
@@ -180,6 +208,8 @@ namespace PreviewEditor
                         //MessageBox.Show($"Call base");
                         base.DoPreview(dataSource);
                         //MessageBox.Show($"Done calling base");
+
+                        HideStatus();
                     }
                     catch (Exception ex)
                     {
@@ -199,6 +229,103 @@ namespace PreviewEditor
                     var lbl = new Label();
                     lbl.Text = "File could not be loaded for preview";
                     this.Controls.Add(lbl);
+                });
+            }
+        }
+
+
+        /// <summary>
+        /// Hook into font setter
+        /// </summary>
+        /// <param name="font"></param>
+        public new void SetFont(Font font)
+        {
+            base.SetFont(font);
+            pnlEditor.Font = font;
+        }
+
+
+        /// <summary>
+        /// Hook into color setter
+        /// </summary>
+        /// <param name="color"></param>
+        public new void SetTextColor(Color color)
+        {
+            base.SetTextColor(color);
+            pnlEditor.ForeColor = color;
+        }
+
+
+        /// <summary>
+        /// hook into color setter
+        /// </summary>
+        /// <param name="argbColor"></param>
+        public new void SetBackgroundColor(Color color)
+        {
+            base.SetBackgroundColor(color);
+            pnlEditor.BackColor = color;
+        }
+
+
+        /// <summary>
+        /// Give the user a nice loading message
+        /// </summary>
+        private void InitializeLoadingScreen()
+        {
+            InvokeOnControlThread(() =>
+            {
+
+                var loading = new Label();
+                this.pnlEditor.Controls.Add(loading);
+
+                loading.Dock = DockStyle.Fill;
+                loading.Text = "Loading...";
+                loading.TextAlign = ContentAlignment.MiddleCenter;
+                loading.AutoSize = false;
+                loading.Font = new Font("MS Sans Serif", 16, FontStyle.Bold);
+                loading.ForeColor = Color.White; // Settings.TextColor;
+                loading.BackColor = Color.Black; // Settings.BackgroundColor;
+            });
+        }
+
+
+        private Timer _statusMsgTimer;
+        private void ShowStatus(string message)
+        {
+            var label = this.pnlEditor.Controls[0] as Label;
+            if (label != null)
+            {
+                label.Text = message;
+
+                _statusMsgTimer = new Timer();
+                _statusMsgTimer.Interval = 3000;
+                _statusMsgTimer.Tick += (sender, e) =>
+                {
+                    HideStatus();
+                };
+                _statusMsgTimer.Start();
+            }
+        }
+
+
+        private void HideStatus()
+        {
+            var label = this.pnlEditor.Controls[0] as Label;
+            if (label != null)
+            {
+                this.InvokeOnControlThread(() =>
+                {
+                    if (_statusMsgTimer != null)
+                    {
+                        _statusMsgTimer.Stop();
+                        _statusMsgTimer = null;
+                    }
+                    label.Text = "";
+
+                    if (this.pnlEditor.Controls.Contains(label))
+                    {
+                        this.pnlEditor.Controls.Remove(label);
+                    }
                 });
             }
         }
