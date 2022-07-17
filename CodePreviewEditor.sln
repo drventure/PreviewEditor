@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellTestRig", "ShellTestRi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewEditor", "PreviewEditor\PreviewEditor.csproj", "{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewEditorHost", "PreviewEditorHost\PreviewEditorHost.csproj", "{18E374F1-64CF-42CA-A781-25AB76A71886}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F4128880-3FD2-4F0F-8540-C1D5FA5DE12F}.Release|x86.Build.0 = Release|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Debug|x86.Build.0 = Debug|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Release|x86.ActiveCfg = Release|Any CPU
+		{18E374F1-64CF-42CA-A781-25AB76A71886}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

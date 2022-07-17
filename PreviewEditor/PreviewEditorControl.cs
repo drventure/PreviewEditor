@@ -112,20 +112,23 @@ namespace PreviewEditor
 
         internal void Shutdown()
         {
-            this.InvokeOnControlThread(() =>
+            if (this.Handle != IntPtr.Zero)
             {
-                MessageBox.Show("Unloading");
-                if (hexEditorHost != null && hexEditorHost.Child != null)
+                this.InvokeOnControlThread(() =>
                 {
-                    ((WpfHexaEditor.HexEditor)hexEditorHost.Child).CloseProvider();
-                    hexEditorHost.Child = null;
-                }
-                if (textEditorHost != null && textEditorHost.Child != null)
-                {
-                    textEditorHost.Child = null;
-                }
-                this.Controls.Clear();
-            });
+                    MessageBox.Show("Unloading");
+                    if (hexEditorHost != null && hexEditorHost.Child != null)
+                    {
+                        ((WpfHexaEditor.HexEditor)hexEditorHost.Child).CloseProvider();
+                        hexEditorHost.Child = null;
+                    }
+                    if (textEditorHost != null && textEditorHost.Child != null)
+                    {
+                        textEditorHost.Child = null;
+                    }
+                    this.Controls.Clear();
+                });
+            }
         }
 
 
@@ -180,13 +183,13 @@ namespace PreviewEditor
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Exc {ex.ToString()}");
+                        MessageBox.Show($"Error {ex.ToString()}");
                     }
                 });
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Exc {ex.ToString()}");
+                MessageBox.Show($"Error {ex.ToString()}");
 
                 //if any exception happens, we just have to eat it and show nothing
                 this.InvokeOnControlThread(() =>
