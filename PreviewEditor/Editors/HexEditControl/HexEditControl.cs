@@ -54,8 +54,6 @@ namespace PreviewEditor.Editors
         }
 
 
-
-
         public HexEditControl(FileInfo fileInfo) : this()
         {
             _fileInfo = fileInfo;

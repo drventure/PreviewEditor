@@ -66,6 +66,7 @@ namespace PreviewEditorHost
             this.pnlPreviewHost.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlPreviewHost.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlPreviewHost.Location = new System.Drawing.Point(199, 12);
             this.pnlPreviewHost.Name = "pnlPreviewHost";
             this.pnlPreviewHost.Size = new System.Drawing.Size(1242, 583);
