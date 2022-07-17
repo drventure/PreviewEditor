@@ -11,7 +11,8 @@ using System.Windows.Forms;
 
 using ICSharpCode.AvalonEdit;
 using PreviewHandler.Sdk.Controls;
-
+using PreviewEditor.Editors;
+using System.Windows.Forms.Integration;
 
 namespace PreviewEditor
 {
@@ -35,9 +36,6 @@ namespace PreviewEditor
 
         private FileInfo _fileInfo;
         private Panel pnlEditor;
-        private TextBox tbxEditor;
-        private System.Windows.Forms.Integration.ElementHost hexEditorHost;
-        private System.Windows.Forms.Integration.ElementHost textEditorHost;
 
         private const int MAXFILESIZE = 2 * 1000 * 1000;
 
@@ -71,42 +69,10 @@ namespace PreviewEditor
 
         private void InitializeComponent()
         {
-            this.tbxEditor = new System.Windows.Forms.TextBox();
-            this.hexEditorHost = new System.Windows.Forms.Integration.ElementHost();
-            this.textEditorHost = new System.Windows.Forms.Integration.ElementHost();
             this.SuspendLayout();
-            // 
-            // tbxEditor
-            // 
-            this.tbxEditor.Location = new System.Drawing.Point(613, 30);
-            this.tbxEditor.Multiline = true;
-            this.tbxEditor.Name = "tbxEditor";
-            this.tbxEditor.Size = new System.Drawing.Size(366, 209);
-            this.tbxEditor.TabIndex = 0;
-            // 
-            // hexEditorHost
-            // 
-            this.hexEditorHost.Location = new System.Drawing.Point(29, 51);
-            this.hexEditorHost.Name = "hexEditorHost";
-            this.hexEditorHost.Size = new System.Drawing.Size(519, 188);
-            this.hexEditorHost.TabIndex = 1;
-            this.hexEditorHost.Text = "elementHost1";
-            this.hexEditorHost.Child = null;
-            // 
-            // textEditorHost
-            // 
-            this.textEditorHost.Location = new System.Drawing.Point(1019, 51);
-            this.textEditorHost.Name = "textEditorHost";
-            this.textEditorHost.Size = new System.Drawing.Size(519, 188);
-            this.textEditorHost.TabIndex = 2;
-            this.textEditorHost.Text = "elementHost1";
-            this.textEditorHost.Child = null;
             // 
             // PreviewEditorHandlerControl
             // 
-            this.Controls.Add(this.textEditorHost);
-            this.Controls.Add(this.hexEditorHost);
-            this.Controls.Add(this.tbxEditor);
             this.Name = "PreviewEditorHandlerControl";
             this.Size = new System.Drawing.Size(1814, 643);
             this.ResumeLayout(false);
@@ -134,14 +100,16 @@ namespace PreviewEditor
                 this.InvokeOnControlThread(() =>
                 {
                     //MessageBox.Show("Unloading");
-                    if (hexEditorHost != null && hexEditorHost.Child != null)
+                    if (this.pnlEditor.Controls.Count == 1)
                     {
-                        ((WpfHexaEditor.HexEditor)hexEditorHost.Child).CloseProvider();
-                        hexEditorHost.Child = null;
-                    }
-                    if (textEditorHost != null && textEditorHost.Child != null)
-                    {
-                        textEditorHost.Child = null;
+                        var editor = this.pnlEditor.Controls[0] as IPreviewEditorControl;
+                        if (editor != null)
+                        {
+                            if (editor != null)
+                            {
+                                editor.Close();
+                            }
+                        }
                     }
                     this.Controls.Clear();
                 });
@@ -159,7 +127,6 @@ namespace PreviewEditor
             try
             {
                 //MessageBox.Show($"Previewing");
-                var buf = "";
                 string filename = null;
                 _fileInfo = null;
 
@@ -168,7 +135,6 @@ namespace PreviewEditor
                     if (File.Exists(stringVal))
                     {
                         filename = stringVal;
-                        buf = File.ReadAllText(stringVal);
                     }
                 }
                 else
@@ -192,23 +158,22 @@ namespace PreviewEditor
                 {
                     try
                     {
-                        //MessageBox.Show($"Set text");
-                        tbxEditor.Text = buf;
+                        IPreviewEditorControl editor = new TextEditControl(_fileInfo);
+                        if (!editor.IsApplicable) editor = new HexEditControl(_fileInfo);
+                        if (!editor.IsApplicable)
+                        {
+                            ShowStatus("Unable to preview this file.");
+                            return;
+                        }
 
-                        //MessageBox.Show($"Set Hex");
-                        var hexEditor = new WpfHexaEditor.HexEditor();
-                        hexEditorHost.Child = hexEditor;
-                        hexEditor.Stream = new MemoryStream(Encoding.ASCII.GetBytes(buf));
-
-                        var editor = new TextEditor();
-                        textEditorHost.Child = editor;
-                        editor.Text = buf;
+                        this.pnlEditor.Controls.Clear();
+                        var editorControl = (Control)editor;
+                        this.pnlEditor.Controls.Add(editorControl);
+                        editorControl.Dock = DockStyle.Fill;
+                        editorControl.Visible = true;
 
                         //call the base class to finish out
-                        //MessageBox.Show($"Call base");
                         base.DoPreview(dataSource);
-                        //MessageBox.Show($"Done calling base");
-
                         HideStatus();
                     }
                     catch (Exception ex)
@@ -224,11 +189,7 @@ namespace PreviewEditor
                 //if any exception happens, we just have to eat it and show nothing
                 this.InvokeOnControlThread(() =>
                 {
-                    tbxEditor.Visible = false;
-
-                    var lbl = new Label();
-                    lbl.Text = "File could not be loaded for preview";
-                    this.Controls.Add(lbl);
+                    ShowStatus("Unable to preview this file.");
                 });
             }
         }
@@ -295,15 +256,18 @@ namespace PreviewEditor
             var label = this.pnlEditor.Controls[0] as Label;
             if (label != null)
             {
-                label.Text = message;
-
-                _statusMsgTimer = new Timer();
-                _statusMsgTimer.Interval = 3000;
-                _statusMsgTimer.Tick += (sender, e) =>
+                this.InvokeOnControlThread(() =>
                 {
-                    HideStatus();
-                };
-                _statusMsgTimer.Start();
+                    label.Text = message;
+
+                    _statusMsgTimer = new Timer();
+                    _statusMsgTimer.Interval = 3000;
+                    _statusMsgTimer.Tick += (sender, e) =>
+                    {
+                        HideStatus();
+                    };
+                    _statusMsgTimer.Start();
+                });
             }
         }
 

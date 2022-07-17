@@ -107,6 +107,7 @@ namespace PreviewEditorHost
                 ((Form)prv).Parent = pnlPreviewHost;
                 prv.Visible = true;
                 prv.DoPreview<string>(file);
+                prv.Dock = DockStyle.Fill;
             }
         }
     }

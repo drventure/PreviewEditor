@@ -5,12 +5,12 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>PreviewEditor</RootNamespace>
     <AssemblyName>PreviewEditor</AssemblyName>
-    <Title>WpfHexEditor user control</Title>
+    <Title>PreviewEditor</Title>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Authors></Authors>
     <Company></Company>
     <Description></Description>
-    <PackageIcon>Logo-Icon.png</PackageIcon>
+    <PackageIcon></PackageIcon>
     <PackageIconUrl />
     <Product></Product>
     <Copyright>Apache 2.0</Copyright>
@@ -18,7 +18,7 @@
     <FileVersion></FileVersion>
     <Version></Version>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <PackageTags>character-table;hexadecimal;binary;editor;hexeditor;tbl;hexedit</PackageTags>
+    <PackageTags></PackageTags>
     <ApplicationIcon />
     <LangVersion>preview</LangVersion>
     <PackageProjectUrl></PackageProjectUrl>
