@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using System.Windows.Input;
 using System.Windows.Threading;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
@@ -15,6 +17,8 @@ namespace PreviewEditor.Editors
 {
     internal class TextEditControl : TextControlBase
     {
+        private bool _isDirty = false;
+
         public TextEditControl(FileInfo fileInfo) : base(fileInfo)
         {
             this.ParentChanged += OnParentChanged;
@@ -32,6 +36,13 @@ namespace PreviewEditor.Editors
             {
                 var buf = File.ReadAllText(_fileInfo.FullName);
                 _editor.Text = buf;
+
+                //track whether document has been changed
+                _isDirty = false;
+                _editor.DocumentChanged += (sender, e) =>
+                {
+                    _isDirty = true;
+                };
             }
             catch (Exception ex)
             {
@@ -110,7 +121,26 @@ namespace PreviewEditor.Editors
         }
 
 
-        public bool IsApplicable
+        /// <summary>
+        /// Handle TextEdit specific keys
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected override void GeneralKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.S)
+                {
+                    Save();
+                }
+            }
+
+            base.GeneralKeyDown(sender, e); 
+        }
+
+
+        public override bool IsApplicable
         {
             get
             {
@@ -129,14 +159,23 @@ namespace PreviewEditor.Editors
         }
 
 
-        public void Close()
+        public void Save()
         {
-            if (_editor != null)
+            if (_isDirty)
             {
-                _editor = null;
+                if (MessageBox.Show("Save Changes?", "File has changed", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    try
+                    {
+                        _editor.Save(_fileInfo.FullName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error saving changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            this.Child = null;
+            _isDirty = false;
         }
     }
 }

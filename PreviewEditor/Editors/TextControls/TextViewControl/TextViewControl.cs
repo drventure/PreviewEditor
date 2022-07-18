@@ -125,7 +125,7 @@ namespace PreviewEditor.Editors
         }
 
 
-        public bool IsApplicable
+        public override bool IsApplicable
         {
             get
             {
@@ -138,17 +138,6 @@ namespace PreviewEditor.Editors
                 //for now just return false otherwise
                 return false;
             }
-        }
-
-
-        public void Close()
-        {
-            if (_editor != null)
-            {
-                _editor = null;
-            }
-
-            this.Child = null;
         }
     }
 }

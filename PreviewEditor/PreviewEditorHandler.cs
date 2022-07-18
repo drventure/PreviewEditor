@@ -80,7 +80,7 @@ namespace PreviewEditor
                 {
                     "ICSharpCode.AvalonEdit",
                     "WPFHexaEditor",
-                    "PreviewHandler.Sdk.Managed"
+                    "Newtonsoft.Json"
                 };
 
                 //System.Windows.Forms.MessageBox.Show($"Loading {name}");

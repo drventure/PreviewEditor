@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
+using System.Windows.Input;
 using System.Windows.Threading;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
@@ -51,6 +52,10 @@ namespace PreviewEditor.Editors
             //init the control once it's sited
             _editor = new TextEditor();
             this.Child = _editor;
+
+            //monitor this event and forward to the subclass
+            //which will then call back to this base class if needed
+            _editor.KeyDown += GeneralKeyDown; ;
 
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_fileInfo.Extension);
             _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
@@ -131,23 +136,24 @@ namespace PreviewEditor.Editors
         }
 
 
-        public bool IsApplicable
+        /// <summary>
+        /// Handle General Text Control Keys
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void GeneralKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            get
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
-                if (_fileInfo.Length <= MAXEDITABLESIZE)
+                if (e.Key == Key.T)
                 {
-                    if (EXTENSIONS.Contains(_fileInfo.Extension))
-                    {
-                        //we can be reasonably sure any of these are text files
-                        return true;
-                    }
+                    //ToggleEditor();
                 }
-
-                //for now just return false otherwise
-                return false;
             }
         }
+
+
+        public abstract bool IsApplicable { get; }
 
 
         public void Close()
