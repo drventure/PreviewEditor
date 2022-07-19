@@ -25,7 +25,8 @@ namespace PreviewEditor
     /// 
     /// Not using the stream based handler right now.
     /// </summary>
-    [PreviewHandler("Preview Editor Handler", ".cs;.vb;.html;.htm;.log;.txt;.cshtml;.css;.csproj;.vbproj", "{C71E74A6-4C57-4297-90E3-A221F6EECF24}")]
+    /// ".cs;.vb;.html;.htm;.log;.txt;.cshtml;.css;.csproj;.vbproj"
+    [PreviewHandler("Preview Editor Handler", "*", "{C71E74A6-4C57-4297-90E3-A221F6EECF24}")]
     [ProgId("PreviewEditorHandler")]
     [Guid("D2A0858D-6E99-4A5A-87C9-2590A1B1B720")]
     [ClassInterface(ClassInterfaceType.None)]

@@ -129,9 +129,8 @@ namespace PreviewEditor.Editors
         {
             get
             {
-                if (EXTENSIONS.Contains(_fileInfo.Extension))
+                if (this.IsLikelyTextFile())
                 {
-                    //we can be reasonably sure any of these are text files
                     return true;
                 }
 

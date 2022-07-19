@@ -25,7 +25,7 @@ namespace PreviewEditor.Editors
         /// </summary>
         protected const int MAXEDITABLESIZE = 2 * 1000 * 1000;
 
-        protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps" };
+        protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
         protected FileInfo _fileInfo;
         protected TextEditor _editor;
@@ -149,6 +149,41 @@ namespace PreviewEditor.Editors
                 {
                     //ToggleEditor();
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// check the first 8k for any null chars
+        /// If there is one, this is likely a binary file
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsLikelyTextFile()
+        {
+            StreamReader fileReader = null;
+            try
+            {
+                var l = _fileInfo.Length;
+                l = l > 8000 ? 8000 : l;
+                if (l == 0) return true;
+                char[] chars = new char[l];
+                using (fileReader = new StreamReader(new FileStream(_fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                {
+                    var buffer = fileReader.ReadBlock(chars, 0, (int)l);
+                }
+                for (var i = 0; i < l; i++)
+                {
+                    if (chars[i] == 0) return false; 
+                }
+                return true;
+            } 
+            catch (Exception ex)
+            {
+                _ = ex;
+                return false;
+            }
+            finally
+            {
             }
         }
 

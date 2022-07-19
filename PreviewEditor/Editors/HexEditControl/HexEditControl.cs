@@ -47,6 +47,7 @@ namespace PreviewEditor.Editors
             catch (Exception ex)
             {
                 //TODO update the status label?
+                MessageBox.Show($"{ex}");
             }
 
             //once we've initialized, unhook the event
