@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
+using System.Windows.Media;
 using System.Windows.Threading;
+
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -34,7 +36,7 @@ namespace PreviewEditor.Editors
         private void OnParentChanged(object sender, EventArgs e)
         {
             //init the control once it's sited
-            _editor.IsReadOnly = true;  
+            _editor.IsReadOnly = true;
 
             try
             {
@@ -121,21 +123,6 @@ namespace PreviewEditor.Editors
             {
                 var f = h.Foreground;
                 var b = h.Background;
-            }
-        }
-
-
-        public override bool IsApplicable
-        {
-            get
-            {
-                if (this.IsLikelyTextFile())
-                {
-                    return true;
-                }
-
-                //for now just return false otherwise
-                return false;
             }
         }
     }

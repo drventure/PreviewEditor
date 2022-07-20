@@ -140,25 +140,6 @@ namespace PreviewEditor.Editors
         }
 
 
-        public override bool IsApplicable
-        {
-            get
-            {
-                if (_fileInfo.Length <= MAXEDITABLESIZE)
-                {
-                    if (this.IsLikelyTextFile())
-                    {
-                        //we can be reasonably sure any of these are text files
-                        return true;
-                    }
-                }
-
-                //for now just return false otherwise
-                return false;
-            }
-        }
-
-
         public void Save()
         {
             if (_isDirty)

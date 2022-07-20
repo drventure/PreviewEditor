@@ -9,9 +9,6 @@ namespace PreviewEditor.Editors
 {
     internal interface IPreviewEditorControl
     {
-        bool IsApplicable { get; }
-
-
         void Close();
     }
 }

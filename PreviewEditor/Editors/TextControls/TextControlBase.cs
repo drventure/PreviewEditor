@@ -7,10 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
+
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
+
 
 namespace PreviewEditor.Editors
 {
@@ -20,11 +23,6 @@ namespace PreviewEditor.Editors
     /// </summary>
     internal abstract class TextControlBase : ElementHost, IPreviewEditorControl
     {
-        /// <summary>
-        /// size beyond which control becomes read only and this editor won't handle it
-        /// </summary>
-        protected const int MAXEDITABLESIZE = 2 * 1000 * 1000;
-
         protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
         protected FileInfo _fileInfo;
@@ -60,6 +58,7 @@ namespace PreviewEditor.Editors
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_fileInfo.Extension);
             _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
             _editor.FontSize = 14;
+
             SetDarkMode();
 
             SetFoldingStrategy();
@@ -127,6 +126,8 @@ namespace PreviewEditor.Editors
 
         private void SetDarkMode()
         {
+            _editor.Foreground = new SolidColorBrush(Colors.WhiteSmoke);
+            _editor.Background = new SolidColorBrush(Color.FromRgb(0x1e, 0x1e, 0x1e));
             return;
             foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
             {
@@ -151,44 +152,6 @@ namespace PreviewEditor.Editors
                 }
             }
         }
-
-
-        /// <summary>
-        /// check the first 8k for any null chars
-        /// If there is one, this is likely a binary file
-        /// </summary>
-        /// <returns></returns>
-        protected bool IsLikelyTextFile()
-        {
-            StreamReader fileReader = null;
-            try
-            {
-                var l = _fileInfo.Length;
-                l = l > 8000 ? 8000 : l;
-                if (l == 0) return true;
-                char[] chars = new char[l];
-                using (fileReader = new StreamReader(new FileStream(_fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-                {
-                    var buffer = fileReader.ReadBlock(chars, 0, (int)l);
-                }
-                for (var i = 0; i < l; i++)
-                {
-                    if (chars[i] == 0) return false; 
-                }
-                return true;
-            } 
-            catch (Exception ex)
-            {
-                _ = ex;
-                return false;
-            }
-            finally
-            {
-            }
-        }
-
-
-        public abstract bool IsApplicable { get; }
 
 
         public void Close()

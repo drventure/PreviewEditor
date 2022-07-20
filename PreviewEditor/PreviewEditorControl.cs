@@ -158,18 +158,17 @@ namespace PreviewEditor
                 {
                     try
                     {
-                        MessageBox.Show($"Typing Editor");
-                        IPreviewEditorControl editor = new TextEditControl(_fileInfo);
-                        if (!editor.IsApplicable) editor = new TextViewControl(_fileInfo);
-                        if (!editor.IsApplicable) editor = new HexEditControl(_fileInfo);
-                        if (!editor.IsApplicable)
+                        //MessageBox.Show($"Typing Editor");
+                        var editor = EditorFactory.GetEditor(_fileInfo);
+
+                        if (false)
                         {
                             MessageBox.Show($"Unable to preview");
                             ShowStatus("Unable to preview this file.");
                             return;
                         }
 
-                        MessageBox.Show($"editor is {editor.GetType().Name}");
+                        //MessageBox.Show($"editor is {editor.GetType().Name}");
 
                         this.pnlEditor.Controls.Clear();
                         var editorControl = (Control)editor;
