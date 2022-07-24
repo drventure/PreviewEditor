@@ -37,8 +37,6 @@ namespace PreviewEditor
         private FileInfo _fileInfo;
         private Panel pnlEditor;
 
-        private const int MAXFILESIZE = 2 * 1000 * 1000;
-
 
         public PreviewEditorControl()
         {
@@ -147,12 +145,6 @@ namespace PreviewEditor
 
                 // at this point, we have the filename and we know the file exists
                 _fileInfo = new FileInfo(filename);
-
-                if (_fileInfo.Length > MAXFILESIZE)
-                {
-                    ShowStatus("The File is too big to preview.");
-                    return;
-                }
 
                 this.InvokeOnControlThread(() =>
                 {
