@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -53,7 +54,9 @@ namespace PreviewEditor.Editors
 
             //monitor this event and forward to the subclass
             //which will then call back to this base class if needed
-            _editor.KeyDown += GeneralKeyDown; ;
+            _editor.KeyDown += GeneralKeyDown;
+
+            _editor.MouseDown += _editor_MouseDown;
 
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_fileInfo.Extension);
             _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
@@ -65,6 +68,101 @@ namespace PreviewEditor.Editors
 
             //once we've initialized, unhook the event
             this.ParentChanged -= OnParentChanged;
+        }
+
+
+        private void _editor_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                this.ContextMenu.Show(this, this.PointToClient(System.Windows.Forms.Cursor.Position));
+            }
+        }
+
+
+        /// <summary>
+        /// Build up the ContextMenu
+        /// </summary>
+        public override ContextMenu ContextMenu
+        {
+            get
+            {
+                var menu = new ContextMenu();
+                menu.MenuItems.Add(
+                    new MenuItem("Cut", (sender, e) =>
+                    {
+                        _editor.Cut();
+                    })
+                );
+
+                menu.MenuItems.Add(
+                    new MenuItem("Copy", (sender, e) =>
+                    {
+                        _editor.Copy();
+                    })
+                );
+
+                menu.MenuItems.Add(
+                    new MenuItem("Paste", (sender, e) =>
+                    {
+                        _editor.Paste();
+                    })
+                );
+
+                menu.MenuItems.Add(new MenuItem("Save", mnuSave));
+                menu.MenuItems.Add(new MenuItem("Save As", mnuSaveAs));
+
+                menu.MenuItems.Add(
+                    new MenuItem("Switch to Hex", (sender, e) =>
+                    {
+                        //TODO
+                    })
+                );
+
+                return menu;
+            }
+        }
+
+
+        private void mnuSave(object sender, EventArgs e)
+        {
+                try
+                {
+                    //TODO automatically make writable if possible?
+                    _editor.Save(_fileInfo.FullName);
+                }
+                catch (Exception ex)
+                {
+                    //TODO handle exception
+                }
+        }
+
+
+        private void mnuSaveAs(object sender, EventArgs e)
+        {
+            try
+            {
+                //TODO automatically make writable if possible?
+                var dlg = new SaveFileDialog();
+                dlg.InitialDirectory = _fileInfo.DirectoryName;
+                dlg.FileName = _fileInfo.Name;
+                dlg.OverwritePrompt = true;
+                dlg.Title = "Save file as...";
+                dlg.CheckPathExists = true;
+                dlg.CheckFileExists = false;
+
+                dlg.ShowDialog(this);
+                if (dlg.FileName != "")
+                {
+                    var fs = dlg.OpenFile(); 
+                    _editor.Save(fs);
+                    fs.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO handle exception
+            }
         }
 
 

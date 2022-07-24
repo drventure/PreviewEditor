@@ -29,7 +29,7 @@ namespace PreviewEditor.Editors
                 }
             else
             {
-                return new HexEditControl(fileInfo);
+                return new WPFHexEditControl(fileInfo);
             }
         }
 
@@ -54,13 +54,9 @@ namespace PreviewEditor.Editors
                     l = fileReader.ReadBlock(chars, 0, (int)l);
                 }
                 r = true;
-                return r;
-                for (int i = 0; i < l - 100; i++)
+                for (int i = 0; i < l; i++)
                 {
-                    System.Diagnostics.Debug.WriteLine($"{i}");
-                    var c = chars[i];
-                    System.Diagnostics.Debug.WriteLine($"---{i}");
-                    if (c == (char)0)
+                    if (chars[i] == 0)
                     {
                         r = false;
                         break;
