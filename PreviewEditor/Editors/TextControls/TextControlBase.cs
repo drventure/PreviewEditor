@@ -131,7 +131,7 @@ namespace PreviewEditor.Editors
                     //TODO automatically make writable if possible?
                     _editor.Save(_fileInfo.FullName);
                 }
-                catch (Exception ex)
+                catch 
                 {
                     //TODO handle exception
                 }
@@ -159,7 +159,7 @@ namespace PreviewEditor.Editors
                     fs.Close();
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 //TODO handle exception
             }
@@ -226,12 +226,11 @@ namespace PreviewEditor.Editors
         {
             _editor.Foreground = new SolidColorBrush(Colors.WhiteSmoke);
             _editor.Background = new SolidColorBrush(Color.FromRgb(0x1e, 0x1e, 0x1e));
-            return;
-            foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
-            {
-                var f = h.Foreground;
-                var b = h.Background;
-            }
+            //foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
+            //{
+            //    var f = h.Foreground;
+            //    var b = h.Background;
+            //}
         }
 
 

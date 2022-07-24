@@ -44,7 +44,7 @@ namespace PreviewEditor.Editors
                     _isDirty = true;
                 };
             }
-            catch (Exception ex)
+            catch 
             {
                 //TODO update the status label?
             }
@@ -106,17 +106,6 @@ namespace PreviewEditor.Editors
             {
                 FoldingManager.Uninstall(_foldingManager);
                 _foldingManager = null;
-            }
-        }
-
-
-        private void SetDarkMode()
-        {
-            return;
-            foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
-            {
-                var f = h.Foreground;
-                var b = h.Background;
             }
         }
 

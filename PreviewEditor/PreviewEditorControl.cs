@@ -158,17 +158,7 @@ namespace PreviewEditor
                 {
                     try
                     {
-                        //MessageBox.Show($"Typing Editor");
                         var editor = EditorFactory.GetEditor(_fileInfo);
-
-                        if (false)
-                        {
-                            MessageBox.Show($"Unable to preview");
-                            ShowStatus("Unable to preview this file.");
-                            return;
-                        }
-
-                        //MessageBox.Show($"editor is {editor.GetType().Name}");
 
                         this.pnlEditor.Controls.Clear();
                         var editorControl = (Control)editor;

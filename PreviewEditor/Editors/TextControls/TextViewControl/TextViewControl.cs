@@ -50,7 +50,7 @@ namespace PreviewEditor.Editors
                 _editor.Load(mstream);
                 mstream.Close();
             }
-            catch (Exception ex)
+            catch 
             {
                 //TODO update the status label?
             }
@@ -118,12 +118,11 @@ namespace PreviewEditor.Editors
 
         private void SetDarkMode()
         {
-            return;
-            foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
-            {
-                var f = h.Foreground;
-                var b = h.Background;
-            }
+            //foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
+            //{
+            //    var f = h.Foreground;
+            //    var b = h.Background;
+            //}
         }
     }
 }
