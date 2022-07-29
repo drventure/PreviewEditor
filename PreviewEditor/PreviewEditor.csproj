@@ -58,19 +58,20 @@
 
   <ItemGroup>
     <Compile Remove="Resources\**" />
-    <Compile Remove="WPFHexaEditor\**" />
     <EmbeddedResource Remove="Resources\**" />
-    <EmbeddedResource Remove="WPFHexaEditor\**" />
     <None Remove="Resources\**" />
-    <None Remove="WPFHexaEditor\**" />
     <Page Remove="Resources\**" />
-    <Page Remove="WPFHexaEditor\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
     <None Remove="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
     <None Remove="AssemblyResources\Newtonsoft.Json.dll" />
+    <None Remove="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
+    <None Remove="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
+    <None Remove="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
     <None Remove="AssemblyResources\WPFHexaEditor.dll" />
+    <None Remove="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
     <None Remove="LICENSE" />
   </ItemGroup>
 
@@ -81,9 +82,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
     <EmbeddedResource Include="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
     <EmbeddedResource Include="AssemblyResources\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
+    <EmbeddedResource Include="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
+    <EmbeddedResource Include="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
     <EmbeddedResource Include="AssemblyResources\WPFHexaEditor.dll" />
+    <EmbeddedResource Include="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
   </ItemGroup>
 
   <ItemGroup>
