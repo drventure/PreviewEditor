@@ -22,7 +22,7 @@ namespace PreviewEditor.Editors
     /// </summary>
     internal class TextViewControl : TextControlBase
     {
-        public TextViewControl(FileInfo fileInfo) : base(fileInfo)
+        public TextViewControl(EditingFile file) : base(file)
         {
             this.ParentChanged += OnParentChanged;
         }
@@ -41,7 +41,7 @@ namespace PreviewEditor.Editors
             try
             {
                 //TODO for now, just load 2 megs worth and make it read only
-                var fstream = File.Open(_fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var fstream = File.Open(_file.FileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var bytes = new byte[2 * 1000 * 1000];
                 fstream.Read(bytes, 0, bytes.Length);
                 var mstream = new MemoryStream();

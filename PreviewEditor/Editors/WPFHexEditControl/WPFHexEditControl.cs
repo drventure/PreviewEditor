@@ -15,8 +15,9 @@ namespace PreviewEditor.Editors
 {
     internal class WPFHexEditControl : ElementHost, IPreviewEditorControl
     {
-        private FileInfo _fileInfo;
+        private EditingFile _file;
         private HexEditor _editor;
+
 
         public bool IsApplicable
         {
@@ -31,6 +32,12 @@ namespace PreviewEditor.Editors
         }
 
 
+        public WPFHexEditControl(EditingFile file) : this()
+        {
+            _file = file;
+        }
+
+
         private void OnParentChanged(object sender, EventArgs e)
         {
             //init the control once it's sited
@@ -42,12 +49,17 @@ namespace PreviewEditor.Editors
             _editor.BytePerLine = 32;
             _editor.AllowAutoHighLightSelectionByte = false;
 
+            _editor.BytesDeleted += _editor_BytesDeleted;
+            _editor.BytesModified += _editor_BytesModified;
+            _editor.SelectionLengthChanged += _editor_SelectionLengthChanged;
+            _editor.SelectionStartChanged += _editor_SelectionStartChanged;
+
             SetDarkMode();
 
             try
             {
                 var stream = new MemoryStream();
-                _fileInfo.OpenRead().CopyTo(stream);
+                _file.FileInfo.OpenRead().CopyTo(stream);
                 _editor.Stream = stream;
             }
             catch (Exception ex)
@@ -61,9 +73,27 @@ namespace PreviewEditor.Editors
         }
 
 
-        public WPFHexEditControl(FileInfo fileInfo) : this()
+        private void _editor_SelectionStartChanged(object sender, EventArgs e)
         {
-            _fileInfo = fileInfo;
+            _file.SelectionStart = _editor.SelectionStart;
+        }
+
+
+        private void _editor_SelectionLengthChanged(object sender, EventArgs e)
+        {
+            _file.SelectionLength = _editor.SelectionLength;
+        }
+
+
+        private void _editor_BytesModified(object sender, WpfHexaEditor.Core.EventArguments.ByteEventArgs e)
+        {
+            _file.SetDirty();
+        }
+
+
+        private void _editor_BytesDeleted(object sender, EventArgs e)
+        {
+            _file.SetDirty();
         }
 
 

@@ -26,7 +26,7 @@ namespace PreviewEditor.Editors
     {
         protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
-        protected FileInfo _fileInfo;
+        protected EditingFile _file;
         protected TextEditor _editor;
 
         protected DispatcherTimer _foldingUpdateTimer;
@@ -34,9 +34,9 @@ namespace PreviewEditor.Editors
         protected dynamic _foldingStrategy;
 
 
-        public TextControlBase(FileInfo fileInfo) : this()
+        public TextControlBase(EditingFile file) : this()
         {
-            _fileInfo = fileInfo;   
+            _file = file;   
         }
 
 
@@ -56,9 +56,14 @@ namespace PreviewEditor.Editors
             //which will then call back to this base class if needed
             _editor.KeyDown += GeneralKeyDown;
 
+            _editor.MouseDown += (sender, e) => { updateEditingFile(); };
+            _editor.KeyDown += (sender, e) => { updateEditingFile(); };
+            _editor.TextChanged += (sender, e) => { updateEditingFile(); _file.SetDirty(); };
             _editor.MouseDown += _editor_MouseDown;
+            _editor.TextChanged += _editor_TextChanged;
 
-            _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_fileInfo.Extension);
+            _editor.ShowLineNumbers = true;
+            _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
             _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
             _editor.FontSize = 14;
 
@@ -68,6 +73,18 @@ namespace PreviewEditor.Editors
 
             //once we've initialized, unhook the event
             this.ParentChanged -= OnParentChanged;
+        }
+
+
+        private void updateEditingFile()
+        {
+            _file.SelectionStart = _editor.SelectionStart;
+            _file.SelectionLength = _editor.SelectionLength;
+        }
+
+
+        private void _editor_TextChanged(object sender, EventArgs e)
+        {
         }
 
 
@@ -129,7 +146,7 @@ namespace PreviewEditor.Editors
                 try
                 {
                     //TODO automatically make writable if possible?
-                    _editor.Save(_fileInfo.FullName);
+                    _editor.Save(_file.FileInfo.FullName);
                 }
                 catch 
                 {
@@ -144,8 +161,8 @@ namespace PreviewEditor.Editors
             {
                 //TODO automatically make writable if possible?
                 var dlg = new SaveFileDialog();
-                dlg.InitialDirectory = _fileInfo.DirectoryName;
-                dlg.FileName = _fileInfo.Name;
+                dlg.InitialDirectory = _file.FileInfo.DirectoryName;
+                dlg.FileName = _file.FileInfo.Name;
                 dlg.OverwritePrompt = true;
                 dlg.Title = "Save file as...";
                 dlg.CheckPathExists = true;

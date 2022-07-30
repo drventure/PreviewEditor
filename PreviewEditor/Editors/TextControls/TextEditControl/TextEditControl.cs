@@ -19,7 +19,7 @@ namespace PreviewEditor.Editors
     {
         private bool _isDirty = false;
 
-        public TextEditControl(FileInfo fileInfo) : base(fileInfo)
+        public TextEditControl(EditingFile file) : base(file)
         {
             this.ParentChanged += OnParentChanged;
         }
@@ -34,7 +34,7 @@ namespace PreviewEditor.Editors
         {
             try
             {
-                var buf = File.ReadAllText(_fileInfo.FullName);
+                var buf = File.ReadAllText(_file.FileInfo.FullName);
                 _editor.Text = buf;
 
                 //track whether document has been changed
@@ -137,7 +137,7 @@ namespace PreviewEditor.Editors
                 {
                     try
                     {
-                        _editor.Save(_fileInfo.FullName);
+                        _editor.Save(_file.FileInfo.FullName);
                     }
                     catch (Exception ex)
                     {

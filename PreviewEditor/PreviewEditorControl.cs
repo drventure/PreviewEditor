@@ -34,7 +34,7 @@ namespace PreviewEditor
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        private FileInfo _fileInfo;
+        private EditingFile _file;
         private Panel pnlEditor;
 
 
@@ -126,7 +126,7 @@ namespace PreviewEditor
             {
                 //MessageBox.Show($"Previewing");
                 string filename = null;
-                _fileInfo = null;
+                _file = null;
 
                 if (dataSource is string stringVal)
                 {
@@ -144,13 +144,13 @@ namespace PreviewEditor
                 }
 
                 // at this point, we have the filename and we know the file exists
-                _fileInfo = new FileInfo(filename);
+                _file = new EditingFile(filename);
 
                 this.InvokeOnControlThread(() =>
                 {
                     try
                     {
-                        var editor = EditorFactory.GetEditor(_fileInfo);
+                        var editor = EditorFactory.GetEditor(_file);
 
                         this.pnlEditor.Controls.Clear();
                         var editorControl = (Control)editor;
