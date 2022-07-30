@@ -9,15 +9,15 @@ namespace PreviewEditor
 {
     internal static class PreviewEditor
     {
-        private static Settings _settings = null;
+        private static Options _settings = null;
 
-        public static Settings Settings
+        public static Options Settings
         {
             get
             {
                 if (_settings == null)
                 {
-                    _settings = new Settings();
+                    _settings = new Options();
                 }
                 return _settings;
             }
