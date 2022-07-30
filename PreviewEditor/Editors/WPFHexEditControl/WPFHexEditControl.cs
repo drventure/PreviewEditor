@@ -113,5 +113,14 @@ namespace PreviewEditor.Editors
                 _editor = null;
             }
         }
+
+
+        public IPreviewEditorControl SwitchToEditor()
+        {
+            var mstream = new MemoryStream();
+            _editor.CopyToStream(mstream, true);
+
+            return EditorFactory.GetTextEditor(_file);
+        }
     }
 }

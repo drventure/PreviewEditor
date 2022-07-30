@@ -62,7 +62,7 @@ namespace PreviewEditor.Editors
             _editor.MouseDown += _editor_MouseDown;
             _editor.TextChanged += _editor_TextChanged;
 
-            _editor.ShowLineNumbers = true;
+            _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
             _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
             _editor.FontSize = 14;
@@ -125,6 +125,14 @@ namespace PreviewEditor.Editors
                         _editor.Paste();
                     })
                 );
+
+                menu.MenuItems.Add(
+                    new MenuItem("Show Line Numbers", (sender, e) =>
+                        {
+                            _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
+                            PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
+                        })
+                    );
 
                 menu.MenuItems.Add(new MenuItem("Save", mnuSave));
                 menu.MenuItems.Add(new MenuItem("Save As", mnuSaveAs));
@@ -276,6 +284,12 @@ namespace PreviewEditor.Editors
             }
 
             this.Child = null;
+        }
+
+
+        public IPreviewEditorControl SwitchToEditor()
+        {
+            return EditorFactory.GetHexEditor(_file);
         }
     }
 }

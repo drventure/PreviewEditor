@@ -9,6 +9,16 @@ namespace PreviewEditor.Editors
 {
     internal interface IPreviewEditorControl
     {
+        /// <summary>
+        /// Close any loaded file/resources
+        /// </summary>
         void Close();
+
+
+        /// <summary>
+        /// Returns the "other" kind of editor, either Hex or text
+        /// </summary>
+        /// <returns></returns>
+        IPreviewEditorControl SwitchToEditor();
     }
 }

@@ -19,18 +19,33 @@ namespace PreviewEditor.Editors
         internal static IPreviewEditorControl GetEditor(EditingFile file)
         {
             if (file.IsLikelyTextFile)
-                if (file.FileInfo.Length > MAXEDITABLESIZE)
-                {
-                    return new TextViewControl(file);
-                }
-                else
-                {
-                    return new TextEditControl(file);
-                }
+            {
+                return GetTextEditor(file);
+            }
             else
             {
-                return new WPFHexEditControl(file);
+                return GetHexEditor(file);
             }
         }
+
+
+        internal static IPreviewEditorControl GetTextEditor(EditingFile file)
+        {
+            if (file.FileInfo.Length > MAXEDITABLESIZE)
+            {
+                return new TextViewControl(file);
+            }
+            else
+            {
+                return new TextEditControl(file);
+            }
+        }
+
+
+        internal static IPreviewEditorControl GetHexEditor(EditingFile file)
+        {
+            return new WPFHexEditControl(file);
+        }
+
     }
 }
