@@ -120,29 +120,34 @@ namespace PreviewEditor.Editors
         /// <param name="e"></param>
         protected override void GeneralKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            //var isCtrl = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-            //var isShift = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.LeftShift);
-            //if (isCtrl && !isShift)
-            //{
-            //    if (e.Key == Key.S)
-            //    {
-            //        Save();
-            //    }
-            //}
-            //if (isShift && !isCtrl)
-            //{
-            //    if (e.Key == Key.Z)
-            //    {
-            //        _editor.Undo();
-            //    }
-            //}
-            //if (isShift && isCtrl)
-            //{
-            //    if (e.Key == Key.Z)
-            //    {
-            //        _editor.Redo();
-            //    }
-            //}
+            var isCtrl = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            var isShift = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.LeftShift);
+            var isAlt = Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.LeftAlt);
+            if (isCtrl && !isShift && !isAlt)
+            {
+                if (e.Key == Key.S)
+                {
+                    this.Save();
+                }
+            }
+            if (isShift && !isCtrl && !isAlt)
+            {
+                if (e.Key == Key.Z)
+                {
+                    _editor.Undo();
+                }
+            }
+            if (isShift && isCtrl && !isAlt)
+            {
+                if (e.Key == Key.A)
+                {
+                    this.SaveAs();
+                }
+                else if (e.Key == Key.Z)
+                {
+                    _editor.Redo();
+                }
+            }
 
             base.GeneralKeyDown(sender, e); 
         }
@@ -206,6 +211,27 @@ namespace PreviewEditor.Editors
                 }
             }
             _isDirty = false;
+        }
+
+
+        public void SaveAs()
+        {
+            try
+            {
+                var dlg = new SaveFileDialog();
+                dlg.InitialDirectory = _file.FileInfo.DirectoryName;
+                dlg.FileName = _file.FileInfo.Name;
+                dlg.ShowDialog();
+
+                if (dlg.FileName != null)
+                {
+                    _editor.Save(Path.Combine(dlg.InitialDirectory, dlg.FileName));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error saving changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Search;
 
 
 namespace PreviewEditor.Editors
@@ -133,6 +134,17 @@ namespace PreviewEditor.Editors
                         Shortcut = Shortcut.CtrlV, 
                         Enabled = Clipboard.ContainsText(),
                         MergeOrder = 0 
+                    }
+                );
+
+                menu.MenuItems.Add(
+                    new MenuItem("Find", (sender, e) =>
+                    {
+                        Find();
+                    })
+                    {
+                        Shortcut = Shortcut.CtrlF,
+                        MergeOrder = 0
                     }
                 );
 
@@ -321,13 +333,28 @@ namespace PreviewEditor.Editors
         /// <param name="e"></param>
         protected virtual void GeneralKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            var isCtrl = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            var isShift = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            var isAlt = Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+            if (isCtrl && !isShift && !isAlt)
             {
                 if (e.Key == Key.T)
                 {
                     //ToggleEditor();
                 }
+                else if (e.Key == Key.F)
+                {
+                    Find();
+                }
             }
+        }
+
+
+        private void Find()
+        {
+            var search = SearchPanel.Install(_editor);
+            search.Open();
+            search.Reactivate();
         }
 
 
