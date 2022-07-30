@@ -160,15 +160,25 @@ namespace PreviewEditor.Editors
                     new MenuItem("Undo", (sender, e) =>
                     {
                         _editor.Undo();
-                    }) { Shortcut = Shortcut.CtrlZ, MergeOrder = 20 }
+                    }) 
+                    { 
+                        Shortcut = Shortcut.CtrlZ, 
+                        MergeOrder = 20,
+                        Enabled = _editor.CanUndo
+                    }
                 );
 
                 menu.MenuItems.Add(
                     new MenuItem("Redo", (sender, e) =>
                     {
                         _editor.Redo();
-                    }) { Shortcut = Shortcut.CtrlShiftZ, MergeOrder = 20 }
-                );
+                    })
+                    {
+                        Shortcut = Shortcut.CtrlShiftZ,
+                        MergeOrder = 20,
+                        Enabled = _editor.CanRedo
+                    }
+                ); ;
 
                 //merge menu items
                 var baseMenu = base.ContextMenu;

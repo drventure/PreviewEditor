@@ -31,14 +31,25 @@ namespace PreviewEditor
         public _TextEditorOptions TextEditorOptions 
         { 
             get { return this.GetProperty<_TextEditorOptions>(new _TextEditorOptions(this)); } 
-            set { this.SetProperty(value); } 
+            set { this.SetProperty(value); }
         }
         internal class _TextEditorOptions : NestedOptionsBase
         {
             public _TextEditorOptions(OptionsBase parent) : base(parent) { }
+
             [OptionDescription("Display line numbers on the left side of the editor (or not)")]
             public bool ShowLineNumbers { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Display a column ruler")]
+            public bool ShowColumnRuler { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Display Space characters")]
+            public bool ShowSpaces { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Display Tab characters")]
+            public bool ShowTabs{ get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
         }
+
 
 
         [OptionDescription("Various options related to the Preview Hex Editor")]

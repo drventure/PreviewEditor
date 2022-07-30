@@ -63,6 +63,7 @@ namespace PreviewEditor.Editors
             _editor.TextChanged += _editor_TextChanged;
 
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
+            _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
             _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
             _editor.FontSize = 14;
@@ -142,7 +143,42 @@ namespace PreviewEditor.Editors
                             MergeOrder = 50,
                             Checked = _editor.ShowLineNumbers
                         }
-                ); 
+                );
+                menu.MenuItems.Add(
+                    new MenuItem("Show Column Ruler", (sender, e) =>
+                    {
+                        _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
+                        _editor.Options.ColumnRulerPosition = 80;
+                        PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
+                    })
+                    {
+                        Shortcut = Shortcut.CtrlShiftC,
+                        MergeOrder = 50,
+                        Checked = _editor.Options.ShowColumnRuler
+                    }
+                );
+                menu.MenuItems.Add(
+                    new MenuItem("Show Spaces", (sender, e) =>
+                    {
+                        _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
+                        PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
+                    })
+                    {
+                        MergeOrder = 50,
+                        Checked = _editor.Options.ShowSpaces
+                    }
+                );
+                menu.MenuItems.Add(
+                    new MenuItem("Show Tabs", (sender, e) =>
+                    {
+                        _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
+                        PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
+                    })
+                    {
+                        MergeOrder = 50,
+                        Checked = _editor.Options.ShowTabs
+                    }
+                );
                 menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 50 });
 
                 menu.MenuItems.Add(new MenuItem("Save", mnuSave) { Shortcut = Shortcut.CtrlS, MergeOrder = 70 });
