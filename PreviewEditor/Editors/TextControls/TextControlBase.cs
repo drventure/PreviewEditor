@@ -111,7 +111,9 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Cut();
                     })
-                    { Shortcut = Shortcut.CtrlX, MergeOrder = 0 }
+                    { 
+                        Shortcut = Shortcut.CtrlX, 
+                        MergeOrder = 0 }
                 );
 
                 menu.MenuItems.Add(
@@ -127,7 +129,11 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Paste();
                     })
-                    { Shortcut = Shortcut.CtrlV, MergeOrder = 0 }
+                    { 
+                        Shortcut = Shortcut.CtrlV, 
+                        Enabled = Clipboard.ContainsText(),
+                        MergeOrder = 0 
+                    }
                 );
 
                 menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 0 });
@@ -186,7 +192,7 @@ namespace PreviewEditor.Editors
                 menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 70 });
 
                 menu.MenuItems.Add(
-                    new MenuItem("Switch to Hex", (sender, e) =>
+                    new MenuItem("Show in Hex", (sender, e) =>
                     {
                         //TODO
                     })
