@@ -9,15 +9,18 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Threading;
+
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
+
 
 namespace PreviewEditor.Editors
 {
     internal class TextEditControl : TextControlBase
     {
         private bool _isDirty = false;
+
 
         public TextEditControl(EditingFile file) : base(file)
         {
@@ -117,15 +120,62 @@ namespace PreviewEditor.Editors
         /// <param name="e"></param>
         protected override void GeneralKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-            {
-                if (e.Key == Key.S)
-                {
-                    Save();
-                }
-            }
+            //var isCtrl = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            //var isShift = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.LeftShift);
+            //if (isCtrl && !isShift)
+            //{
+            //    if (e.Key == Key.S)
+            //    {
+            //        Save();
+            //    }
+            //}
+            //if (isShift && !isCtrl)
+            //{
+            //    if (e.Key == Key.Z)
+            //    {
+            //        _editor.Undo();
+            //    }
+            //}
+            //if (isShift && isCtrl)
+            //{
+            //    if (e.Key == Key.Z)
+            //    {
+            //        _editor.Redo();
+            //    }
+            //}
 
             base.GeneralKeyDown(sender, e); 
+        }
+
+
+        /// <summary>
+        /// Build up the ContextMenu
+        /// </summary>
+        public override ContextMenu ContextMenu
+        {
+            get
+            {
+                var menu = new ContextMenu();
+                menu.MenuItems.Add(
+                    new MenuItem("Undo", (sender, e) =>
+                    {
+                        _editor.Undo();
+                    }) { Shortcut = Shortcut.CtrlZ, MergeOrder = 20 }
+                );
+
+                menu.MenuItems.Add(
+                    new MenuItem("Redo", (sender, e) =>
+                    {
+                        _editor.Redo();
+                    }) { Shortcut = Shortcut.CtrlShiftZ, MergeOrder = 20 }
+                );
+
+                //merge menu items
+                var baseMenu = base.ContextMenu;
+                baseMenu.MergeMenu(menu);
+
+                return baseMenu;
+            }
         }
 
 

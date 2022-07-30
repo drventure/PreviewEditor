@@ -110,6 +110,7 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Cut();
                     })
+                    { Shortcut = Shortcut.CtrlX, MergeOrder = 0 }
                 );
 
                 menu.MenuItems.Add(
@@ -117,6 +118,7 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Copy();
                     })
+                    { Shortcut = Shortcut.CtrlC, MergeOrder = 0 }
                 );
 
                 menu.MenuItems.Add(
@@ -124,7 +126,10 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Paste();
                     })
+                    { Shortcut = Shortcut.CtrlV, MergeOrder = 0 }
                 );
+
+                menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 0 });
 
                 menu.MenuItems.Add(
                     new MenuItem("Show Line Numbers", (sender, e) =>
@@ -132,16 +137,24 @@ namespace PreviewEditor.Editors
                             _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
                             PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
                         })
-                    );
+                        {
+                            Shortcut = Shortcut.CtrlShiftL,
+                            MergeOrder = 50,
+                            Checked = _editor.ShowLineNumbers
+                        }
+                ); 
+                menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 50 });
 
-                menu.MenuItems.Add(new MenuItem("Save", mnuSave));
-                menu.MenuItems.Add(new MenuItem("Save As", mnuSaveAs));
+                menu.MenuItems.Add(new MenuItem("Save", mnuSave) { Shortcut = Shortcut.CtrlS, MergeOrder = 70 });
+                menu.MenuItems.Add(new MenuItem("Save As", mnuSaveAs) { Shortcut = Shortcut.CtrlA, MergeOrder = 70 });
+                menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 70 });
 
                 menu.MenuItems.Add(
                     new MenuItem("Switch to Hex", (sender, e) =>
                     {
                         //TODO
                     })
+                    { MergeOrder = 80 }
                 );
 
                 return menu;
