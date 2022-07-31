@@ -120,6 +120,7 @@ namespace PreviewHandler.Sdk.Controls
         public virtual void DoPreview<T>(T dataSource)
         {
             this.Visible = true;
+            if (this.HasChildren) this.Controls[0].Focus();
         }
 
         /// <summary>

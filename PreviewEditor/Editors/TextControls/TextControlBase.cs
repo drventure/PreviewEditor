@@ -37,7 +37,7 @@ namespace PreviewEditor.Editors
 
         public TextControlBase(EditingFile file) : this()
         {
-            _file = file;   
+            _file = file;
         }
 
 
@@ -50,7 +50,10 @@ namespace PreviewEditor.Editors
         private void OnParentChanged(object sender, EventArgs e)
         {
             //init the control once it's sited
+            this.TabStop = true;
+            this.TabIndex = 0;
             _editor = new TextEditor();
+            _editor.Focusable = true;
             this.Child = _editor;
 
             //monitor this event and forward to the subclass
@@ -75,6 +78,12 @@ namespace PreviewEditor.Editors
 
             //once we've initialized, unhook the event
             this.ParentChanged -= OnParentChanged;
+
+            this.Focus();
+            _editor.Focus();
+            _editor.CaretOffset = 0;
+            _editor.TextArea.Caret.Show();
+            _editor.TextArea.Caret.BringCaretToView();
         }
 
 
@@ -114,7 +123,8 @@ namespace PreviewEditor.Editors
                     })
                     {
                         Shortcut = Shortcut.CtrlX,
-                        MergeOrder = 0 }
+                        MergeOrder = 0
+                    }
                 );
 
                 menu.MenuItems.Add(
@@ -217,15 +227,15 @@ namespace PreviewEditor.Editors
 
         private void mnuSave(object sender, EventArgs e)
         {
-                try
-                {
-                    //TODO automatically make writable if possible?
-                    _editor.Save(_file.FileInfo.FullName);
-                }
-                catch 
-                {
-                    //TODO handle exception
-                }
+            try
+            {
+                //TODO automatically make writable if possible?
+                _editor.Save(_file.FileInfo.FullName);
+            }
+            catch
+            {
+                //TODO handle exception
+            }
         }
 
 
@@ -245,12 +255,12 @@ namespace PreviewEditor.Editors
                 dlg.ShowDialog(this);
                 if (dlg.FileName != "")
                 {
-                    var fs = dlg.OpenFile(); 
+                    var fs = dlg.OpenFile();
                     _editor.Save(fs);
                     fs.Close();
                 }
             }
-            catch 
+            catch
             {
                 //TODO handle exception
             }
@@ -343,25 +353,25 @@ namespace PreviewEditor.Editors
                 }
                 else if (e.Key == Key.F)
                 {
-                    Find();
+                    Find(); e.Handled = true;
                 }
                 else if (e.Key == Key.G)
                 {
-                    GotoLinePrompt();
+                    GotoLinePrompt(); e.Handled = true;
                 }
             }
             else if (!isCtrl && !isShift && !isAlt)
             {
                 if (e.Key == Key.F3)
                 {
-                    this.FindNext();
+                    this.FindNext(); e.Handled = true;
                 }
             }
             else if (isShift && !isCtrl && !isAlt)
             {
                 if (e.Key == Key.F3)
                 {
-                    this.FindPrevious();
+                    this.FindPrevious(); e.Handled = true;
                 }
             }
         }
@@ -454,14 +464,26 @@ namespace PreviewEditor.Editors
 
         private void GotoLinePrompt()
         {
-            //TODO Prompt for line number
-            GotoLine(50);
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Go to what line number:",
+                                   "Goto Line",
+                                   "1",
+                                   0,
+                                   0);
+            if (input != null)
+            {
+                int line = 1;
+                if (int.TryParse(input, out line)) GotoLine(line);
+            }
         }
 
 
         private void GotoLine(int line)
         {
-            _editor.CaretOffset = _editor.Document.GetLineByNumber(line).Offset; 
+            //verify range
+            if (line < 1) line = 1;
+            if (line > _editor.Document.LineCount) line = _editor.Document.LineCount;
+
+            _editor.CaretOffset = _editor.Document.GetLineByNumber(line).Offset;
             _editor.TextArea.Caret.BringCaretToView();
         }
 

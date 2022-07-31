@@ -94,6 +94,7 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System.Configuration.Install" />
   </ItemGroup>
 
