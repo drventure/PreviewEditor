@@ -346,25 +346,130 @@ namespace PreviewEditor.Editors
                 {
                     Find();
                 }
+                else if (e.Key == Key.G)
+                {
+                    GotoLinePrompt();
+                }
+            }
+            else if (!isCtrl && !isShift && !isAlt)
+            {
+                if (e.Key == Key.F3)
+                {
+                    this.FindNext();
+                }
+            }
+            else if (isShift && !isCtrl && !isAlt)
+            {
+                if (e.Key == Key.F3)
+                {
+                    this.FindPrevious();
+                }
             }
         }
 
 
+        private SearchPanel _search;
         private void Find()
         {
-            var search = SearchPanel.Install(_editor);
-            search.Open();
-            search.Reactivate();
+            //if (_search == null || _search.IsClosed) _search = SearchPanel.Install(_editor);
+            //_search.Open();
+            //_search.Reactivate();
+            var dlg = new FindReplace.FindReplaceDialog(_editor);
+            dlg.ShowDialog();
+        }
+
+
+        private void FindNext()
+        {
+            _search?.FindNext();
+        }
+
+
+        private void FindPrevious()
+        {
+            _search?.FindPrevious();
+        }
+
+
+        private int lastUsedIndex = 0;
+        public void Find(string search)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                lastUsedIndex = 0;
+                return;
+            }
+
+
+            if (string.IsNullOrEmpty(_editor.Text))
+            {
+                lastUsedIndex = 0;
+                return;
+            }
+
+            if (lastUsedIndex >= search.Count())
+            {
+                lastUsedIndex = 0;
+            }
+
+            int nIndex = _editor.Text.IndexOf(search, lastUsedIndex);
+            if (nIndex != -1)
+            {
+                var area = _editor.TextArea;
+                _editor.Select(nIndex, search.Length);
+                lastUsedIndex = nIndex + search.Length;
+            }
+            else
+            {
+                lastUsedIndex = 0;
+            }
+        }
+
+
+        private void Replace(string s, string replacement, bool selectedonly)
+        {
+            int nIndex = -1;
+            if (selectedonly)
+            {
+                nIndex = _editor.Text.IndexOf(s, _editor.SelectionStart, _editor.SelectionLength);
+            }
+            else
+            {
+                nIndex = _editor.Text.IndexOf(s);
+            }
+
+            if (nIndex != -1)
+            {
+                _editor.Document.Replace(nIndex, s.Length, replacement);
+
+
+                _editor.Select(nIndex, replacement.Length);
+            }
+            else
+            {
+                lastUsedIndex = 0;
+                MessageBox.Show("End of file");
+            }
+        }
+
+
+        private void GotoLinePrompt()
+        {
+            //TODO Prompt for line number
+            GotoLine(50);
+        }
+
+
+        private void GotoLine(int line)
+        {
+            _editor.CaretOffset = _editor.Document.GetLineByNumber(line).Offset; 
+            _editor.TextArea.Caret.BringCaretToView();
         }
 
 
         public void Close()
         {
-            if (_editor != null)
-            {
-                _editor = null;
-            }
-
+            _editor = null;
             this.Child = null;
         }
 
