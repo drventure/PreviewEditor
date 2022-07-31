@@ -112,8 +112,8 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Cut();
                     })
-                    { 
-                        Shortcut = Shortcut.CtrlX, 
+                    {
+                        Shortcut = Shortcut.CtrlX,
                         MergeOrder = 0 }
                 );
 
@@ -130,10 +130,10 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Paste();
                     })
-                    { 
-                        Shortcut = Shortcut.CtrlV, 
+                    {
+                        Shortcut = Shortcut.CtrlV,
                         Enabled = Clipboard.ContainsText(),
-                        MergeOrder = 0 
+                        MergeOrder = 0
                     }
                 );
 
@@ -150,53 +150,52 @@ namespace PreviewEditor.Editors
 
                 menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 0 });
 
-                menu.MenuItems.Add(
-                    new MenuItem("Show Line Numbers", (sender, e) =>
-                        {
-                            _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
-                            PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
-                        })
-                        {
-                            Shortcut = Shortcut.CtrlShiftL,
-                            MergeOrder = 50,
-                            Checked = _editor.ShowLineNumbers
-                        }
-                );
-                menu.MenuItems.Add(
-                    new MenuItem("Show Column Ruler", (sender, e) =>
+                menu.MenuItems.Add(new MenuItem(
+                    "Options",
+                    new MenuItem[]
                     {
-                        _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
-                        _editor.Options.ColumnRulerPosition = 80;
-                        PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
+                        new MenuItem("Show Line Numbers", (sender, e) =>
+                            {
+                                _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
+                                PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
+                            })
+                            {
+                                Shortcut = Shortcut.CtrlShiftL,
+                                MergeOrder = 50,
+                                Checked = _editor.ShowLineNumbers
+                            },
+                        new MenuItem("Show Column Ruler", (sender, e) =>
+                            {
+                                _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
+                                _editor.Options.ColumnRulerPosition = 80;
+                                PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
+                            })
+                            {
+                                Shortcut = Shortcut.CtrlShiftC,
+                                MergeOrder = 50,
+                                Checked = _editor.Options.ShowColumnRuler
+                            },
+                        new MenuItem("Show Spaces", (sender, e) =>
+                            {
+                                _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
+                                PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
+                            })
+                            {
+                                MergeOrder = 50,
+                                Checked = _editor.Options.ShowSpaces
+                            },
+                        new MenuItem("Show Tabs", (sender, e) =>
+                            {
+                                _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
+                                PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
+                            })
+                            {
+                                MergeOrder = 50,
+                                Checked = _editor.Options.ShowTabs
+                            }
                     })
-                    {
-                        Shortcut = Shortcut.CtrlShiftC,
-                        MergeOrder = 50,
-                        Checked = _editor.Options.ShowColumnRuler
-                    }
-                );
-                menu.MenuItems.Add(
-                    new MenuItem("Show Spaces", (sender, e) =>
-                    {
-                        _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
-                        PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
-                    })
-                    {
-                        MergeOrder = 50,
-                        Checked = _editor.Options.ShowSpaces
-                    }
-                );
-                menu.MenuItems.Add(
-                    new MenuItem("Show Tabs", (sender, e) =>
-                    {
-                        _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
-                        PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
-                    })
-                    {
-                        MergeOrder = 50,
-                        Checked = _editor.Options.ShowTabs
-                    }
-                );
+                { MergeOrder = 50 });
+
                 menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 50 });
 
                 menu.MenuItems.Add(new MenuItem("Save", mnuSave) { Shortcut = Shortcut.CtrlS, MergeOrder = 70 });

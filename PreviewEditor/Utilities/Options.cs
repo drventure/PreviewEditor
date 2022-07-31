@@ -48,6 +48,9 @@ namespace PreviewEditor
 
             [OptionDescription("Display Tab characters")]
             public bool ShowTabs{ get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Maximum Editable FileSize in bytes")]
+            public long MaxEditableFileSize { get { return this.GetProperty<long>(5 * 1000 * 1000 * 100); } set { this.SetProperty(value); } }
         }
 
 

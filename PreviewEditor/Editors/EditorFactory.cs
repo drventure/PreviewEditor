@@ -10,12 +10,6 @@ namespace PreviewEditor.Editors
 {
     internal static class EditorFactory
     {
-        /// <summary>
-        /// size beyond which control becomes read only and this editor won't handle it
-        /// </summary>
-        private const int MAXEDITABLESIZE = 2 * 1000 * 1000;
-
-
         internal static IPreviewEditorControl GetEditor(EditingFile file)
         {
             if (file.IsLikelyTextFile)
@@ -31,7 +25,7 @@ namespace PreviewEditor.Editors
 
         internal static IPreviewEditorControl GetTextEditor(EditingFile file)
         {
-            if (file.FileInfo.Length > MAXEDITABLESIZE)
+            if (file.FileInfo.Length > PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize)
             {
                 return new TextViewControl(file);
             }

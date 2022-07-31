@@ -100,7 +100,7 @@ namespace PreviewEditorHost
             var r = opn.ShowDialog();
             if (r == DialogResult.OK)
             {
-                var file = Path.Combine(opn.InitialDirectory, opn.SafeFileName);
+                var file = opn.FileName;
 
                 var prv = new PreviewEditor.PreviewEditorControl();
                 pnlPreviewHost.Controls.Clear();

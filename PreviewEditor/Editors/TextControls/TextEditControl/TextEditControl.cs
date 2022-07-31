@@ -225,7 +225,7 @@ namespace PreviewEditor.Editors
 
                 if (dlg.FileName != null)
                 {
-                    _editor.Save(Path.Combine(dlg.InitialDirectory, dlg.FileName));
+                    _editor.Save(dlg.FileName);
                 }
             }
             catch (Exception ex)
