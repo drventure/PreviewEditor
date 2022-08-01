@@ -152,14 +152,12 @@ namespace PreviewEditor
                     {
                         var editor = EditorFactory.GetEditor(_file);
 
-                        this.pnlEditor.Controls.Clear();
-                        var editorControl = (Control)editor;
-                        this.pnlEditor.Controls.Add(editorControl);
-                        editorControl.Dock = DockStyle.Fill;
-                        editorControl.Visible = true;
+                        editor.SwitchEditorRequested += Editor_SwitchEditorRequested;
 
-                        //call the base class to finish out
-                        base.DoPreview(dataSource);
+                        //set the editor into the parent window
+                        //NOTE the datasource argument is not used
+                        SiteEditor(string.Empty, editor);
+
                         HideStatus();
                     }
                     catch (Exception ex)
@@ -177,6 +175,48 @@ namespace PreviewEditor
                 {
                     ShowStatus("Unable to preview this file.");
                 });
+            }
+        }
+
+
+        private void SiteEditor<T>(T dataSource, IPreviewEditorControl editor)
+        {
+            this.pnlEditor.Controls.Clear();
+            var editorControl = (Control)editor;
+            this.pnlEditor.Controls.Add(editorControl);
+            editorControl.Dock = DockStyle.Fill;
+            editorControl.Visible = true;
+
+            //call the base class to finish out
+            base.DoPreview(dataSource);
+        }
+
+
+        private void Editor_SwitchEditorRequested(object sender, SwitchEditorRequestedEventArgs e)
+        {
+            IPreviewEditorControl newEditor = null;
+
+            if (sender is TextEditControl tec)
+            {
+                //Switching to hex editor
+                newEditor = EditorFactory.GetHexEditor(e.EditingFile);
+            }
+            else if (sender is TextViewControl tvc)
+            {
+                //Switching to hex editor
+                newEditor = EditorFactory.GetHexEditor(e.EditingFile);
+            }
+            else if (sender is WPFHexEditControl hec)
+            {
+                //Switching to Text editor
+                //will automatically determine whether to use a viewer or editor
+                newEditor = EditorFactory.GetTextEditor(e.EditingFile);
+            }
+
+            if (newEditor is not null)
+            {
+                //the dataSource is irrelevant here
+                SiteEditor(string.Empty, newEditor);
             }
         }
 

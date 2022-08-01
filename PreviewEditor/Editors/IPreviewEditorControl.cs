@@ -7,6 +7,20 @@ using System.Threading.Tasks;
 
 namespace PreviewEditor.Editors
 {
+    delegate void SwitchEditorRequestedEventHandler(object sender, SwitchEditorRequestedEventArgs e);
+
+
+    internal class SwitchEditorRequestedEventArgs : EventArgs
+    {
+        internal SwitchEditorRequestedEventArgs(EditingFile editingFile)
+        {
+            this.EditingFile = editingFile;
+        }
+
+        public EditingFile EditingFile { get; private set; }    
+    }
+
+
     internal interface IPreviewEditorControl
     {
         /// <summary>
@@ -19,6 +33,6 @@ namespace PreviewEditor.Editors
         /// Returns the "other" kind of editor, either Hex or text
         /// </summary>
         /// <returns></returns>
-        IPreviewEditorControl SwitchToEditor();
+        event SwitchEditorRequestedEventHandler SwitchEditorRequested;
     }
 }

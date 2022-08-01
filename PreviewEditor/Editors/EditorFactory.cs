@@ -40,6 +40,5 @@ namespace PreviewEditor.Editors
         {
             return new WPFHexEditControl(file);
         }
-
     }
 }

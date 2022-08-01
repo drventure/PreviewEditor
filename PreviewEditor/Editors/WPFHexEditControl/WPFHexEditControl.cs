@@ -15,6 +15,11 @@ namespace PreviewEditor.Editors
 {
     internal class WPFHexEditControl : ElementHost, IPreviewEditorControl
     {
+        /// <summary>
+        /// Represents a request to switch editors
+        /// </summary>
+        public event SwitchEditorRequestedEventHandler SwitchEditorRequested;
+
         private EditingFile _file;
         private HexEditor _editor;
 
@@ -115,12 +120,9 @@ namespace PreviewEditor.Editors
         }
 
 
-        public IPreviewEditorControl SwitchToEditor()
+        private void OnSwitchEditor()
         {
-            var mstream = new MemoryStream();
-            _editor.CopyToStream(mstream, true);
-
-            return EditorFactory.GetTextEditor(_file);
+            SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }
     }
 }

@@ -25,6 +25,11 @@ namespace PreviewEditor.Editors
     /// </summary>
     internal abstract class TextControlBase : ElementHost, IPreviewEditorControl
     {
+        /// <summary>
+        /// Represents a request to switch editors
+        /// </summary>
+        public event SwitchEditorRequestedEventHandler SwitchEditorRequested;
+
         protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
         protected EditingFile _file;
@@ -349,7 +354,7 @@ namespace PreviewEditor.Editors
             {
                 if (e.Key == Key.T)
                 {
-                    //ToggleEditor();
+                    OnSwitchEditor();
                 }
                 else if (e.Key == Key.F)
                 {
@@ -401,6 +406,7 @@ namespace PreviewEditor.Editors
 
 
         private int lastUsedIndex = 0;
+
         public void Find(string search)
         {
             if (string.IsNullOrEmpty(search))
@@ -495,9 +501,9 @@ namespace PreviewEditor.Editors
         }
 
 
-        public IPreviewEditorControl SwitchToEditor()
+        private void OnSwitchEditor()
         {
-            return EditorFactory.GetHexEditor(_file);
+            SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }
     }
 }
