@@ -6,7 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using System.Windows.Input;
 using System.Windows.Media;
 using WpfHexaEditor;
 
@@ -58,6 +61,7 @@ namespace PreviewEditor.Editors
             _editor.BytesModified += _editor_BytesModified;
             _editor.SelectionLengthChanged += _editor_SelectionLengthChanged;
             _editor.SelectionStartChanged += _editor_SelectionStartChanged;
+            _editor.PreviewKeyDown += _editor_KeyDown;
 
             SetDarkMode();
 
@@ -77,13 +81,40 @@ namespace PreviewEditor.Editors
             catch (Exception ex)
             {
                 //TODO update the status label?
-                MessageBox.Show($"{ex}");
+                System.Windows.Forms.MessageBox.Show($"{ex}");
             }
 
             //once we've initialized, unhook the event
             this.ParentChanged -= OnParentChanged;
+
+            _editor.Focus();
         }
 
+        private void _editor_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            var isCtrl = (Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != 0;
+            var isShift = (Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Shift) != 0;
+            var isAlt = (Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Alt) != 0;
+            if (isCtrl && isShift && !isAlt && e.Key == System.Windows.Input.Key.M)
+            {
+                var mnu = this.ContextMenu;
+            }
+        }
+
+
+        public new ContextMenuStrip ContextMenu
+        {
+            get
+            {
+                var menu = new ContextMenuStrip();
+                var item = new ToolStripMenuItem("test");
+                //item.Image = Properties.Resources.Example;
+                item.Click += (sender, e) => { System.Windows.Forms.MessageBox.Show("Yep"); };
+                menu.Items.Add(item);
+                menu.Show(this, this.PointToClient(MousePosition));
+                return null;
+            }
+        }
 
         private void _editor_SelectionStartChanged(object sender, EventArgs e)
         {
