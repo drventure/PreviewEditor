@@ -25,13 +25,13 @@ namespace PreviewEditor.Editors
 
         internal static IPreviewEditorControl GetTextEditor(EditingFile file)
         {
-            if (file.FileInfo.Length > PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize)
+            if (file.IsTextEditable)
             {
-                return new TextViewControl(file);
+                return new TextEditControl(file);
             }
             else
             {
-                return new TextEditControl(file);
+                return new TextViewControl(file);
             }
         }
 

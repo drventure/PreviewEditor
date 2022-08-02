@@ -233,5 +233,13 @@ namespace PreviewEditor.Editors
                 MessageBox.Show(ex.Message, "Error saving changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        internal override void OnSwitchEditor()
+        {
+            _file.Stream = new MemoryStream();
+            _editor.Save(_file.Stream);
+            _file.Stream.Position = 0;
+            base.OnSwitchEditor();
+        }
     }
 }

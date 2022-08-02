@@ -220,7 +220,7 @@ namespace PreviewEditor.Editors
                 menu.MenuItems.Add(
                     new MenuItem("Show in Hex", (sender, e) =>
                     {
-                        //TODO
+                        OnSwitchEditor();
                     })
                     { MergeOrder = 80 }
                 );
@@ -501,7 +501,7 @@ namespace PreviewEditor.Editors
         }
 
 
-        private void OnSwitchEditor()
+        internal virtual void OnSwitchEditor()
         {
             SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }

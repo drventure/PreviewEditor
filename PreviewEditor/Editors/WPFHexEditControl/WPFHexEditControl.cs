@@ -63,9 +63,16 @@ namespace PreviewEditor.Editors
 
             try
             {
-                var stream = new MemoryStream();
-                _file.FileInfo.OpenRead().CopyTo(stream);
-                _editor.Stream = stream;
+                Stream stream;
+                if (_file.Stream is not null)
+                {
+                    stream = _file.Stream;
+                    _editor.Stream = stream;
+                }
+                else
+                {
+                    _editor.FileName = _file.FileInfo.FullName;
+                }
             }
             catch (Exception ex)
             {
@@ -122,6 +129,20 @@ namespace PreviewEditor.Editors
 
         private void OnSwitchEditor()
         {
+            if (_editor.FileName == null)
+            {
+                // We have an editable stream
+                _file.Stream = _editor.Stream;
+            }
+            else if (_file.IsTextEditable)
+            {
+                // get the editable stream from the hex editor
+                _file.Stream = _editor.Stream;
+            }
+            else
+            {
+                // just pass the Editing file on through
+            }
             SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }
     }

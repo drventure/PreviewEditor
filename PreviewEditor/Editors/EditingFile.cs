@@ -29,7 +29,25 @@ namespace PreviewEditor.Editors
         /// <summary>
         /// Returns the FileInfo on the file that was selected for preview
         /// </summary>
-        public FileInfo FileInfo { get { return _fileInfo; } }  
+        public FileInfo FileInfo { get { return _fileInfo; } }
+
+
+        /// <summary>
+        /// returns true if this file is not too big to be edited
+        /// </summary>
+        public bool IsTextEditable
+        {
+            get
+            {
+                return _fileInfo.Length <= PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize;
+            }
+        }
+
+        /// <summary>
+        /// If set, represents a stream of the given file to be edited
+        /// This is used when switching from a TextEditor to a HexEditor or back
+        /// </summary>
+        public Stream Stream { get; set; }
 
 
         /// <summary>
