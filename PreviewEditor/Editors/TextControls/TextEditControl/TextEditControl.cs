@@ -156,38 +156,36 @@ namespace PreviewEditor.Editors
         /// <summary>
         /// Build up the ContextMenu
         /// </summary>
-        public override ContextMenu ContextMenu
+        public override ContextMenuStrip ContextMenu
         {
             get
             {
-                var menu = new ContextMenu();
-                menu.MenuItems.Add(
-                    new MenuItem("Undo", (sender, e) =>
+                var menu = new ContextMenuStrip();
+                menu.Items.AddRange(new ToolStripItem[] {
+                    new ToolStripMenuItem("Undo", null, (sender, e) =>
                     {
                         _editor.Undo();
-                    }) 
-                    { 
-                        Shortcut = Shortcut.CtrlZ, 
-                        MergeOrder = 20,
+                    }, Keys.Control | Keys.Z)
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 3,
                         Enabled = _editor.CanUndo
-                    }
-                );
+                    },
 
-                menu.MenuItems.Add(
-                    new MenuItem("Redo", (sender, e) =>
+                    new ToolStripMenuItem("Redo", null, (sender, e) =>
                     {
                         _editor.Redo();
-                    })
+                    }, Keys.Control | Keys.Shift | Keys.Z)
                     {
-                        Shortcut = Shortcut.CtrlShiftZ,
-                        MergeOrder = 20,
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 4,
                         Enabled = _editor.CanRedo
                     }
-                ); ;
+                }); 
 
                 //merge menu items
                 var baseMenu = base.ContextMenu;
-                baseMenu.MergeMenu(menu);
+                ToolStripManager.Merge(menu, baseMenu);
 
                 return baseMenu;
             }

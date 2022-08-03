@@ -116,114 +116,83 @@ namespace PreviewEditor.Editors
         /// <summary>
         /// Build up the ContextMenu
         /// </summary>
-        public override ContextMenu ContextMenu
+        public virtual new ContextMenuStrip ContextMenu
         {
             get
             {
-                var menu = new ContextMenu();
-                menu.MenuItems.Add(
-                    new MenuItem("Cut", (sender, e) =>
+                var menu = new ContextMenuStrip();
+                menu.Items.AddRange(new ToolStripItem[] {
+                    new ToolStripMenuItem("Cut", null, (sender, e) =>
                     {
                         _editor.Cut();
-                    })
-                    {
-                        Shortcut = Shortcut.CtrlX,
-                        MergeOrder = 0
-                    }
-                );
+                    }, Keys.Control | Keys.X),
 
-                menu.MenuItems.Add(
-                    new MenuItem("Copy", (sender, e) =>
+                    new ToolStripMenuItem("Copy", null, (sender, e) =>
                     {
                         _editor.Copy();
-                    })
-                    { Shortcut = Shortcut.CtrlC, MergeOrder = 0 }
-                );
+                    }, Keys.Control | Keys.C),
 
-                menu.MenuItems.Add(
-                    new MenuItem("Paste", (sender, e) =>
+                    new ToolStripMenuItem("Paste", null, (sender, e) =>
                     {
                         _editor.Paste();
-                    })
+                    }, Keys.Control | Keys.V)
                     {
-                        Shortcut = Shortcut.CtrlV,
                         Enabled = Clipboard.ContainsText(),
-                        MergeOrder = 0
-                    }
-                );
+                    },
 
-                menu.MenuItems.Add(
-                    new MenuItem("Find", (sender, e) =>
+                    new ToolStripMenuItem("Find", null, (sender, e) =>
                     {
                         Find();
-                    })
-                    {
-                        Shortcut = Shortcut.CtrlF,
-                        MergeOrder = 0
-                    }
-                );
+                    }, Keys.Control | Keys.F),
 
-                menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 0 });
+                    new ToolStripSeparator(),
 
-                menu.MenuItems.Add(new MenuItem(
-                    "Options",
-                    new MenuItem[]
-                    {
-                        new MenuItem("Show Line Numbers", (sender, e) =>
+                    new ToolStripMenuItem("Options", null, new ToolStripMenuItem[] {
+                        new ToolStripMenuItem("Show Line Numbers", null, (sender, e) =>
                             {
                                 _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
                                 PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
-                            })
+                            }, Keys.Control | Keys.Shift | Keys.L)
                             {
-                                Shortcut = Shortcut.CtrlShiftL,
-                                MergeOrder = 50,
                                 Checked = _editor.ShowLineNumbers
                             },
-                        new MenuItem("Show Column Ruler", (sender, e) =>
+                        new ToolStripMenuItem("Show Column Ruler", null, (sender, e) =>
                             {
                                 _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
                                 _editor.Options.ColumnRulerPosition = 80;
                                 PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
-                            })
+                            }, Keys.Control | Keys.Shift | Keys.C)
                             {
-                                Shortcut = Shortcut.CtrlShiftC,
-                                MergeOrder = 50,
                                 Checked = _editor.Options.ShowColumnRuler
                             },
-                        new MenuItem("Show Spaces", (sender, e) =>
+                        new ToolStripMenuItem("Show Spaces", null, (sender, e) =>
                             {
                                 _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
                                 PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
                             })
                             {
-                                MergeOrder = 50,
                                 Checked = _editor.Options.ShowSpaces
                             },
-                        new MenuItem("Show Tabs", (sender, e) =>
+                        new ToolStripMenuItem("Show Tabs", null, (sender, e) =>
                             {
                                 _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
                                 PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
                             })
                             {
-                                MergeOrder = 50,
                                 Checked = _editor.Options.ShowTabs
                             }
-                    })
-                { MergeOrder = 50 });
+                    }),
 
-                menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 50 });
+                    new ToolStripSeparator(),
 
-                menu.MenuItems.Add(new MenuItem("Save", mnuSave) { Shortcut = Shortcut.CtrlS, MergeOrder = 70 });
-                menu.MenuItems.Add(new MenuItem("Save As", mnuSaveAs) { Shortcut = Shortcut.CtrlA, MergeOrder = 70 });
-                menu.MenuItems.Add(new MenuItem("-") { MergeOrder = 70 });
+                    new ToolStripMenuItem("Save", null, mnuSave, Keys.Control | Keys.S),
+                    new ToolStripSeparator(),
 
-                menu.MenuItems.Add(
-                    new MenuItem("Show in Hex", (sender, e) =>
+                    new ToolStripMenuItem("Show in Hex", null, (sender, e) =>
                     {
                         OnSwitchEditor();
                     })
-                    { MergeOrder = 80 }
-                );
+                });
 
                 return menu;
             }

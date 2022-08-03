@@ -125,7 +125,7 @@ namespace PreviewEditor.Editors
                     {
                         _editor.Undo();
                     }, Keys.Control | Keys.Z),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Bookmarks...", null,
                         new ToolStripItem[]
                         {
@@ -138,7 +138,7 @@ namespace PreviewEditor.Editors
                                 _editor.ClearScrollMarker(_editor.SelectionStart);
                             }),
                         }),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Copy as Hexadecimal", null, (sender, e) =>
                     {
                         _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.HexaString);
@@ -175,12 +175,12 @@ namespace PreviewEditor.Editors
                                 _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.TblString);
                             }),
                         }),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Paste (overwrite)", null, (sender, e) =>
                     {
                         //TODO
                     }, Keys.Control | Keys.V),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Fill Selection with Byte", null, (sender, e) =>
                     {
                         //_editor.FillWithByte();
@@ -189,22 +189,22 @@ namespace PreviewEditor.Editors
                     {
                         //_editor.FillWithByte();
                     }, Keys.Control | Keys.H),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Delete", null, (sender, e) =>
                     {
                         _editor.DeleteSelection();
                     }, Keys.Delete),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Find All Occurrences of Selection", null, (sender, e) =>
                     {
                         //TODO
                     }, Keys.Control | Keys.F),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Select All", null, (sender, e) =>
                     {
                         //TODO
                     }, Keys.Control | Keys.A),
-                    new ToolStripMenuItem("-"),
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("Switch to Text Editor", null, (sender, e) =>
                     {
                         OnSwitchEditor();
