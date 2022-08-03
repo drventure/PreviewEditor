@@ -107,14 +107,97 @@ namespace PreviewEditor.Editors
             get
             {
                 var menu = new ContextMenuStrip();
-                var item = new ToolStripMenuItem("test");
-                //item.Image = Properties.Resources.Example;
-                item.Click += (sender, e) => { System.Windows.Forms.MessageBox.Show("Yep"); };
-                menu.Items.Add(item);
-                menu.Show(this, this.PointToClient(MousePosition));
-                return null;
+                menu.Items.AddRange(new ToolStripItem[]
+                {
+                    new ToolStripMenuItem("Undo", null, (sender, e) =>
+                    {
+                        _editor.Undo();
+                    }, Keys.ControlKey | Keys.Z),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Bookmarks...", null,
+                        new ToolStripItem[]
+                        {
+                            new ToolStripMenuItem("Set Bookmark", null, (sender, e) =>
+                            {
+                                _editor.SetBookMark();
+                            }),
+                            new ToolStripMenuItem("Clear Bookmark", null, (sender, e) =>
+                            {
+                                _editor.ClearScrollMarker(_editor.SelectionStart);
+                            }),
+                        }),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Copy as Hexadecimal", null, (sender, e) =>
+                    {
+                        _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.HexaString);
+                    }),
+                    new ToolStripMenuItem("Copy as ASCII", null, (sender, e) =>
+                    {
+                        _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.AsciiString);
+                    }),
+                    new ToolStripMenuItem("Copy Selection as...", null,
+                        new ToolStripItem[]
+                        {
+                            new ToolStripMenuItem("C", null, (sender, e) =>
+                            {
+                                _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.CCode);
+                            }),
+                            new ToolStripMenuItem("C#", null, (sender, e) =>
+                            {
+                                _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.CSharpCode);
+                            }),
+                            new ToolStripMenuItem("F#", null, (sender, e) =>
+                            {
+                                _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.FSharpCode);
+                            }),
+                            new ToolStripMenuItem("Java", null, (sender, e) =>
+                            {
+                                _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.JavaCode);
+                            }),
+                            new ToolStripMenuItem("Visual Basic.Net", null, (sender, e) =>
+                            {
+                                _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.VbNetCode);
+                            }),
+                            new ToolStripMenuItem("TBL string", null, (sender, e) =>
+                            {
+                                _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.TblString);
+                            }),
+                        }),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Paste (overwrite)", null, (sender, e) =>
+                    {
+                        //TODO
+                    }, Keys.ControlKey | Keys.V),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Fill Selection with Byte", null, (sender, e) =>
+                    {
+                        //_editor.FillWithByte();
+                    }),
+                    new ToolStripMenuItem("Replace Byte in Selection", null, (sender, e) =>
+                    {
+                        //_editor.FillWithByte();
+                    }, Keys.ControlKey | Keys.H),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Delete", null, (sender, e) =>
+                    {
+                        _editor.DeleteSelection();
+                    }, Keys.Delete),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Find All Occurrences of Selection", null, (sender, e) =>
+                    {
+                        //TODO
+                    }, Keys.ControlKey | Keys.F),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Select All", null, (sender, e) =>
+                    {
+                        //TODO
+                    }, Keys.ControlKey | Keys.A),
+                });
+
+                return menu;
             }
         }
+
 
         private void _editor_SelectionStartChanged(object sender, EventArgs e)
         {
