@@ -62,6 +62,7 @@ namespace PreviewEditor.Editors
             _editor.SelectionLengthChanged += _editor_SelectionLengthChanged;
             _editor.SelectionStartChanged += _editor_SelectionStartChanged;
             _editor.PreviewKeyDown += _editor_KeyDown;
+            _editor.MouseDown += _editor_MouseDown;
 
             SetDarkMode();
 
@@ -90,6 +91,17 @@ namespace PreviewEditor.Editors
             _editor.Focus();
         }
 
+
+        private void _editor_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                e.Handled = true;
+                this.ContextMenu.Show(this, this.PointToClient(System.Windows.Forms.Cursor.Position));
+            }
+        }
+
+
         private void _editor_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             var isCtrl = (Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != 0;
@@ -112,7 +124,7 @@ namespace PreviewEditor.Editors
                     new ToolStripMenuItem("Undo", null, (sender, e) =>
                     {
                         _editor.Undo();
-                    }, Keys.ControlKey | Keys.Z),
+                    }, Keys.Control | Keys.Z),
                     new ToolStripMenuItem("-"),
                     new ToolStripMenuItem("Bookmarks...", null,
                         new ToolStripItem[]
@@ -167,7 +179,7 @@ namespace PreviewEditor.Editors
                     new ToolStripMenuItem("Paste (overwrite)", null, (sender, e) =>
                     {
                         //TODO
-                    }, Keys.ControlKey | Keys.V),
+                    }, Keys.Control | Keys.V),
                     new ToolStripMenuItem("-"),
                     new ToolStripMenuItem("Fill Selection with Byte", null, (sender, e) =>
                     {
@@ -176,7 +188,7 @@ namespace PreviewEditor.Editors
                     new ToolStripMenuItem("Replace Byte in Selection", null, (sender, e) =>
                     {
                         //_editor.FillWithByte();
-                    }, Keys.ControlKey | Keys.H),
+                    }, Keys.Control | Keys.H),
                     new ToolStripMenuItem("-"),
                     new ToolStripMenuItem("Delete", null, (sender, e) =>
                     {
@@ -186,12 +198,17 @@ namespace PreviewEditor.Editors
                     new ToolStripMenuItem("Find All Occurrences of Selection", null, (sender, e) =>
                     {
                         //TODO
-                    }, Keys.ControlKey | Keys.F),
+                    }, Keys.Control | Keys.F),
                     new ToolStripMenuItem("-"),
                     new ToolStripMenuItem("Select All", null, (sender, e) =>
                     {
                         //TODO
-                    }, Keys.ControlKey | Keys.A),
+                    }, Keys.Control | Keys.A),
+                    new ToolStripMenuItem("-"),
+                    new ToolStripMenuItem("Switch to Text Editor", null, (sender, e) =>
+                    {
+                        OnSwitchEditor();
+                    }, Keys.Control | Keys.T),
                 });
 
                 return menu;
@@ -241,6 +258,9 @@ namespace PreviewEditor.Editors
         }
 
 
+        /// <summary>
+        /// Request to switch editors
+        /// </summary>
         private void OnSwitchEditor()
         {
             if (_editor.FileName == null)
