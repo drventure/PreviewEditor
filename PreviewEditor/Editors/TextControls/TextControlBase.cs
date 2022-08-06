@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -393,6 +394,7 @@ namespace PreviewEditor.Editors.TextControls
                 _find.ReplaceAll += OnReplaceAll;
             }
 
+            _lastUsedIndex = _editor.SelectionStart;
             _find.Visible = true;
             _find.BringToFront();
 
@@ -426,7 +428,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private int lastUsedIndex = 0;
+        private int _lastUsedIndex = 0;
 
         public void FindNext(string search = null)
         {
@@ -439,33 +441,44 @@ namespace PreviewEditor.Editors.TextControls
             //if nothing to find, bail
             if (string.IsNullOrEmpty(search))
             {
-                lastUsedIndex = 0;
                 return;
             }
 
 
             if (string.IsNullOrEmpty(_editor.Text))
             {
-                lastUsedIndex = 0;
                 return;
             }
 
-            if (lastUsedIndex >= search.Count())
+            if (_lastUsedIndex >= _editor.Document.TextLength)
             {
-                lastUsedIndex = 0;
+                _lastUsedIndex = 0;
             }
 
-            int nIndex = _editor.Text.IndexOf(search, lastUsedIndex);
-            if (nIndex != -1)
+            var wrapped = false;
+            do
             {
-                var area = _editor.TextArea;
-                _editor.Select(nIndex, search.Length);
-                lastUsedIndex = nIndex + search.Length;
-            }
-            else
-            {
-                lastUsedIndex = 0;
-            }
+                int nIndex = _editor.Text.IndexOf(search, _lastUsedIndex);
+                if (nIndex != -1)
+                {
+                    var area = _editor.TextArea;
+                    _editor.Select(nIndex, search.Length);
+                    _lastUsedIndex = nIndex + search.Length;
+                    _editor.CaretOffset = nIndex + search.Length;
+                    _editor.TextArea.Caret.BringCaretToView();
+                    break;
+                }
+                else if (wrapped)
+                {
+                    break;
+                }
+                else
+                {
+                    wrapped = true;
+                    _lastUsedIndex = 0;
+                    SystemSounds.Exclamation.Play();
+                }
+            } while (true);
         }
 
 
@@ -480,33 +493,46 @@ namespace PreviewEditor.Editors.TextControls
             //if nothing to find, bail
             if (string.IsNullOrEmpty(search))
             {
-                lastUsedIndex = 0;
+                _lastUsedIndex = 0;
                 return;
             }
 
 
             if (string.IsNullOrEmpty(_editor.Text))
             {
-                lastUsedIndex = 0;
+                _lastUsedIndex = 0;
                 return;
             }
 
-            if (lastUsedIndex > 0)
+            if (_lastUsedIndex > 0)
             {
-                lastUsedIndex = lastUsedIndex - search.Length;
+                _lastUsedIndex = _lastUsedIndex - search.Length;
             }
 
-            int nIndex = _editor.Text.LastIndexOf(search, 0, lastUsedIndex - 1);
-            if (nIndex != -1)
+            var wrapped = false;
+            do
             {
-                var area = _editor.TextArea;
-                _editor.Select(nIndex, search.Length);
-                lastUsedIndex = nIndex + search.Length;
-            }
-            else
-            {
-                lastUsedIndex = _editor.Document.TextLength;
-            }
+                int nIndex = _editor.Text.LastIndexOf(search, _lastUsedIndex - 1);
+                if (nIndex != -1)
+                {
+                    var area = _editor.TextArea;
+                    _editor.Select(nIndex, search.Length);
+                    _lastUsedIndex = nIndex + search.Length;
+                    _editor.CaretOffset = nIndex + search.Length;
+                    _editor.TextArea.Caret.BringCaretToView();
+                    break;
+                }
+                else if (wrapped)
+                {
+                    break;
+                }
+                else
+                {
+                    wrapped = true;
+                    _lastUsedIndex = _editor.Document.TextLength;
+                    SystemSounds.Exclamation.Play();
+                }
+            } while (true);
         }
 
 
@@ -531,7 +557,7 @@ namespace PreviewEditor.Editors.TextControls
             }
             else
             {
-                lastUsedIndex = 0;
+                _lastUsedIndex = 0;
                 MessageBox.Show("End of file");
             }
         }

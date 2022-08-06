@@ -63,11 +63,12 @@ namespace PreviewEditor.Editors.TextControls
             // 
             this.tbxFind.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbxFind.Location = new System.Drawing.Point(53, 23);
-            this.tbxFind.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbxFind.Margin = new System.Windows.Forms.Padding(6);
             this.tbxFind.Name = "tbxFind";
             this.tbxFind.Size = new System.Drawing.Size(431, 24);
             this.tbxFind.TabIndex = 0;
             this.tbxFind.TextChanged += new System.EventHandler(this.tbxFind_TextChanged);
+            this.tbxFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxFind_KeyDown);
             // 
             // stripFind
             // 
@@ -153,7 +154,7 @@ namespace PreviewEditor.Editors.TextControls
             this.btnToggleFindReplace.FlatAppearance.BorderSize = 0;
             this.btnToggleFindReplace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnToggleFindReplace.Location = new System.Drawing.Point(16, 6);
-            this.btnToggleFindReplace.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnToggleFindReplace.Margin = new System.Windows.Forms.Padding(6);
             this.btnToggleFindReplace.Name = "btnToggleFindReplace";
             this.btnToggleFindReplace.Size = new System.Drawing.Size(27, 106);
             this.btnToggleFindReplace.TabIndex = 2;
@@ -196,7 +197,7 @@ namespace PreviewEditor.Editors.TextControls
             // 
             this.tbxReplace.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbxReplace.Location = new System.Drawing.Point(54, 65);
-            this.tbxReplace.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbxReplace.Margin = new System.Windows.Forms.Padding(6);
             this.tbxReplace.Name = "tbxReplace";
             this.tbxReplace.Size = new System.Drawing.Size(431, 24);
             this.tbxReplace.TabIndex = 3;
@@ -204,7 +205,7 @@ namespace PreviewEditor.Editors.TextControls
             // splitSizer
             // 
             this.splitSizer.Location = new System.Drawing.Point(0, 0);
-            this.splitSizer.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.splitSizer.Margin = new System.Windows.Forms.Padding(6);
             this.splitSizer.Name = "splitSizer";
             this.splitSizer.Size = new System.Drawing.Size(6, 117);
             this.splitSizer.TabIndex = 100;
@@ -220,7 +221,7 @@ namespace PreviewEditor.Editors.TextControls
             this.Controls.Add(this.btnToggleFindReplace);
             this.Controls.Add(this.stripFind);
             this.Controls.Add(this.tbxFind);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "FindReplacePanel";
             this.Size = new System.Drawing.Size(956, 117);
             this.stripFind.ResumeLayout(false);
@@ -346,6 +347,24 @@ namespace PreviewEditor.Editors.TextControls
         private void btnPrevious_Click(object sender, EventArgs e)
         {
             OnFindPrevious(new EventArgs());
+        }
+
+
+        public bool IsFindActive
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(this.FindText);
+            }
+        }
+
+
+        private void tbxFind_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && this.IsFindActive)
+            {
+                OnFindNext(new EventArgs());
+            }
         }
     }
 }
