@@ -41,7 +41,7 @@ namespace PreviewEditor.Editors.TextControls
 
                 //track whether document has been changed
                 _isDirty = false;
-                _editor.DocumentChanged += (sender, e) =>
+                _editor.TextChanged += (sender, e) =>
                 {
                     _isDirty = true;
                 };
