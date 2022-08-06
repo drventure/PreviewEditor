@@ -96,8 +96,6 @@ namespace PreviewEditor.Editors
             if (_file.SelectionStart > 0)
             {
                 _editor.SetPosition(_file.SelectionStart, _file.SelectionLength);
-                // _editor.SelectionStart 
-                // _editor.SelectionStop = _editor.SelectionStart + _file.SelectionLength;
             }
         }
 
@@ -229,14 +227,12 @@ namespace PreviewEditor.Editors
         private void _editor_SelectionStartChanged(object sender, EventArgs e)
         {
             _file.SelectionStart = _editor.SelectionStart;
-            System.Diagnostics.Debug.WriteLine($"HEX SelStart {_file.SelectionStart}");
         }
 
 
         private void _editor_SelectionLengthChanged(object sender, EventArgs e)
         {
             _file.SelectionLength = _editor.SelectionLength;
-            System.Diagnostics.Debug.WriteLine($"HEX SelLength {_file.SelectionLength}");
         }
 
 

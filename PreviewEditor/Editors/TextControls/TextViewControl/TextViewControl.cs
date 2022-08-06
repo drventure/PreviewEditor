@@ -13,7 +13,7 @@ using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 
-namespace PreviewEditor.Editors
+namespace PreviewEditor.Editors.TextControls
 {
     /// <summary>
     /// This control views text files of arbitrary size.

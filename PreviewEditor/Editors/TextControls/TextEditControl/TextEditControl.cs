@@ -15,7 +15,7 @@ using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 
 
-namespace PreviewEditor.Editors
+namespace PreviewEditor.Editors.TextControls
 {
     internal class TextEditControl : TextControlBase
     {

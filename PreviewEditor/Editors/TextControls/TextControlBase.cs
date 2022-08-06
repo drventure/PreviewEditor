@@ -17,13 +17,13 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Search;
 
 
-namespace PreviewEditor.Editors
+namespace PreviewEditor.Editors.TextControls
 {
     /// <summary>
     /// Since both the TextEditor and the large text file viewer rely on AvalonEdit
     /// we'll use this base class to abstract out the commonalities between the two
     /// </summary>
-    internal abstract class TextControlBase : ElementHost, IPreviewEditorControl
+    internal class TextControlBase : UserControl, IPreviewEditorControl
     {
         /// <summary>
         /// Represents a request to switch editors
@@ -33,11 +33,18 @@ namespace PreviewEditor.Editors
         protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
         protected EditingFile _file;
+        protected ElementHost _host;
         protected TextEditor _editor;
 
         protected DispatcherTimer _foldingUpdateTimer;
         protected FoldingManager _foldingManager;
         protected dynamic _foldingStrategy;
+
+
+        public TextControlBase() : base()
+        {
+            this.ParentChanged += editor_ParentChanged;
+        }
 
 
         public TextControlBase(EditingFile file) : this()
@@ -46,25 +53,25 @@ namespace PreviewEditor.Editors
         }
 
 
-        public TextControlBase()
-        {
-            this.ParentChanged += editor_ParentChanged;
-        }
-
-
-        protected abstract void OnParentChanged();
+        protected virtual void OnParentChanged()
+        { }
 
 
         private void editor_ParentChanged(object sender, EventArgs e)
         {
             if (this.Parent is null) return;
+            if (LicenseManager.UsageMode != LicenseUsageMode.Runtime) return;
+
+            _host = new ElementHost();
+            this.Controls.Add(_host);
+            _host.Dock = DockStyle.Fill;
 
             //init the control once it's sited
             this.TabStop = true;
             this.TabIndex = 0;
             _editor = new TextEditor();
             _editor.Focusable = true;
-            this.Child = _editor;
+            _host.Child = _editor;
 
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
@@ -363,33 +370,73 @@ namespace PreviewEditor.Editors
         }
 
 
-        private SearchPanel _search;
+        private FindReplacePanel _find;
         private void Find()
         {
-            //if (_search == null || _search.IsClosed) _search = SearchPanel.Install(_editor);
-            //_search.Open();
-            //_search.Reactivate();
-            var dlg = new FindReplace.FindReplaceDialog(_editor);
-            dlg.ShowDialog();
+            var SCROLLBARWIDTH = System.Windows.Forms.SystemInformation.VerticalScrollBarWidth;
+            if (_find is null)
+            {
+                _find = new FindReplacePanel();
+                this.SizeChanged += (sender, e) =>
+                {
+                    _find.Left = this.Width - _find.Width - SCROLLBARWIDTH;
+                    _find.Top = 0;
+                };
+
+                this.Controls.Add(_find);
+                _find.Top = 0;
+                _find.Left = this.Width - _find.Width - SCROLLBARWIDTH;
+
+                _find.FindNext += OnFindNext;
+                _find.FindPrevious += OnFindPrevious;
+                _find.ReplaceNext += OnReplaceNext;
+                _find.ReplaceAll += OnReplaceAll;
+            }
+
+            _find.Visible = true;
+            _find.BringToFront();
+
+            _find.Focus();
+            //var dlg = new FindReplace.FindReplaceDialog(_editor);
+            //dlg.ShowDialog();
         }
 
 
-        private void FindNext()
+        private void OnFindNext(object sender, EventArgs e)
         {
-            _search?.FindNext();
+            FindNext(_find.FindText);
         }
 
 
-        private void FindPrevious()
+        private void OnFindPrevious(object sender, EventArgs e)
         {
-            _search?.FindPrevious();
+            FindPrevious(_find.FindText);
+        }
+
+
+        private void OnReplaceNext(object sender, EventArgs e)
+        {
+            MessageBox.Show("PeformReplaceNext");
+        }
+
+
+        private void OnReplaceAll(object sender, EventArgs e)
+        {
+            MessageBox.Show("PeformReplaceAll");
         }
 
 
         private int lastUsedIndex = 0;
 
-        public void Find(string search)
+        public void FindNext(string search = null)
         {
+            if (string.IsNullOrEmpty(search))
+            {
+                //nothing passed in, so use last find
+                search = _find?.FindText;
+            }
+
+            //if nothing to find, bail
             if (string.IsNullOrEmpty(search))
             {
                 lastUsedIndex = 0;
@@ -418,6 +465,47 @@ namespace PreviewEditor.Editors
             else
             {
                 lastUsedIndex = 0;
+            }
+        }
+
+
+        public void FindPrevious(string search = null)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                //nothing passed in, so use last find
+                search = _find?.FindText;
+            }
+
+            //if nothing to find, bail
+            if (string.IsNullOrEmpty(search))
+            {
+                lastUsedIndex = 0;
+                return;
+            }
+
+
+            if (string.IsNullOrEmpty(_editor.Text))
+            {
+                lastUsedIndex = 0;
+                return;
+            }
+
+            if (lastUsedIndex > 0)
+            {
+                lastUsedIndex = lastUsedIndex - search.Length;
+            }
+
+            int nIndex = _editor.Text.LastIndexOf(search, 0, lastUsedIndex - 1);
+            if (nIndex != -1)
+            {
+                var area = _editor.TextArea;
+                _editor.Select(nIndex, search.Length);
+                lastUsedIndex = nIndex + search.Length;
+            }
+            else
+            {
+                lastUsedIndex = _editor.Document.TextLength;
             }
         }
 
@@ -478,13 +566,26 @@ namespace PreviewEditor.Editors
         public void Close()
         {
             _editor = null;
-            this.Child = null;
+            _host.Child = null;
+            _host = null;
         }
 
 
         internal virtual void OnSwitchEditor()
         {
             SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // TextControlBase
+            // 
+            this.Name = "TextControlBase";
+            this.Size = new System.Drawing.Size(728, 194);
+            this.ResumeLayout(false);
+
         }
     }
 }

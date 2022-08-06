@@ -8,11 +8,13 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 using ICSharpCode.AvalonEdit;
 using PreviewHandler.Sdk.Controls;
 using PreviewEditor.Editors;
-using System.Windows.Forms.Integration;
+using PreviewEditor.Editors.TextControls;
+
 
 namespace PreviewEditor
 {
