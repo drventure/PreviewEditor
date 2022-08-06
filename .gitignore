@@ -351,3 +351,7 @@ MigrationBackup/
 
 /installer/PowerToysSetup/MonacoSRC.wxs
 /Hb.Hexeditor2-master
+/WDViewer/FILELIST.FRM
+/WDViewer/WINDOS5.BAS
+/LargeTextFile.txt
+/VeryLargeJson.json
