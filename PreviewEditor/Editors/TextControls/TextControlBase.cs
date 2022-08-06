@@ -48,28 +48,23 @@ namespace PreviewEditor.Editors
 
         public TextControlBase()
         {
-            this.ParentChanged += OnParentChanged;
+            this.ParentChanged += editor_ParentChanged;
         }
 
 
-        private void OnParentChanged(object sender, EventArgs e)
+        protected abstract void OnParentChanged();
+
+
+        private void editor_ParentChanged(object sender, EventArgs e)
         {
+            if (this.Parent is null) return;
+
             //init the control once it's sited
             this.TabStop = true;
             this.TabIndex = 0;
             _editor = new TextEditor();
             _editor.Focusable = true;
             this.Child = _editor;
-
-            //monitor this event and forward to the subclass
-            //which will then call back to this base class if needed
-            _editor.KeyDown += GeneralKeyDown;
-
-            _editor.MouseDown += (sender, e) => { updateEditingFile(); };
-            _editor.KeyDown += (sender, e) => { updateEditingFile(); };
-            _editor.TextChanged += (sender, e) => { updateEditingFile(); _file.SetDirty(); };
-            _editor.MouseDown += _editor_MouseDown;
-            _editor.TextChanged += _editor_TextChanged;
 
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
@@ -82,13 +77,30 @@ namespace PreviewEditor.Editors
             SetFoldingStrategy();
 
             //once we've initialized, unhook the event
-            this.ParentChanged -= OnParentChanged;
+            this.OnParentChanged();
 
             this.Focus();
             _editor.Focus();
-            _editor.CaretOffset = 0;
-            _editor.TextArea.Caret.Show();
-            _editor.TextArea.Caret.BringCaretToView();
+
+            if (_file.SelectionStart != 0)
+            {
+                _editor.SelectionStart = _file.SelectionStart >= int.MaxValue ? 0 : (int)_file.SelectionStart;
+                _editor.SelectionLength = _file.SelectionLength >= int.MaxValue ? 0 : (int)_file.SelectionLength;
+                _editor.TextArea.Caret.Show();
+                _editor.CaretOffset = _editor.SelectionStart + _editor.SelectionLength;
+                _editor.TextArea.Caret.BringCaretToView();
+            }
+
+            //hook up events AFTER the document has been loaded
+            _editor.MouseDown += (sender, e) => { updateEditingFile(); };
+            _editor.KeyDown += (sender, e) => { updateEditingFile(); };
+            _editor.TextChanged += (sender, e) => { updateEditingFile(); _file.SetDirty(); };
+            _editor.MouseDown += _editor_MouseDown;
+            _editor.TextChanged += _editor_TextChanged;
+
+            //monitor this event and forward to the subclass
+            //which will then call back to this base class if needed
+            _editor.KeyDown += GeneralKeyDown;
         }
 
 

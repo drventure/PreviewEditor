@@ -48,6 +48,8 @@ namespace PreviewEditor.Editors
 
         private void OnParentChanged(object sender, EventArgs e)
         {
+            if (this.Parent is null) return;
+
             //init the control once it's sited
             _editor = new HexEditor();
             _editor.BorderThickness = new Thickness(0);
@@ -56,6 +58,7 @@ namespace PreviewEditor.Editors
             _editor.ByteGrouping = WpfHexaEditor.Core.ByteSpacerGroup.FourByte;
             _editor.BytePerLine = 32;
             _editor.AllowAutoHighLightSelectionByte = false;
+            _editor.AllowContextMenu = false;
 
             _editor.BytesDeleted += _editor_BytesDeleted;
             _editor.BytesModified += _editor_BytesModified;
@@ -89,6 +92,13 @@ namespace PreviewEditor.Editors
             this.ParentChanged -= OnParentChanged;
 
             _editor.Focus();
+
+            if (_file.SelectionStart > 0)
+            {
+                _editor.SetPosition(_file.SelectionStart, _file.SelectionLength);
+                // _editor.SelectionStart 
+                // _editor.SelectionStop = _editor.SelectionStart + _file.SelectionLength;
+            }
         }
 
 
@@ -219,12 +229,14 @@ namespace PreviewEditor.Editors
         private void _editor_SelectionStartChanged(object sender, EventArgs e)
         {
             _file.SelectionStart = _editor.SelectionStart;
+            System.Diagnostics.Debug.WriteLine($"HEX SelStart {_file.SelectionStart}");
         }
 
 
         private void _editor_SelectionLengthChanged(object sender, EventArgs e)
         {
             _file.SelectionLength = _editor.SelectionLength;
+            System.Diagnostics.Debug.WriteLine($"HEX SelLength {_file.SelectionLength}");
         }
 
 

@@ -24,7 +24,6 @@ namespace PreviewEditor.Editors
     {
         public TextViewControl(EditingFile file) : base(file)
         {
-            this.ParentChanged += OnParentChanged;
         }
 
 
@@ -33,7 +32,7 @@ namespace PreviewEditor.Editors
         }
 
 
-        private void OnParentChanged(object sender, EventArgs e)
+        protected override void OnParentChanged()
         {
             //init the control once it's sited
             _editor.IsReadOnly = true;
@@ -54,9 +53,6 @@ namespace PreviewEditor.Editors
             {
                 //TODO update the status label?
             }
-
-            //once we've initialized, unhook the event
-            this.ParentChanged -= OnParentChanged;
         }
 
 

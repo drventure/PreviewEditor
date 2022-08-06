@@ -152,8 +152,6 @@ namespace PreviewEditor
                     {
                         var editor = EditorFactory.GetEditor(_file);
 
-                        editor.SwitchEditorRequested += Editor_SwitchEditorRequested;
-
                         //set the editor into the parent window
                         //NOTE the datasource argument is not used
                         SiteEditor(string.Empty, editor);
@@ -186,6 +184,10 @@ namespace PreviewEditor
             this.pnlEditor.Controls.Add(editorControl);
             editorControl.Dock = DockStyle.Fill;
             editorControl.Visible = true;
+
+            //monitor for switch editor request
+            editor.SwitchEditorRequested += Editor_SwitchEditorRequested;
+
 
             //call the base class to finish out
             base.DoPreview(dataSource);
@@ -249,6 +251,7 @@ namespace PreviewEditor
         /// <param name="argbColor"></param>
         public new void SetBackgroundColor(Color color)
         {
+            MessageBox.Show($"BColor is {color}");
             base.SetBackgroundColor(color);
             pnlEditor.BackColor = color;
         }
