@@ -34,23 +34,27 @@ namespace PreviewEditor.Editors
 
         /// <summary>
         /// returns true if this file is not too big to be edited
+        /// but the file ALSO must be non read only and NOT system
         /// </summary>
         public bool IsTextEditable
         {
             get
             {
-                return _fileInfo.Length <= PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize;
+                var ro = _fileInfo.Attributes.HasFlag(FileAttributes.ReadOnly) || _fileInfo.Attributes.HasFlag(FileAttributes.System);
+                return !ro && _fileInfo.Length <= PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize;
             }
         }
 
         /// <summary>
         /// returns true if this file is not too big to be edited
+        /// but the file ALSO must be non read only and NOT system
         /// </summary>
         public bool IsHexEditable
         {
             get
             {
-                return _fileInfo.Length <= PreviewEditor.Settings.HexEditorOptions.MaxEditableFileSize;
+                var ro = _fileInfo.Attributes.HasFlag(FileAttributes.ReadOnly) || _fileInfo.Attributes.HasFlag(FileAttributes.System);
+                return !ro && _fileInfo.Length <= PreviewEditor.Settings.HexEditorOptions.MaxEditableFileSize;
             }
         }
 
