@@ -44,6 +44,17 @@ namespace PreviewEditor.Editors
         }
 
         /// <summary>
+        /// returns true if this file is not too big to be edited
+        /// </summary>
+        public bool IsHexEditable
+        {
+            get
+            {
+                return _fileInfo.Length <= PreviewEditor.Settings.HexEditorOptions.MaxEditableFileSize;
+            }
+        }
+
+        /// <summary>
         /// If set, represents a stream of the given file to be edited
         /// This is used when switching from a TextEditor to a HexEditor or back
         /// </summary>

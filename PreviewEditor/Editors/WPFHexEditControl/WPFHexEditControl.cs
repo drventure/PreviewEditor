@@ -74,16 +74,23 @@ namespace PreviewEditor.Editors
                 Stream stream;
                 if (_file.Stream is not null)
                 {
+                    //read only is always based on whether it's editable or not
+                    _editor.ReadOnlyMode = !_file.IsHexEditable;
+                    //but in any case, use the stream that was passed in
                     stream = _file.Stream;
                     _editor.Stream = stream;
                 }
                 else
                 {
-                    //TODO need to make sure file is NOT opened in locked mode
-                    //because user may use Explorer to delete/rename etc
-                    //and we don't want to block those operations
-                    //even if it means loosing edits here
-                    _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    if (_file.IsHexEditable)
+                    {
+                        _editor.ReadOnlyMode = false;
+                        _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    } else
+                    {
+                        _editor.ReadOnlyMode = true;
+                        _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    }
                     // _editor.FileName = _file.FileInfo.FullName;
                 }
             }
