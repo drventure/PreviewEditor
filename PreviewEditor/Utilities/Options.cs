@@ -51,6 +51,14 @@ namespace PreviewEditor
 
             [OptionDescription("Maximum Editable FileSize in bytes")]
             public long MaxEditableFileSize { get { return this.GetProperty<long>(50 * 1000 * 1000); } set { this.SetProperty(value); } }
+            [OptionDescription("Find only within the current selection")]
+            public bool FindInSelection{ get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
+            [OptionDescription("Find Whole Words Only")]
+            public bool FindWholeWordsOnly { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
+            [OptionDescription("Find Using Regular Expressions")]
+            public bool FindWithRegex { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
+            [OptionDescription("Find Case Sensitive")]
+            public bool FindCaseSensitive { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
         }
 
 

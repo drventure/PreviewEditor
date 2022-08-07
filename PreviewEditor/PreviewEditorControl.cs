@@ -240,10 +240,13 @@ namespace PreviewEditor
         /// Hook into color setter
         /// </summary>
         /// <param name="color"></param>
-        public new void SetTextColor(Color color)
+        public override void SetTextColor(Color color)
         {
-            base.SetTextColor(color);
-            pnlEditor.ForeColor = color;
+            InvokeOnControlThread(() => 
+            {
+                base.SetTextColor(color);
+                pnlEditor.ForeColor = color;
+            });
         }
 
 
@@ -251,11 +254,13 @@ namespace PreviewEditor
         /// hook into color setter
         /// </summary>
         /// <param name="argbColor"></param>
-        public new void SetBackgroundColor(Color color)
+        public override void SetBackgroundColor(Color color)
         {
-            MessageBox.Show($"BColor is {color}");
-            base.SetBackgroundColor(color);
-            pnlEditor.BackColor = color;
+            InvokeOnControlThread(() => 
+            {
+                base.SetBackgroundColor(color);
+                pnlEditor.BackColor = color;
+            });
         }
 
 

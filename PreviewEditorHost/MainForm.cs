@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PreviewHandler.Sdk.Interop;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -107,6 +108,12 @@ namespace PreviewEditorHost
                 ((Form)prv).TopLevel = false;
                 ((Form)prv).Parent = pnlPreviewHost;
                 prv.Visible = true;
+                
+                //in a real host, the PreviewHandlerBase interface called IPreviewHandlerVisuals is called
+                //which then forwards the colors on to these methods on the control
+                prv.SetBackgroundColor(Color.FromArgb(0x1e, 0x1e, 0x1e));
+                prv.SetTextColor(Color.WhiteSmoke);
+
                 prv.DoPreview<string>(file);
                 prv.Dock = DockStyle.Fill;
             }

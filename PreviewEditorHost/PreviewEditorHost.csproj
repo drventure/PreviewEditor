@@ -36,9 +36,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PreviewHandler.Sdk.Managed, Version=1.0.1.0, Culture=neutral, PublicKeyToken=8d978d0ea5ae8d21, processorArchitecture=MSIL">
-      <HintPath>..\packages\PreviewHandler.Sdk.Managed.1.0.1\lib\net47\PreviewHandler.Sdk.Managed.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

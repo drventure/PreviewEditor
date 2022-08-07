@@ -74,6 +74,10 @@ namespace PreviewEditor.Editors.TextControls
             _editor.Focusable = true;
             _host.Child = _editor;
 
+            var c = this.Parent.BackColor;
+            _editor.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
+            c = this.Parent.ForeColor;
+            _editor.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
@@ -476,7 +480,7 @@ namespace PreviewEditor.Editors.TextControls
                 {
                     wrapped = true;
                     _lastUsedIndex = 0;
-                    SystemSounds.Exclamation.Play();
+                    SystemSounds.Beep.Play();
                 }
             } while (true);
         }

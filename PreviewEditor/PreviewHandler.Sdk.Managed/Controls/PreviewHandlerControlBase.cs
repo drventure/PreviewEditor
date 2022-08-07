@@ -41,7 +41,7 @@ namespace PreviewHandler.Sdk.Controls
         }
 
         /// <inheritdoc />
-        public void SetFocus()
+        public virtual void SetFocus()
         {
             this.InvokeOnControlThread(() =>
             {
@@ -50,7 +50,7 @@ namespace PreviewHandler.Sdk.Controls
         }
 
         /// <inheritdoc />
-        public void SetFont(Font font)
+        public virtual void SetFont(Font font)
         {
             this.InvokeOnControlThread(() =>
             {
@@ -59,7 +59,7 @@ namespace PreviewHandler.Sdk.Controls
         }
 
         /// <inheritdoc />
-        public void SetTextColor(Color color)
+        public virtual void SetTextColor(Color color)
         {
             this.InvokeOnControlThread(() =>
             {
@@ -68,7 +68,7 @@ namespace PreviewHandler.Sdk.Controls
         }
 
         /// <inheritdoc />
-        public void SetBackgroundColor(Color argbColor)
+        public virtual void SetBackgroundColor(Color argbColor)
         {
             this.InvokeOnControlThread(() =>
             {

@@ -101,23 +101,26 @@ namespace PreviewEditor.Editors.TextControls
             this.btnCaseSensitive.Name = "btnCaseSensitive";
             this.btnCaseSensitive.Size = new System.Drawing.Size(41, 30);
             this.btnCaseSensitive.Text = "Aa";
+            this.btnCaseSensitive.Click += new System.EventHandler(this.btnCaseSensitive_Click);
             // 
             // btnWholeWord
             // 
             this.btnWholeWord.Name = "btnWholeWord";
             this.btnWholeWord.Size = new System.Drawing.Size(40, 30);
             this.btnWholeWord.Text = "ab";
+            this.btnWholeWord.Click += new System.EventHandler(this.btnWholeWord_Click);
             // 
             // btnRegex
             // 
             this.btnRegex.Name = "btnRegex";
             this.btnRegex.Size = new System.Drawing.Size(29, 30);
             this.btnRegex.Text = ".*";
+            this.btnRegex.Click += new System.EventHandler(this.btnRegex_Click);
             // 
             // lblResults
             // 
             this.lblResults.Name = "lblResults";
-            this.lblResults.Size = new System.Drawing.Size(155, 30);
+            this.lblResults.Size = new System.Drawing.Size(93, 30);
             this.lblResults.Spring = true;
             this.lblResults.Text = "No results";
             // 
@@ -140,12 +143,14 @@ namespace PreviewEditor.Editors.TextControls
             this.btnFindInSelection.Name = "btnFindInSelection";
             this.btnFindInSelection.Size = new System.Drawing.Size(30, 30);
             this.btnFindInSelection.Text = "=";
+            this.btnFindInSelection.Click += new System.EventHandler(this.btnFindInSelection_Click);
             // 
             // btnClose
             // 
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(28, 30);
             this.btnClose.Text = "X";
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnToggleFindReplace
             // 
@@ -321,15 +326,81 @@ namespace PreviewEditor.Editors.TextControls
                 {
                     if (e.KeyCode == Keys.Escape)
                     {
+                        e.Handled = true;
                         this.Visible = false;
                     }
                 };
             }
+
+            this.FindInSelection = PreviewEditor.Settings.TextEditorOptions.FindInSelection;
+            this.RegEx = PreviewEditor.Settings.TextEditorOptions.FindWithRegex;
+            this.WholeWord = PreviewEditor.Settings.TextEditorOptions.FindWholeWordsOnly;
+            this.CaseSensitive = PreviewEditor.Settings.TextEditorOptions.FindCaseSensitive;
         }
 
 
         public string FindText { get; set; }
         public string ReplaceText { get; set; }
+
+
+        public bool CaseSensitive
+        {
+            get
+            {
+                return this.btnCaseSensitive.Font.Bold;
+            }
+            set
+            {
+                var style = value ? FontStyle.Bold : FontStyle.Regular;
+                btnCaseSensitive.Font = new Font(btnCaseSensitive.Font, style);
+                PreviewEditor.Settings.TextEditorOptions.FindCaseSensitive = value;
+            }
+        }
+
+
+        public bool RegEx
+        {
+            get
+            {
+                return this.btnRegex.Font.Bold;
+            }
+            set
+            {
+                var style = value ? FontStyle.Bold : FontStyle.Regular;
+                btnRegex.Font = new Font(btnRegex.Font, style);
+                PreviewEditor.Settings.TextEditorOptions.FindWithRegex = value;
+            }
+        }
+
+
+        public bool WholeWord
+        {
+            get
+            {
+                return this.btnWholeWord.Font.Bold;
+            }
+            set
+            {
+                var style = value ? FontStyle.Bold : FontStyle.Regular;
+                btnWholeWord.Font = new Font(btnWholeWord.Font, style);
+                PreviewEditor.Settings.TextEditorOptions.FindWholeWordsOnly = value;
+            }
+        }
+
+
+        public bool FindInSelection
+        {
+            get
+            {
+                return this.btnFindInSelection.Font.Bold;
+            }
+            set
+            {
+                var style = value ? FontStyle.Bold : FontStyle.Regular;
+                btnFindInSelection.Font = new Font(btnFindInSelection.Font, style);
+                PreviewEditor.Settings.TextEditorOptions.FindInSelection = value;
+            }
+        }
 
 
         private void tbxFind_TextChanged(object sender, EventArgs e)
@@ -363,8 +434,40 @@ namespace PreviewEditor.Editors.TextControls
         {
             if (e.KeyCode == Keys.Enter && this.IsFindActive)
             {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
                 OnFindNext(new EventArgs());
             }
+        }
+
+
+        private void btnCaseSensitive_Click(object sender, EventArgs e)
+        {
+            this.CaseSensitive = !this.CaseSensitive;
+        }
+
+
+        private void btnRegex_Click(object sender, EventArgs e)
+        {
+            this.RegEx = !this.RegEx;
+        }
+
+
+        private void btnWholeWord_Click(object sender, EventArgs e)
+        {
+            this.WholeWord = !this.WholeWord;
+        }
+
+
+        private void btnFindInSelection_Click(object sender, EventArgs e)
+        {
+            this.FindInSelection = !this.FindInSelection;
+        }
+
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Visible = false;
         }
     }
 }
