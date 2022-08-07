@@ -327,6 +327,7 @@ namespace PreviewEditor.Editors.TextControls
                     if (e.KeyCode == Keys.Escape)
                     {
                         e.Handled = true;
+                        e.SuppressKeyPress = true;
                         this.Visible = false;
                     }
                 };
