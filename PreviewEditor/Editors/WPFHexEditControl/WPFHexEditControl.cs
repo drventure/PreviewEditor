@@ -79,7 +79,12 @@ namespace PreviewEditor.Editors
                 }
                 else
                 {
-                    _editor.FileName = _file.FileInfo.FullName;
+                    //TODO need to make sure file is NOT opened in locked mode
+                    //because user may use Explorer to delete/rename etc
+                    //and we don't want to block those operations
+                    //even if it means loosing edits here
+                    _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    // _editor.FileName = _file.FileInfo.FullName;
                 }
             }
             catch (Exception ex)

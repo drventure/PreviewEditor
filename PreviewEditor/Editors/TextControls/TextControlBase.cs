@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -563,6 +564,44 @@ namespace PreviewEditor.Editors.TextControls
             {
                 _lastUsedIndex = 0;
                 MessageBox.Show("End of file");
+            }
+        }
+
+
+        /// <summary>
+        /// Use a regex search always, just create an appropriate one from the inputs
+        /// </summary>
+        /// <param name="textToFind"></param>
+        /// <param name="caseSensitive"></param>
+        /// <param name="regex"></param>
+        /// <param name="wholeWord"></param>
+        /// <param name="searchForward"></param>
+        /// <returns></returns>
+        private Regex GetRegEx(FindReplacePanel options)
+        {
+            RegexOptions regex = RegexOptions.None;
+            if (!options.FindForward)
+            {
+                regex |= RegexOptions.RightToLeft;
+            }
+            if (!options.CaseSensitive)
+            {
+                regex |= RegexOptions.IgnoreCase;
+            }
+
+            if (options.RegEx)
+            {
+                return new Regex(options.FindText, regex);
+            }
+            else
+            {
+                string pattern = Regex.Escape(options.FindText);
+                pattern = pattern.Replace("\\*", ".*").Replace("\\?", ".");
+                if (options.WholeWord)
+                {
+                    pattern = "\\b" + pattern + "\\b";
+                }
+                return new Regex(pattern, regex);
             }
         }
 

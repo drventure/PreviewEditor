@@ -126,7 +126,6 @@ namespace PreviewEditor
         {
             try
             {
-                //MessageBox.Show($"Previewing");
                 string filename = null;
                 _file = null;
 

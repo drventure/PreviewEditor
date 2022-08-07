@@ -404,6 +404,9 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        public bool FindForward { get; set; }
+
+
         private void tbxFind_TextChanged(object sender, EventArgs e)
         {
             this.FindText = tbxFind.Text;
