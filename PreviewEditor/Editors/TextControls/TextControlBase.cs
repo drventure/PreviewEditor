@@ -12,10 +12,11 @@ using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-
+using System.Xml;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
 
 
@@ -82,8 +83,8 @@ namespace PreviewEditor.Editors.TextControls
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
-            _editor.FontFamily = new System.Windows.Media.FontFamily("Consolas");
-            _editor.FontSize = 14;
+            _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
+            _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 
             SetDarkMode();
 
@@ -205,7 +206,11 @@ namespace PreviewEditor.Editors.TextControls
                             })
                             {
                                 Checked = _editor.Options.ShowTabs
-                            }
+                            },
+                        new ToolStripMenuItem("Font...", null, (sender, e) =>
+                            {
+                                this.ChooseFont();
+                            })
                     }),
 
                     new ToolStripSeparator(),
@@ -606,6 +611,24 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        private void ChooseFont()
+        {
+            var dlg = new FontDialog();
+            dlg.ShowApply = false;
+            dlg.ShowColor = false;
+            dlg.ShowEffects = false;
+            dlg.Font = new System.Drawing.Font(_editor.FontFamily.Source, (float)_editor.FontSize);
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                var font = dlg.Font;
+                PreviewEditor.Settings.TextEditorOptions.FontFamily = font.Name;
+                PreviewEditor.Settings.TextEditorOptions.FontSize = font.Size;
+
+                _editor.FontFamily = new FontFamily(font.Name);
+                _editor.FontSize = font.Size;
+            }
+        }
+
         private void GotoLinePrompt()
         {
             string input = Microsoft.VisualBasic.Interaction.InputBox("Go to what line number:",
@@ -654,7 +677,6 @@ namespace PreviewEditor.Editors.TextControls
             this.Name = "TextControlBase";
             this.Size = new System.Drawing.Size(728, 194);
             this.ResumeLayout(false);
-
         }
     }
 }

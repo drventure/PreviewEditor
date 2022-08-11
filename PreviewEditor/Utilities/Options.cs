@@ -63,6 +63,12 @@ namespace PreviewEditor
 
             [OptionDescription("Find Case Sensitive")]
             public bool FindCaseSensitive { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Font Name to use")]
+            public string FontFamily { get { return this.GetProperty<string>("Consolas"); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Font Size to use")]
+            public float FontSize { get { return this.GetProperty<float>(8); } set { this.SetProperty(value); } }
         }
 
 
