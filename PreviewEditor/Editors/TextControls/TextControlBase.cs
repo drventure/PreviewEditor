@@ -83,6 +83,29 @@ namespace PreviewEditor.Editors.TextControls
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
+
+            //Example changing a highlighting color
+            //// Get a instance of the default rule set "XML"
+            //var highlighting = _editor.SyntaxHighlighting;
+
+            //// Get Color Definition "Comment"
+            //var commentHighlighting = highlighting.NamedHighlightingColors.First(c => c.Name == "Comment");
+
+            //// Change the Foreground Color
+            //commentHighlighting.Foreground = new SimpleHighlightingBrush(Color.FromRgb(100, 0,0));
+            //commentHighlighting.Background = new SimpleHighlightingBrush(Color.FromRgb(0,0, 100));
+
+            //// Set the syntaxHighlighting
+            //_editor.SyntaxHighlighting = highlighting;
+
+            using (var xshd_stream = File.OpenRead(@".\Dark-CSharp.xshd"))
+            {
+                using (var xshd_reader = new XmlTextReader(xshd_stream))
+                {
+                    _editor.SyntaxHighlighting = HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
+                }
+            }
+
             _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
             _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 

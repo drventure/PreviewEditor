@@ -72,10 +72,14 @@
     <None Remove="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
     <None Remove="AssemblyResources\WPFHexaEditor.dll" />
     <None Remove="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
+    <None Remove="Dark-CSharp.xshd" />
     <None Remove="LICENSE" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Dark-CSharp.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
