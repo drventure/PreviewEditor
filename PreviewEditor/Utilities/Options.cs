@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Media;
 using SimpleJSONOptions;
 
 
@@ -47,13 +47,13 @@ namespace PreviewEditor
             public bool ShowSpaces { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
 
             [OptionDescription("Display Tab characters")]
-            public bool ShowTabs{ get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+            public bool ShowTabs { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
 
             [OptionDescription("Maximum Editable FileSize in bytes")]
             public long MaxEditableFileSize { get { return this.GetProperty<long>(50 * 1000 * 1000); } set { this.SetProperty(value); } }
 
             [OptionDescription("Find only within the current selection")]
-            public bool FindInSelection{ get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
+            public bool FindInSelection { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
 
             [OptionDescription("Find Whole Words Only")]
             public bool FindWholeWordsOnly { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }
@@ -69,8 +69,40 @@ namespace PreviewEditor
 
             [OptionDescription("Font Size to use")]
             public float FontSize { get { return this.GetProperty<float>(8); } set { this.SetProperty(value); } }
-        }
 
+            /// <summary>
+            /// 
+            /// </summary>
+            [OptionDescription("Various Syntax Coloring Options for the Preview Text Editor")]
+            public _TextEditorColors Colors
+            {
+                get { return this.GetProperty<_TextEditorColors>(new _TextEditorColors(this)); }
+                set { this.SetProperty(value); }
+            }
+            internal class _TextEditorColors : NestedOptionsBase
+            {
+                public _TextEditorColors(NestedOptionsBase parent) : base(parent) { }
+
+                [OptionDescription("Editor Foreground")]
+                public Color Forecolor { get { return this.GetProperty<Color>(System.Windows.Media.Colors.White); } set { this.SetProperty(value); } }
+                [OptionDescription("Editor Background")]
+                public Color Backcolor { get { return this.GetProperty<Color>(System.Windows.Media.Colors.Black); } set { this.SetProperty(value); } }
+                [OptionDescription("Comments")]
+                public Color Comments { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkCyan); } set { this.SetProperty(value); } }
+                [OptionDescription("Variables")]
+                public Color Variables { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkGoldenrod); } set { this.SetProperty(value); } }
+                [OptionDescription("Namespaces")]
+                public Color Namespaces { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkGoldenrod); } set { this.SetProperty(value); } }
+                [OptionDescription("Keywords")]
+                public Color Keywords { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkGoldenrod); } set { this.SetProperty(value); } }
+                [OptionDescription("Goto Keywords")]
+                public Color GotoKeywords { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkGoldenrod); } set { this.SetProperty(value); } }
+                [OptionDescription("Types")]
+                public Color Types { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkCyan); } set { this.SetProperty(value); } }
+                [OptionDescription("Strings")]
+                public Color Strings { get { return this.GetProperty<Color>(System.Windows.Media.Colors.Goldenrod); } set { this.SetProperty(value); } }
+            }
+        }
 
 
         [OptionDescription("Various options related to the Preview Hex Editor")]

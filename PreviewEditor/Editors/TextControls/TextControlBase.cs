@@ -7,6 +7,7 @@ using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
@@ -83,33 +84,12 @@ namespace PreviewEditor.Editors.TextControls
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
-
-            //Example changing a highlighting color
-            //// Get a instance of the default rule set "XML"
-            //var highlighting = _editor.SyntaxHighlighting;
-
-            //// Get Color Definition "Comment"
-            //var commentHighlighting = highlighting.NamedHighlightingColors.First(c => c.Name == "Comment");
-
-            //// Change the Foreground Color
-            //commentHighlighting.Foreground = new SimpleHighlightingBrush(Color.FromRgb(100, 0,0));
-            //commentHighlighting.Background = new SimpleHighlightingBrush(Color.FromRgb(0,0, 100));
-
-            //// Set the syntaxHighlighting
-            //_editor.SyntaxHighlighting = highlighting;
-
-            using (var xshd_stream = File.OpenRead(@".\Dark-CSharp.xshd"))
-            {
-                using (var xshd_reader = new XmlTextReader(xshd_stream))
-                {
-                    _editor.SyntaxHighlighting = HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
-                }
-            }
-
             _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
             _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 
-            SetDarkMode();
+            ApplyTheme();
+
+            //SetDarkMode();
 
             SetFoldingStrategy();
 
@@ -186,7 +166,7 @@ namespace PreviewEditor.Editors.TextControls
                         _editor.Paste();
                     }, Keys.Control | Keys.V)
                     {
-                        Enabled = Clipboard.ContainsText(),
+                        Enabled = System.Windows.Clipboard.ContainsText(),
                     },
 
                     new ToolStripMenuItem("Find", null, (sender, e) =>
@@ -233,6 +213,10 @@ namespace PreviewEditor.Editors.TextControls
                         new ToolStripMenuItem("Font...", null, (sender, e) =>
                             {
                                 this.ChooseFont();
+                            }),
+                        new ToolStripMenuItem("Theme...", null, (sender, e) =>
+                            {
+                                this.ChooseTheme();
                             })
                     }),
 
@@ -451,13 +435,13 @@ namespace PreviewEditor.Editors.TextControls
 
         private void OnReplaceNext(object sender, EventArgs e)
         {
-            MessageBox.Show("PeformReplaceNext");
+            System.Windows.MessageBox.Show("PeformReplaceNext");
         }
 
 
         private void OnReplaceAll(object sender, EventArgs e)
         {
-            MessageBox.Show("PeformReplaceAll");
+            System.Windows.MessageBox.Show("PeformReplaceAll");
         }
 
 
@@ -591,7 +575,7 @@ namespace PreviewEditor.Editors.TextControls
             else
             {
                 _lastUsedIndex = 0;
-                MessageBox.Show("End of file");
+                System.Windows.MessageBox.Show("End of file");
             }
         }
 
@@ -652,6 +636,19 @@ namespace PreviewEditor.Editors.TextControls
             }
         }
 
+
+        private void ChooseTheme()
+        {
+            var dlg = new OpenFileDialog();
+            if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != null)
+            {
+                Theme.Load(dlg.FileName);
+
+                ApplyTheme();
+            }
+        }
+
+
         private void GotoLinePrompt()
         {
             string input = Microsoft.VisualBasic.Interaction.InputBox("Go to what line number:",
@@ -691,6 +688,7 @@ namespace PreviewEditor.Editors.TextControls
             SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }
 
+
         private void InitializeComponent()
         {
             this.SuspendLayout();
@@ -700,6 +698,54 @@ namespace PreviewEditor.Editors.TextControls
             this.Name = "TextControlBase";
             this.Size = new System.Drawing.Size(728, 194);
             this.ResumeLayout(false);
+        }
+
+
+        /// <summary>
+        /// Assuming a theme has already been loaded as is in Settings
+        /// apply those colors to the editor
+        /// </summary>
+        private void ApplyTheme()
+        {
+            var c = PreviewEditor.Settings.TextEditorOptions.Colors;
+
+            //main text colors
+            _editor.Background = new SolidColorBrush(c.Backcolor);
+            _editor.Foreground = new SolidColorBrush(c.Forecolor);
+
+            //various syntax coloring
+            SetElementColor("Comment", c.Comments);
+            SetElementColor("ReferenceTypeKeywords", c.Variables);
+            SetElementColor("ValueTypeKeywords", c.Variables);
+            SetElementColor("NamespaceKeywords", c.Keywords);
+            SetElementColor("Keywords", c.Keywords);
+            SetElementColor("Goto Keywords", c.GotoKeywords);
+            SetElementColor("TypeKeywords", c.Types);
+            SetElementColor("String", c.Strings);
+
+            // Set the syntaxHighlighting
+            //_editor.SyntaxHighlighting = highlighting;
+
+            //using (var xshd_stream = File.OpenRead(@".\Dark-CSharp.xshd"))
+            //{
+            //    using (var xshd_reader = new XmlTextReader(xshd_stream))
+            //    {
+            //        _editor.SyntaxHighlighting = HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
+            //    }
+            //}
+        }
+
+
+        private void SetElementColor(string element, Color color)
+        {
+            var highlighting = _editor.SyntaxHighlighting;
+
+            var hlt = highlighting.NamedHighlightingColors.Where(c => c.Name == element).FirstOrDefault();
+            if (hlt != null)
+            {
+                hlt.Foreground = new SimpleHighlightingBrush(color);
+                hlt.FontWeight = FontWeights.UltraLight;
+            }
         }
     }
 }
