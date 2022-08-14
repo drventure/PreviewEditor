@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml;
 using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -416,8 +417,6 @@ namespace PreviewEditor.Editors.TextControls
             _find.BringToFront();
 
             _find.Focus();
-            //var dlg = new FindReplace.FindReplaceDialog(_editor);
-            //dlg.ShowDialog();
         }
 
 
@@ -447,109 +446,42 @@ namespace PreviewEditor.Editors.TextControls
 
         private int _lastUsedIndex = 0;
 
-        public void FindNext(string search = null)
+        public bool FindNext(string search = null, bool searchForward = true)
         {
-            if (string.IsNullOrEmpty(search))
-            {
-                //nothing passed in, so use last find
-                search = _find?.FindText;
-            }
+            Regex regex = _find.RegEx(search, searchForward);
+            int start = regex.Options.HasFlag(RegexOptions.RightToLeft) ?
+                _editor.SelectionStart : 
+                _editor.SelectionStart + _editor.SelectionLength;
 
-            //if nothing to find, bail
-            if (string.IsNullOrEmpty(search))
-            {
-                return;
-            }
+            Match match = regex.Match(_editor.Text, start);
 
-
-            if (string.IsNullOrEmpty(_editor.Text))
+            if (!match.Success)  // start again from beginning or end
             {
-                return;
-            }
+                SystemSounds.Beep.Play();
 
-            if (_lastUsedIndex >= _editor.Document.TextLength)
-            {
-                _lastUsedIndex = 0;
-            }
-
-            var wrapped = false;
-            do
-            {
-                int nIndex = _editor.Text.IndexOf(search, _lastUsedIndex);
-                if (nIndex != -1)
-                {
-                    var area = _editor.TextArea;
-                    _editor.Select(nIndex, search.Length);
-                    _lastUsedIndex = nIndex + search.Length;
-                    _editor.CaretOffset = nIndex + search.Length;
-                    _editor.TextArea.Caret.BringCaretToView();
-                    break;
-                }
-                else if (wrapped)
-                {
-                    break;
-                }
+                if (regex.Options.HasFlag(RegexOptions.RightToLeft))
+                    match = regex.Match(_editor.Text, _editor.Text.Length);
                 else
-                {
-                    wrapped = true;
-                    _lastUsedIndex = 0;
-                    SystemSounds.Beep.Play();
-                }
-            } while (true);
+                    match = regex.Match(_editor.Text, 0);
+            }
+
+            if (match.Success)
+            {
+                _editor.Select(match.Index, match.Length);
+                _lastUsedIndex = match.Index + match.Length;
+                _editor.CaretOffset = match.Index + match.Length;
+                _editor.TextArea.Caret.BringCaretToView();
+                //TextLocation loc = _editor.Document.GetLocation(match.Index);
+                //_editor.ScrollTo(loc.Line, loc.Column);
+            }
+
+            return match.Success;
         }
 
 
         public void FindPrevious(string search = null)
         {
-            if (string.IsNullOrEmpty(search))
-            {
-                //nothing passed in, so use last find
-                search = _find?.FindText;
-            }
-
-            //if nothing to find, bail
-            if (string.IsNullOrEmpty(search))
-            {
-                _lastUsedIndex = 0;
-                return;
-            }
-
-
-            if (string.IsNullOrEmpty(_editor.Text))
-            {
-                _lastUsedIndex = 0;
-                return;
-            }
-
-            if (_lastUsedIndex > 0)
-            {
-                _lastUsedIndex = _lastUsedIndex - search.Length;
-            }
-
-            var wrapped = false;
-            do
-            {
-                int nIndex = _editor.Text.LastIndexOf(search, _lastUsedIndex - 1);
-                if (nIndex != -1)
-                {
-                    var area = _editor.TextArea;
-                    _editor.Select(nIndex, search.Length);
-                    _lastUsedIndex = nIndex + search.Length;
-                    _editor.CaretOffset = nIndex + search.Length;
-                    _editor.TextArea.Caret.BringCaretToView();
-                    break;
-                }
-                else if (wrapped)
-                {
-                    break;
-                }
-                else
-                {
-                    wrapped = true;
-                    _lastUsedIndex = _editor.Document.TextLength;
-                    SystemSounds.Exclamation.Play();
-                }
-            } while (true);
+            FindNext(search, false);
         }
 
 
@@ -576,44 +508,6 @@ namespace PreviewEditor.Editors.TextControls
             {
                 _lastUsedIndex = 0;
                 System.Windows.MessageBox.Show("End of file");
-            }
-        }
-
-
-        /// <summary>
-        /// Use a regex search always, just create an appropriate one from the inputs
-        /// </summary>
-        /// <param name="textToFind"></param>
-        /// <param name="caseSensitive"></param>
-        /// <param name="regex"></param>
-        /// <param name="wholeWord"></param>
-        /// <param name="searchForward"></param>
-        /// <returns></returns>
-        private Regex GetRegEx(FindReplacePanel options)
-        {
-            RegexOptions regex = RegexOptions.None;
-            if (!options.FindForward)
-            {
-                regex |= RegexOptions.RightToLeft;
-            }
-            if (!options.CaseSensitive)
-            {
-                regex |= RegexOptions.IgnoreCase;
-            }
-
-            if (options.RegEx)
-            {
-                return new Regex(options.FindText, regex);
-            }
-            else
-            {
-                string pattern = Regex.Escape(options.FindText);
-                pattern = pattern.Replace("\\*", ".*").Replace("\\?", ".");
-                if (options.WholeWord)
-                {
-                    pattern = "\\b" + pattern + "\\b";
-                }
-                return new Regex(pattern, regex);
             }
         }
 

@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -72,7 +73,7 @@ namespace PreviewEditor.Editors.TextControls
             // 
             // stripFind
             // 
-            this.stripFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.stripFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.stripFind.AutoSize = false;
             this.stripFind.BackColor = System.Drawing.Color.Transparent;
@@ -91,7 +92,7 @@ namespace PreviewEditor.Editors.TextControls
             this.stripFind.Location = new System.Drawing.Point(495, 13);
             this.stripFind.Name = "stripFind";
             this.stripFind.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
-            this.stripFind.Size = new System.Drawing.Size(445, 40);
+            this.stripFind.Size = new System.Drawing.Size(516, 40);
             this.stripFind.SizingGrip = false;
             this.stripFind.TabIndex = 1;
             this.stripFind.Text = "statusStrip1";
@@ -120,7 +121,7 @@ namespace PreviewEditor.Editors.TextControls
             // lblResults
             // 
             this.lblResults.Name = "lblResults";
-            this.lblResults.Size = new System.Drawing.Size(93, 30);
+            this.lblResults.Size = new System.Drawing.Size(226, 30);
             this.lblResults.Spring = true;
             this.lblResults.Text = "No results";
             // 
@@ -154,7 +155,7 @@ namespace PreviewEditor.Editors.TextControls
             // 
             // btnToggleFindReplace
             // 
-            this.btnToggleFindReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnToggleFindReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.btnToggleFindReplace.FlatAppearance.BorderSize = 0;
             this.btnToggleFindReplace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -168,7 +169,7 @@ namespace PreviewEditor.Editors.TextControls
             // 
             // stripReplace
             // 
-            this.stripReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.stripReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.stripReplace.AutoSize = false;
             this.stripReplace.BackColor = System.Drawing.Color.Transparent;
@@ -181,7 +182,7 @@ namespace PreviewEditor.Editors.TextControls
             this.stripReplace.Location = new System.Drawing.Point(495, 56);
             this.stripReplace.Name = "stripReplace";
             this.stripReplace.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
-            this.stripReplace.Size = new System.Drawing.Size(445, 38);
+            this.stripReplace.Size = new System.Drawing.Size(516, 38);
             this.stripReplace.SizingGrip = false;
             this.stripReplace.TabIndex = 4;
             this.stripReplace.Text = "statusStrip2";
@@ -228,7 +229,7 @@ namespace PreviewEditor.Editors.TextControls
             this.Controls.Add(this.tbxFind);
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "FindReplacePanel";
-            this.Size = new System.Drawing.Size(956, 117);
+            this.Size = new System.Drawing.Size(1027, 117);
             this.stripFind.ResumeLayout(false);
             this.stripFind.PerformLayout();
             this.stripReplace.ResumeLayout(false);
@@ -334,7 +335,7 @@ namespace PreviewEditor.Editors.TextControls
             }
 
             this.FindInSelection = PreviewEditor.Settings.TextEditorOptions.FindInSelection;
-            this.RegEx = PreviewEditor.Settings.TextEditorOptions.FindWithRegex;
+            this.UseRegEx = PreviewEditor.Settings.TextEditorOptions.FindWithRegex;
             this.WholeWord = PreviewEditor.Settings.TextEditorOptions.FindWholeWordsOnly;
             this.CaseSensitive = PreviewEditor.Settings.TextEditorOptions.FindCaseSensitive;
         }
@@ -342,6 +343,41 @@ namespace PreviewEditor.Editors.TextControls
 
         public string FindText { get; set; }
         public string ReplaceText { get; set; }
+
+
+        /// <summary>
+        /// Converts any text to find into a regex or returns
+        /// the text to find as a literal regex if the 
+        /// regex flag is checked
+        /// </summary>
+        /// <param name="textToFind"></param>
+        /// <param name="leftToRight"></param>
+        /// <returns></returns>
+        public Regex RegEx(string search = null, bool searchForward = true)
+        {
+            if (search == null) search = this.FindText;
+
+            RegexOptions options = RegexOptions.None;
+            if (!searchForward)
+                options |= RegexOptions.RightToLeft;
+            if (!this.CaseSensitive)
+                options |= RegexOptions.IgnoreCase;
+
+            if (this.UseRegEx)
+            {
+                return new Regex(search, options);
+            }
+            else
+            {
+                string pattern = Regex.Escape(search);
+                //automatically assume wildcard support
+                pattern = pattern.Replace("\\*", ".*").Replace("\\?", ".");
+                if (this.WholeWord)
+                    pattern = "\\b" + pattern + "\\b";
+                return new Regex(pattern, options);
+            }
+        }
+
 
 
         public bool CaseSensitive
@@ -359,7 +395,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        public bool RegEx
+        public bool UseRegEx
         {
             get
             {
@@ -453,7 +489,7 @@ namespace PreviewEditor.Editors.TextControls
 
         private void btnRegex_Click(object sender, EventArgs e)
         {
-            this.RegEx = !this.RegEx;
+            this.UseRegEx = !this.UseRegEx;
         }
 
 

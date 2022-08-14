@@ -1,0 +1,15 @@
+﻿All settings are saved anytime one changes, need to queue up saves and only save after a few seconds.
+Also save needs to automatically occur before shutdown
+
+Need to create each editor when necessary and cache it between invocations on viewing files, so that 
+we don't create a new viewer each time.
+
+Rework syntax defs to use consistent token names (to make it easier to map VSCode or VS themes to here)
+
+Add code to load syntax defs from file system if available.
+
+Finish up Find replace panel.
+
+Highlight all occurrences as you type
+
+Count all occurrences and show which you're at as you type (like VSCODE)
