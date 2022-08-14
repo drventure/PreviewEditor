@@ -105,6 +105,12 @@ namespace PreviewEditor
                 public Color Punctuation { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkGray); } set { this.SetProperty(value); } }
                 [OptionDescription("Operators")]
                 public Color Operators { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkMagenta); } set { this.SetProperty(value); } }
+                [OptionDescription("Visibility")]
+                public Color Visibility { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkMagenta); } set { this.SetProperty(value); } }
+                [OptionDescription("Functions")]
+                public Color Functions { get { return this.GetProperty<Color>(System.Windows.Media.Colors.CornflowerBlue); } set { this.SetProperty(value); } }
+                [OptionDescription("Integers")]
+                public Color Integers { get { return this.GetProperty<Color>(System.Windows.Media.Colors.Goldenrod); } set { this.SetProperty(value); } }
             }
         }
 

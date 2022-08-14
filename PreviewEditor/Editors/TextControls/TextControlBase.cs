@@ -667,11 +667,16 @@ namespace PreviewEditor.Editors.TextControls
                 SetElementColor("ValueTypeKeywords", c.Variables);
                 SetElementColor("NamespaceKeywords", c.Keywords);
                 SetElementColor("Keywords", c.Keywords);
-                SetElementColor("Goto Keywords", c.GotoKeywords);
+                SetElementColor("ContextKeywords", c.Keywords);
+                SetElementColor("GotoKeywords", c.GotoKeywords);
                 SetElementColor("TypeKeywords", c.Types);
                 SetElementColor("String", c.Strings);
                 SetElementColor("Punctuation", c.Punctuation);
                 SetElementColor("OperatorKeywords", c.Operators);
+                SetElementColor("Visibility", c.Visibility);
+                SetElementColor("ParameterModifiers", c.Visibility);
+                SetElementColor("MethodCall", c.Functions);
+                SetElementColor("NumberLiteral", c.Integers);
 
                 // Set the syntaxHighlighting
                 //_editor.SyntaxHighlighting = highlighting;
