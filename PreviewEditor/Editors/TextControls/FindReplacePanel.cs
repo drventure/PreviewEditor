@@ -583,5 +583,6 @@ namespace PreviewEditor.Editors.TextControls
         {
             this.Mode = this.Mode == Modes.Find ? Modes.Replace : Modes.Find;
         }
+
     }
 }

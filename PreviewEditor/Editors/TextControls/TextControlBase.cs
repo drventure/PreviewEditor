@@ -118,6 +118,18 @@ namespace PreviewEditor.Editors.TextControls
             //monitor this event and forward to the subclass
             //which will then call back to this base class if needed
             _editor.KeyDown += GeneralKeyDown;
+
+
+            //Free icons https://fontawesome.com/search?m=free
+            var img = new FontAwesome.Sharp.IconButton();
+            img.IconChar = FontAwesome.Sharp.IconChar.ArrowUp;
+            img.IconSize = 16;
+            img.Size = new System.Drawing.Size(100, 100);
+            img.IconColor = System.Drawing.Color.PeachPuff;
+
+            this.Controls.Add(img);
+            img.BringToFront();
+            img.Visible = true;
         }
 
 
