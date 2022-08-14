@@ -83,6 +83,9 @@ namespace PreviewEditor.Editors.TextControls
             _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
             _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 
+            //load our custom highlightings
+            CustomHighlighting.Load();
+
             //Apply syntax file based on extension of viewed file
             _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
             //and apply theme given the syntax
@@ -94,6 +97,7 @@ namespace PreviewEditor.Editors.TextControls
 
             //once we've initialized, unhook the event
             this.OnParentChanged();
+            
 
             this.Focus();
             _editor.Focus();
@@ -677,6 +681,7 @@ namespace PreviewEditor.Editors.TextControls
                 SetElementColor("String", c.Strings);
                 SetElementColor("Punctuation", c.Punctuation);
                 SetElementColor("OperatorKeywords", c.Operators);
+                SetElementColor("Operators", c.Operators);
                 SetElementColor("Visibility", c.Visibility);
                 SetElementColor("ParameterModifiers", c.Visibility);
                 SetElementColor("MethodCall", c.Functions);

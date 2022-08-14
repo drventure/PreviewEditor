@@ -79,29 +79,29 @@
     <None Remove="Dark-CSharp.xshd" />
     <None Remove="LICENSE" />
     <None Remove="OneDark-Pro-darker.json" />
-    <None Remove="SyntaxDefinitions\ASPX.xshd" />
-    <None Remove="SyntaxDefinitions\Boo.xshd" />
-    <None Remove="SyntaxDefinitions\Coco-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\CPP-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\CSharp-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\CSS-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\HTML-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\Java-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\JavaScript-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\Json.xshd" />
-    <None Remove="SyntaxDefinitions\MarkDown-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\MarkDownWithFontSize-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\ModeV1.xsd" />
-    <None Remove="SyntaxDefinitions\ModeV2.xsd" />
-    <None Remove="SyntaxDefinitions\Patch-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\PHP-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\PowerShell.xshd" />
-    <None Remove="SyntaxDefinitions\Python-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\Tex-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\TSQL-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\VB-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\XML-Mode.xshd" />
-    <None Remove="SyntaxDefinitions\XmlDoc.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\ASPX.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Boo.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Coco-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\CPP-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\CSS-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\HTML-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Java-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\JavaScript-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Json.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\MarkDown-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\MarkDownWithFontSize-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\ModeV1.xsd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\ModeV2.xsd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Patch-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\PHP-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\PowerShell.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Python-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\Tex-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\TSQL-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\VB-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\XML-Mode.xshd" />
+    <None Remove="Editors\TextControls\SyntaxDefinitions\XmlDoc.xshd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -114,73 +114,73 @@
     <Content Include="OneDark-Pro-darker.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\ASPX.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\ASPX.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Boo.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Boo.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Coco-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Coco-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\CPP-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\CPP-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\CSharp-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\CSS-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\CSS-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\HTML-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\HTML-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Java-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Java-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\JavaScript-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\JavaScript-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Json.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Json.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\MarkDown-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\MarkDown-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\MarkDownWithFontSize-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\MarkDownWithFontSize-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\ModeV1.xsd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\ModeV1.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\ModeV2.xsd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\ModeV2.xsd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Patch-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Patch-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\PHP-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\PHP-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\PowerShell.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\PowerShell.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Python-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Python-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\Tex-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\Tex-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\TSQL-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\TSQL-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\VB-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\VB-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\XML-Mode.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\XML-Mode.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SyntaxDefinitions\XmlDoc.xshd">
+    <Content Include="Editors\TextControls\SyntaxDefinitions\XmlDoc.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -258,6 +258,11 @@
   <ItemGroup>
     <Folder Include="Editors\HexEditControl\" />
     <Folder Include="Properties\" />
+    <Folder Include="Editors\TextControls\SyntaxDefinitions\AsResources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<EmbeddedResource Include="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd" Link="Editors\TextControls\SyntaxDefinitions\AsResources\CSharp-Mode.xshd" />
   </ItemGroup>
 
   <ItemGroup>
