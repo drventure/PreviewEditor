@@ -101,6 +101,10 @@ namespace PreviewEditor
                 public Color Types { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkCyan); } set { this.SetProperty(value); } }
                 [OptionDescription("Strings")]
                 public Color Strings { get { return this.GetProperty<Color>(System.Windows.Media.Colors.Goldenrod); } set { this.SetProperty(value); } }
+                [OptionDescription("Punctuation")]
+                public Color Punctuation { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkGray); } set { this.SetProperty(value); } }
+                [OptionDescription("Operators")]
+                public Color Operators { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkMagenta); } set { this.SetProperty(value); } }
             }
         }
 

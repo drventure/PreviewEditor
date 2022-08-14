@@ -33,9 +33,6 @@ namespace PreviewEditor
     [ComVisible(true)]
     public sealed class PreviewEditorHandler : FileBasedPreviewHandler
     {
-        PreviewEditorControl _control;
-
-
         /// <summary>
         /// This static constructor allows me to override
         /// assembly resolution and load assemblies from embedded resources
@@ -47,9 +44,13 @@ namespace PreviewEditor
         }
 
 
+        private PreviewEditorControl _control;
         protected override IPreviewHandlerControl CreatePreviewHandlerControl()
         {
-
+            //TODO would be great to cache the control so we don't have to recreate
+            //it each time, but it appears to depend on the host.
+            //some hosts (explorer) appear to dispose the previewhandler itself
+            //(ie this object), so there wouldn't be any way to cache the control internally
             _control = new PreviewEditorControl();
             return _control;
         }

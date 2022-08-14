@@ -11,7 +11,7 @@ namespace PreviewEditor
     {
         private static Options _settings = null;
 
-        public static Options Settings
+        internal static Options Settings
         {
             get
             {

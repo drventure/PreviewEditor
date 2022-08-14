@@ -329,7 +329,7 @@ namespace PreviewEditor.Editors.TextControls
                     {
                         e.Handled = true;
                         e.SuppressKeyPress = true;
-                        this.Visible = false;
+                        this.Close();
                     }
                 };
             }
@@ -343,6 +343,28 @@ namespace PreviewEditor.Editors.TextControls
 
         public string FindText { get; set; }
         public string ReplaceText { get; set; }
+
+
+        public void ShowForReplace()
+        {
+            this.Height = tbxReplace.Bottom + tbxFind.Top;
+
+            this.Visible = true;
+            this.BringToFront();
+
+            this.Focus();
+        }
+
+
+        public void ShowForFind()
+        {
+            this.Height = tbxReplace.Top;
+
+            this.Visible = true;
+            this.BringToFront();
+
+            this.Focus();
+        }
 
 
         /// <summary>
@@ -440,7 +462,13 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        public bool FindForward { get; set; }
+        /// <summary>
+        /// Close the search panel
+        /// </summary>
+        public void Close()
+        {
+            this.Visible = false;
+        }
 
 
         private void tbxFind_TextChanged(object sender, EventArgs e)
@@ -507,7 +535,7 @@ namespace PreviewEditor.Editors.TextControls
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Visible = false;
+            this.Close();
         }
     }
 }

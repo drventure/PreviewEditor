@@ -59,6 +59,8 @@ namespace PreviewEditor
             ApplyNamedColor(theme, nameof(c.GotoKeywords), "Keyword Control");
             ApplyNamedColor(theme, nameof(c.Types), "Type Name");
             ApplyNamedColor(theme, nameof(c.Strings), "Strings");
+            ApplyNamedColor(theme, nameof(c.Punctuation), "Punctuation");
+            ApplyNamedColor(theme, nameof(c.Operators), "keyword.operator");
 
         }
 

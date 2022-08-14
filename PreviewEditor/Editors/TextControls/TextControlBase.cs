@@ -78,16 +78,14 @@ namespace PreviewEditor.Editors.TextControls
             _editor.Focusable = true;
             _host.Child = _editor;
 
-            var c = this.Parent.BackColor;
-            _editor.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
-            c = this.Parent.ForeColor;
-            _editor.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
-            _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
             _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
             _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 
+            //Apply syntax file based on extension of viewed file
+            _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
+            //and apply theme given the syntax
             ApplyTheme();
 
             //SetDarkMode();
@@ -115,10 +113,27 @@ namespace PreviewEditor.Editors.TextControls
             _editor.TextChanged += (sender, e) => { updateEditingFile(); _file.SetDirty(); };
             _editor.MouseDown += _editor_MouseDown;
             _editor.TextChanged += _editor_TextChanged;
+            _editor.TextArea.SelectionChanged += _editor_SelectionChanged;
 
             //monitor this event and forward to the subclass
             //which will then call back to this base class if needed
             _editor.KeyDown += GeneralKeyDown;
+        }
+
+
+        /// <summary>
+        /// Implement highlight selected text
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _editor_SelectionChanged(object sender, EventArgs e)
+        {
+            foreach (var xformer in _editor.TextArea.TextView.LineTransformers.OfType<HighlightSelectionTransformer>().ToList())
+            {
+                _editor.TextArea.TextView.LineTransformers.Remove(xformer);
+            }
+
+            _editor.TextArea.TextView.LineTransformers.Add(new HighlightSelectionTransformer(_editor.SelectedText));
         }
 
 
@@ -174,6 +189,11 @@ namespace PreviewEditor.Editors.TextControls
                     {
                         Find();
                     }, Keys.Control | Keys.F),
+
+                    new ToolStripMenuItem("Replace", null, (sender, e) =>
+                    {
+                        Replace();
+                    }, Keys.Control | Keys.H),
 
                     new ToolStripSeparator(),
 
@@ -371,6 +391,10 @@ namespace PreviewEditor.Editors.TextControls
                 {
                     GotoLinePrompt(); e.Handled = true;
                 }
+                else if (e.Key == Key.H)
+                {
+                    Replace(); e.Handled = true;
+                }
             }
             else if (!isCtrl && !isShift && !isAlt)
             {
@@ -386,11 +410,34 @@ namespace PreviewEditor.Editors.TextControls
                     this.FindPrevious(); e.Handled = true;
                 }
             }
+            else
+            {
+                //keys that don't matter the shift state
+                if (e.Key == Key.Escape)
+                {
+                    //close the find panel if visible
+                    _find?.Close();
+                }
+            }
         }
 
 
         private FindReplacePanel _find;
         private void Find()
+        {
+            SetupFindPanel();
+            _find.ShowForFind();
+        }
+
+
+        private void Replace()
+        {
+            SetupFindPanel();
+            _find.ShowForReplace();
+        }
+
+
+        private void SetupFindPanel()
         {
             var SCROLLBARWIDTH = System.Windows.Forms.SystemInformation.VerticalScrollBarWidth;
             if (_find is null)
@@ -413,10 +460,6 @@ namespace PreviewEditor.Editors.TextControls
             }
 
             _lastUsedIndex = _editor.SelectionStart;
-            _find.Visible = true;
-            _find.BringToFront();
-
-            _find.Focus();
         }
 
 
@@ -450,7 +493,7 @@ namespace PreviewEditor.Editors.TextControls
         {
             Regex regex = _find.RegEx(search, searchForward);
             int start = regex.Options.HasFlag(RegexOptions.RightToLeft) ?
-                _editor.SelectionStart : 
+                _editor.SelectionStart :
                 _editor.SelectionStart + _editor.SelectionLength;
 
             Match match = regex.Match(_editor.Text, start);
@@ -471,8 +514,6 @@ namespace PreviewEditor.Editors.TextControls
                 _lastUsedIndex = match.Index + match.Length;
                 _editor.CaretOffset = match.Index + match.Length;
                 _editor.TextArea.Caret.BringCaretToView();
-                //TextLocation loc = _editor.Document.GetLocation(match.Index);
-                //_editor.ScrollTo(loc.Line, loc.Column);
             }
 
             return match.Success;
@@ -601,32 +642,49 @@ namespace PreviewEditor.Editors.TextControls
         /// </summary>
         private void ApplyTheme()
         {
-            var c = PreviewEditor.Settings.TextEditorOptions.Colors;
+            //can only apply a theme if we have defined highlighting rules
+            if (_editor.SyntaxHighlighting == null)
+            {
+                //best we can do is use the standard windows dark or light mode colors
+                var c = this.Parent.BackColor;
+                _editor.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
+                c = this.Parent.ForeColor;
+                _editor.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(c.A, c.R, c.G, c.B));
 
-            //main text colors
-            _editor.Background = new SolidColorBrush(c.Backcolor);
-            _editor.Foreground = new SolidColorBrush(c.Forecolor);
+                return;
+            }
+            else
+            {
+                var c = PreviewEditor.Settings.TextEditorOptions.Colors;
 
-            //various syntax coloring
-            SetElementColor("Comment", c.Comments);
-            SetElementColor("ReferenceTypeKeywords", c.Variables);
-            SetElementColor("ValueTypeKeywords", c.Variables);
-            SetElementColor("NamespaceKeywords", c.Keywords);
-            SetElementColor("Keywords", c.Keywords);
-            SetElementColor("Goto Keywords", c.GotoKeywords);
-            SetElementColor("TypeKeywords", c.Types);
-            SetElementColor("String", c.Strings);
+                //main text colors
+                _editor.Background = new SolidColorBrush(c.Backcolor);
+                _editor.Foreground = new SolidColorBrush(c.Forecolor);
 
-            // Set the syntaxHighlighting
-            //_editor.SyntaxHighlighting = highlighting;
+                //various syntax coloring
+                SetElementColor("Comment", c.Comments);
+                SetElementColor("ReferenceTypeKeywords", c.Variables);
+                SetElementColor("ValueTypeKeywords", c.Variables);
+                SetElementColor("NamespaceKeywords", c.Keywords);
+                SetElementColor("Keywords", c.Keywords);
+                SetElementColor("Goto Keywords", c.GotoKeywords);
+                SetElementColor("TypeKeywords", c.Types);
+                SetElementColor("String", c.Strings);
+                SetElementColor("Punctuation", c.Punctuation);
+                SetElementColor("OperatorKeywords", c.Operators);
 
-            //using (var xshd_stream = File.OpenRead(@".\Dark-CSharp.xshd"))
-            //{
-            //    using (var xshd_reader = new XmlTextReader(xshd_stream))
-            //    {
-            //        _editor.SyntaxHighlighting = HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
-            //    }
-            //}
+                // Set the syntaxHighlighting
+                //_editor.SyntaxHighlighting = highlighting;
+
+                //using (var xshd_stream = File.OpenRead(@".\Dark-CSharp.xshd"))
+                //{
+                //    using (var xshd_reader = new XmlTextReader(xshd_stream))
+                //    {
+                //        _editor.SyntaxHighlighting = HighlightingLoader.Load(xshd_reader, HighlightingManager.Instance);
+                //    }
+                //}
+
+            }
         }
 
 
