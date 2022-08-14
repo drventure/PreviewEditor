@@ -426,14 +426,14 @@ namespace PreviewEditor.Editors.TextControls
         private void Find()
         {
             SetupFindPanel();
-            _find.ShowForFind();
+            _find.Mode = FindReplacePanel.Modes.Find;
         }
 
 
         private void Replace()
         {
             SetupFindPanel();
-            _find.ShowForReplace();
+            _find.Mode = FindReplacePanel.Modes.Replace;
         }
 
 
@@ -477,7 +477,7 @@ namespace PreviewEditor.Editors.TextControls
 
         private void OnReplaceNext(object sender, EventArgs e)
         {
-            System.Windows.MessageBox.Show("PeformReplaceNext");
+            ReplaceNext(_find.FindText, _find.ReplaceText);
         }
 
 
@@ -526,29 +526,21 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void Replace(string s, string replacement, bool selectedonly)
+        private void ReplaceNext(string search, string replacement, bool selectedonly= false)
         {
-            int nIndex = -1;
-            if (selectedonly)
+            Regex regex = _find.RegEx(search);
+            string input = _editor.Text.Substring(_editor.SelectionStart, _editor.SelectionLength);
+            Match match = regex.Match(input);
+            bool replaced = false;
+            if (match.Success && match.Index == 0 && match.Length == input.Length)
             {
-                nIndex = _editor.Text.IndexOf(s, _editor.SelectionStart, _editor.SelectionLength);
-            }
-            else
-            {
-                nIndex = _editor.Text.IndexOf(s);
+                _editor.Document.Replace(_editor.SelectionStart, _editor.SelectionLength, replacement);
+                replaced = true;
             }
 
-            if (nIndex != -1)
+            if (!FindNext(search) && !replaced)
             {
-                _editor.Document.Replace(nIndex, s.Length, replacement);
-
-
-                _editor.Select(nIndex, replacement.Length);
-            }
-            else
-            {
-                _lastUsedIndex = 0;
-                System.Windows.MessageBox.Show("End of file");
+                SystemSounds.Beep.Play();
             }
         }
 

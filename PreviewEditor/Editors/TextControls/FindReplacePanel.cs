@@ -73,7 +73,7 @@ namespace PreviewEditor.Editors.TextControls
             // 
             // stripFind
             // 
-            this.stripFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.stripFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.stripFind.AutoSize = false;
             this.stripFind.BackColor = System.Drawing.Color.Transparent;
@@ -94,7 +94,7 @@ namespace PreviewEditor.Editors.TextControls
             this.stripFind.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
             this.stripFind.Size = new System.Drawing.Size(516, 40);
             this.stripFind.SizingGrip = false;
-            this.stripFind.TabIndex = 1;
+            this.stripFind.TabIndex = 2;
             this.stripFind.Text = "statusStrip1";
             // 
             // btnCaseSensitive
@@ -155,7 +155,7 @@ namespace PreviewEditor.Editors.TextControls
             // 
             // btnToggleFindReplace
             // 
-            this.btnToggleFindReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.btnToggleFindReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.btnToggleFindReplace.FlatAppearance.BorderSize = 0;
             this.btnToggleFindReplace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -163,13 +163,14 @@ namespace PreviewEditor.Editors.TextControls
             this.btnToggleFindReplace.Margin = new System.Windows.Forms.Padding(6);
             this.btnToggleFindReplace.Name = "btnToggleFindReplace";
             this.btnToggleFindReplace.Size = new System.Drawing.Size(27, 106);
-            this.btnToggleFindReplace.TabIndex = 2;
+            this.btnToggleFindReplace.TabIndex = 4;
             this.btnToggleFindReplace.Text = ">";
             this.btnToggleFindReplace.UseVisualStyleBackColor = true;
+            this.btnToggleFindReplace.Click += new System.EventHandler(this.btnToggleFindReplace_Click);
             // 
             // stripReplace
             // 
-            this.stripReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.stripReplace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.stripReplace.AutoSize = false;
             this.stripReplace.BackColor = System.Drawing.Color.Transparent;
@@ -184,7 +185,7 @@ namespace PreviewEditor.Editors.TextControls
             this.stripReplace.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
             this.stripReplace.Size = new System.Drawing.Size(516, 38);
             this.stripReplace.SizingGrip = false;
-            this.stripReplace.TabIndex = 4;
+            this.stripReplace.TabIndex = 3;
             this.stripReplace.Text = "statusStrip2";
             // 
             // btnReplaceNext
@@ -206,7 +207,9 @@ namespace PreviewEditor.Editors.TextControls
             this.tbxReplace.Margin = new System.Windows.Forms.Padding(6);
             this.tbxReplace.Name = "tbxReplace";
             this.tbxReplace.Size = new System.Drawing.Size(431, 24);
-            this.tbxReplace.TabIndex = 3;
+            this.tbxReplace.TabIndex = 1;
+            this.tbxReplace.TextChanged += new System.EventHandler(this.tbxReplace_TextChanged);
+            this.tbxReplace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxReplace_KeyDown);
             // 
             // splitSizer
             // 
@@ -345,25 +348,38 @@ namespace PreviewEditor.Editors.TextControls
         public string ReplaceText { get; set; }
 
 
-        public void ShowForReplace()
+        public enum Modes
         {
-            this.Height = tbxReplace.Bottom + tbxFind.Top;
-
-            this.Visible = true;
-            this.BringToFront();
-
-            this.Focus();
+            Find,
+            Replace
         }
 
 
-        public void ShowForFind()
+        private Modes _mode;
+        public Modes Mode
         {
-            this.Height = tbxReplace.Top;
+            get
+            {
+                return _mode;
+            }
+            set
+            {
+                _mode = value;
 
-            this.Visible = true;
-            this.BringToFront();
+                if (_mode == FindReplacePanel.Modes.Replace)
+                {
+                    this.Height = tbxReplace.Bottom + tbxFind.Top;
+                }
+                else
+                {
+                    this.Height = tbxReplace.Top;
+                }
 
-            this.Focus();
+                this.Visible = true;
+                this.BringToFront();
+
+                this.Focus();
+            }
         }
 
 
@@ -477,6 +493,12 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        private void tbxReplace_TextChanged(object sender, EventArgs e)
+        {
+            this.ReplaceText = tbxReplace.Text;
+        }
+
+
         private void btnNext_Click(object sender, EventArgs e)
         {
             OnFindNext(new EventArgs());
@@ -504,7 +526,25 @@ namespace PreviewEditor.Editors.TextControls
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-                OnFindNext(new EventArgs());
+                if (this.Mode == Modes.Find)
+                {
+                    OnFindNext(new EventArgs());
+                }
+                else
+                {
+                    OnReplaceNext(new EventArgs());
+                }
+            }
+        }
+
+
+        private void tbxReplace_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && this.IsFindActive)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                OnReplaceNext(new EventArgs());
             }
         }
 
@@ -536,6 +576,12 @@ namespace PreviewEditor.Editors.TextControls
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+
+        private void btnToggleFindReplace_Click(object sender, EventArgs e)
+        {
+            this.Mode = this.Mode == Modes.Find ? Modes.Replace : Modes.Find;
         }
     }
 }
