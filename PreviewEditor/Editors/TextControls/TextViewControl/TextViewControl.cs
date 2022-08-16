@@ -42,12 +42,13 @@ namespace PreviewEditor.Editors.TextControls
                 //TODO for now, just load 2 megs worth and make it read only
                 var fstream = File.Open(_file.FileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 var bytes = new byte[2 * 1000 * 1000];
-                fstream.Read(bytes, 0, bytes.Length);
                 var mstream = new MemoryStream();
-                fstream.CopyTo(mstream);
+                fstream.CopyTo(mstream, bytes.Length);
                 fstream.Close();
+                mstream.Position = 0;
                 _editor.Load(mstream);
                 mstream.Close();
+                _editor.Background = new SolidColorBrush(Colors.DarkRed);
             }
             catch 
             {
