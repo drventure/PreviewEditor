@@ -91,7 +91,7 @@ namespace PreviewHandler.Sdk.Handlers
         /// <inheritdoc />
         public uint TranslateAccelerator(ref MSG pmsg)
         {
-            // Current implementation simply directs all Keystrokes to IPreviewHandlerFrame. This is the recommended approach to handle keystokes for all low-integrity preview handlers.
+            // Current implementation simply directs all Keystrokes to IPreviewHandlerFrame. This is the recommended approach to handle keystrokes for all low-integrity preview handlers.
             // Source: https://docs.microsoft.com/en-us/windows/win32/shell/building-preview-handlers#ipreviewhandlertranslateaccelerator
             if (this._frame != null)
             {
@@ -181,9 +181,22 @@ namespace PreviewHandler.Sdk.Handlers
             }
         }
 
+        private static string GetTypeGuid(Type t)
+        {
+            foreach (var a in t.GetCustomAttributesData())
+            {
+                if (a.AttributeType == typeof(GuidAttribute))
+                {
+                    return "{" + a.ConstructorArguments[0].ToString().Replace("\"", "") + "}";  
+                }
+            }
+            return null;
+        }
+
+
         protected static void RegisterPreviewHandler(string name, string extensions, string previewerGuid, string appId)
         {
-            // Create a new prevhost AppID so that this always runs in its own isolated process
+            // Create a new preview host AppID so that this always runs in its own isolated process
             using (RegistryKey appIdsKey = Registry.ClassesRoot.OpenSubKey("AppID", true))
             using (RegistryKey appIdKey = appIdsKey.CreateSubKey(appId))
             {
@@ -212,7 +225,8 @@ namespace PreviewHandler.Sdk.Handlers
                 // Set preview handler for specific extension
                 using (RegistryKey extensionKey = Registry.ClassesRoot.CreateSubKey(extension))
                 using (RegistryKey shellexKey = extensionKey.CreateSubKey("shellex"))
-                using (RegistryKey previewKey = shellexKey.CreateSubKey("{8895b1c6-b41f-4c1c-a562-0d564250836f}"))
+                //{8895b1c6-b41f-4c1c-a562-0d564250836f}
+                using (RegistryKey previewKey = shellexKey.CreateSubKey(GetTypeGuid(typeof(IPreviewHandler))))
                 {
                     previewKey.SetValue(null, previewerGuid, RegistryValueKind.String);
                 }
@@ -226,7 +240,8 @@ namespace PreviewHandler.Sdk.Handlers
                 Trace.WriteLine("Unregistering extension '" + extension + "' with previewer '" + previewerGuid + "'");
                 using (RegistryKey shellexKey = Registry.ClassesRoot.OpenSubKey(extension + "\\shellex", true))
                 {
-                    shellexKey.DeleteSubKey("{8895b1c6-b41f-4c1c-a562-0d564250836f}");
+                    //"{8895b1c6-b41f-4c1c-a562-0d564250836f}"
+                    shellexKey.DeleteSubKey(GetTypeGuid(typeof(IPreviewHandler)));
                 }
             }
 
