@@ -463,6 +463,18 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        public void UpdateResults(int matchNumber, int totalMatches)
+        {
+            if (totalMatches == 0)
+            {
+                lblResults.Text = "No results";
+            } else
+            {
+                lblResults.Text = $"{matchNumber} of {totalMatches}";
+            }
+        }
+
+
         public bool FindInSelection
         {
             get

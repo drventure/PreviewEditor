@@ -534,6 +534,13 @@ namespace PreviewEditor.Editors.TextControls
                 _lastUsedIndex = match.Index + match.Length;
                 _editor.CaretOffset = match.Index + match.Length;
                 _editor.TextArea.Caret.BringCaretToView();
+
+                var t = CountOccurances(search);
+                _find.UpdateResults(t.Item1, t.Item2);
+            }
+            else
+            {
+                _find.UpdateResults(0, 0);
             }
 
             return match.Success;
@@ -556,12 +563,44 @@ namespace PreviewEditor.Editors.TextControls
             {
                 _editor.Document.Replace(_editor.SelectionStart, _editor.SelectionLength, replacement);
                 replaced = true;
+
+                var t = CountOccurances(search);
+                _find.UpdateResults(t.Item1, t.Item2);
+            }
+            else
+            {
+                _find.UpdateResults(0, 0);
             }
 
             if (!FindNext(search) && !replaced)
             {
                 SystemSounds.Beep.Play();
             }
+        }
+
+
+        /// <summary>
+        /// Given the current position in document, count 
+        /// matches before
+        /// </summary>
+        /// <returns></returns>
+        private Tuple<int, int> CountOccurances(string search)
+        {
+            var curIndex = _editor.CaretOffset;
+
+            Regex regex = _find.RegEx(search, true);
+            var matches = regex.Matches(_editor.Text, 0);
+
+            var c = 1;
+            foreach (Match m in matches)
+            {
+                if (m.Index + m.Length >= curIndex)
+                {
+                    break;
+                }
+                c++;
+            }
+            return Tuple.Create(c, matches.Count);
         }
 
 
