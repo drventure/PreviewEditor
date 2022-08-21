@@ -1,4 +1,8 @@
-﻿All settings are saved anytime one changes, need to queue up saves and only save after a few seconds.
+﻿In SiteEditor, the editor is loaded with the file when the PARENTCHANGED event happens
+Need to change this because that prevents me from leaving the LOADING in place while the editor loads VERY large files.
+Also, need to make the loading of the document ASYNC and CANCELLABLE.
+
+All settings are saved anytime one changes, need to queue up saves and only save after a few seconds.
 Also save needs to automatically occur before shutdown
 
 Rework syntax defs to use consistent token names (to make it easier to map VSCode or VS themes to here)

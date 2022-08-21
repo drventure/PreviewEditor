@@ -107,9 +107,11 @@ namespace PreviewEditorHost
                 prv.Dock = DockStyle.Fill;
 
                 pnlPreviewHost.Controls.Clear();
-                ((Form)prv).TopLevel = false;
-                ((Form)prv).Parent = pnlPreviewHost;
+                pnlPreviewHost.Controls.Add(prv);
+                // ((Form)prv).TopLevel = false;
+                //((Form)prv).Parent = pnlPreviewHost;
                 prv.Visible = true;
+                prv.Refresh();
                 
                 //in a real host, the PreviewHandlerBase interface called IPreviewHandlerVisuals is called
                 //which then forwards the colors on to these methods on the control

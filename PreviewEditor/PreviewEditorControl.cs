@@ -45,6 +45,7 @@ namespace PreviewEditor
         public PreviewEditorControl()
         {
             InitializeComponent();
+            this.TopLevel = false;
 
             pnlEditor = new Panel();
             pnlEditor.Dock = DockStyle.Fill;
@@ -52,9 +53,9 @@ namespace PreviewEditor
             this.SetBackgroundColor(this.DefaultBackColor);
             this.SetTextColor(this.DefaultForeColor);
 
-            this.Controls.Add(pnlEditor);
-
             InitializeLoadingScreen();
+
+            this.Controls.Add(pnlEditor);
         }
 
 
@@ -185,18 +186,18 @@ namespace PreviewEditor
 
         private void SiteEditor<T>(T dataSource, IPreviewEditorControl editor)
         {
-            this.pnlEditor.Controls.Clear();
             var editorControl = (Control)editor;
-            this.pnlEditor.Controls.Add(editorControl);
             editorControl.Dock = DockStyle.Fill;
             editorControl.Visible = true;
 
             //monitor for switch editor request
             editor.SwitchEditorRequested += Editor_SwitchEditorRequested;
 
-
             //call the base class to finish out
             base.DoPreview(dataSource);
+
+            this.pnlEditor.Controls.Clear();
+            this.pnlEditor.Controls.Add(editorControl);
         }
 
 
