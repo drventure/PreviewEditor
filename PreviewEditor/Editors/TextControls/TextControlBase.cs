@@ -80,6 +80,7 @@ namespace PreviewEditor.Editors.TextControls
 
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
+            _editor.Options.ColumnRulerPosition = PreviewEditor.Settings.TextEditorOptions.ColumnRulerPosition;
             _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
             _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 
@@ -219,6 +220,7 @@ namespace PreviewEditor.Editors.TextControls
                             {
                                 Checked = _editor.Options.ShowColumnRuler
                             },
+                        new ToolStripMenuItem("Set Column Ruler", null, SetColumnRuler),
                         new ToolStripMenuItem("Show Spaces", null, (sender, e) =>
                             {
                                 _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
@@ -258,6 +260,20 @@ namespace PreviewEditor.Editors.TextControls
 
                 return menu;
             }
+        }
+
+
+        public void SetColumnRuler(object sender, EventArgs e)
+        {
+            //var p = Mouse.GetPosition(_editor);
+            //var pos = _editor.GetPositionFromPoint(p);
+            //_editor.TextArea.Caret.Position = pos.Value;
+            var c = _editor.TextArea.Caret.Column;
+
+            _editor.Options.ShowColumnRuler = true;
+            _editor.Options.ColumnRulerPosition = c - 1;
+            PreviewEditor.Settings.TextEditorOptions.ColumnRulerPosition = _editor.Options.ColumnRulerPosition;
+            PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
         }
 
 

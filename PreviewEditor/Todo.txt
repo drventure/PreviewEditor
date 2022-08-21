@@ -1,9 +1,6 @@
 ﻿All settings are saved anytime one changes, need to queue up saves and only save after a few seconds.
 Also save needs to automatically occur before shutdown
 
-Need to create each editor when necessary and cache it between invocations on viewing files, so that 
-we don't create a new viewer each time.
-
 Rework syntax defs to use consistent token names (to make it easier to map VSCode or VS themes to here)
 
 Add code to load syntax defs from file system if available.
@@ -17,3 +14,14 @@ Count all occurrences and show which you're at as you type (like VSCODE)
 Show find, click back to editor, press esc, should close find.
 
 Build in support to override the syntax rules with new ones. I updated the Dark-CSharp with Operators, but need to get it embedded
+
+
+
+MIGHT NOT BE POSSIBLE
+=====================
+
+Need to create each editor when necessary and cache it between invocations on viewing files, so that 
+we don't create a new viewer each time.
+Looks like the host is responsible for newing up the previewers and DOPUS at least creates one fresh
+every time so there's no way to cache them.
+

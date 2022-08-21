@@ -43,6 +43,9 @@ namespace PreviewEditor
             [OptionDescription("Display a column ruler")]
             public bool ShowColumnRuler { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
 
+            [OptionDescription("Column ruler position")]
+            public int ColumnRulerPosition { get { return this.GetProperty<int>(80); } set { this.SetProperty(value); } }
+
             [OptionDescription("Display Space characters")]
             public bool ShowSpaces { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
 

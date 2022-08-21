@@ -104,6 +104,8 @@ namespace PreviewEditorHost
                 var file = opn.FileName;
 
                 var prv = new PreviewEditor.PreviewEditorControl();
+                prv.Dock = DockStyle.Fill;
+
                 pnlPreviewHost.Controls.Clear();
                 ((Form)prv).TopLevel = false;
                 ((Form)prv).Parent = pnlPreviewHost;
@@ -115,7 +117,6 @@ namespace PreviewEditorHost
                 prv.SetTextColor(Color.WhiteSmoke);
 
                 prv.DoPreview<string>(file);
-                prv.Dock = DockStyle.Fill;
             }
         }
     }

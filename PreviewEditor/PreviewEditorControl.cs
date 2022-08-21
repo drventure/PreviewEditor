@@ -47,12 +47,12 @@ namespace PreviewEditor
             InitializeComponent();
 
             pnlEditor = new Panel();
-            this.Controls.Add(pnlEditor);
+            pnlEditor.Dock = DockStyle.Fill;
 
             this.SetBackgroundColor(this.DefaultBackColor);
             this.SetTextColor(this.DefaultForeColor);
 
-            pnlEditor.Dock = DockStyle.Fill;
+            this.Controls.Add(pnlEditor);
 
             InitializeLoadingScreen();
         }
@@ -277,8 +277,6 @@ namespace PreviewEditor
             {
 
                 var loading = new Label();
-                this.pnlEditor.Controls.Add(loading);
-
                 loading.Dock = DockStyle.Fill;
                 loading.Text = "Loading...";
                 loading.TextAlign = ContentAlignment.MiddleCenter;
@@ -286,6 +284,9 @@ namespace PreviewEditor
                 loading.Font = new Font("MS Sans Serif", 16, FontStyle.Bold);
                 loading.ForeColor = PreviewEditor.Settings.TextEditorOptions.Colors.Forecolor.ToDrawColor();
                 loading.BackColor = PreviewEditor.Settings.TextEditorOptions.Colors.Backcolor.ToDrawColor();
+
+                this.pnlEditor.Controls.Add(loading);
+                this.pnlEditor.Refresh();
             });
         }
 
