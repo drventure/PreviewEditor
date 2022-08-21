@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
+using Microsoft.Win32;
+
 using ICSharpCode.AvalonEdit;
 using PreviewHandler.Sdk.Controls;
 using PreviewEditor.Editors;
@@ -46,6 +48,9 @@ namespace PreviewEditor
 
             pnlEditor = new Panel();
             this.Controls.Add(pnlEditor);
+
+            this.SetBackgroundColor(this.DefaultBackColor);
+            this.SetTextColor(this.DefaultForeColor);
 
             pnlEditor.Dock = DockStyle.Fill;
 
@@ -279,8 +284,8 @@ namespace PreviewEditor
                 loading.TextAlign = ContentAlignment.MiddleCenter;
                 loading.AutoSize = false;
                 loading.Font = new Font("MS Sans Serif", 16, FontStyle.Bold);
-                loading.ForeColor = Color.White; // Settings.TextColor;
-                loading.BackColor = Color.Black; // Settings.BackgroundColor;
+                loading.ForeColor = PreviewEditor.Settings.TextEditorOptions.Colors.Forecolor.ToDrawColor();
+                loading.BackColor = PreviewEditor.Settings.TextEditorOptions.Colors.Backcolor.ToDrawColor();
             });
         }
 
@@ -326,6 +331,43 @@ namespace PreviewEditor
                         this.pnlEditor.Controls.Remove(label);
                     }
                 });
+            }
+        }
+
+
+        private bool IsDarkModeActive
+        {
+            get
+            {
+                try
+                {
+                    int res = (int)Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", -1);
+                    return (res == 0);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+
+        internal Color DefaultForeColor
+        {
+            get
+            {
+                if (this.IsDarkModeActive) return Color.LightGray;
+                return Color.FromArgb(0x1a, 0x1a, 0x1a);
+            }
+        }
+
+
+        internal Color DefaultBackColor
+        {
+            get
+            {
+                if (this.IsDarkModeActive) return Color.FromArgb(0x1a, 0x1a, 0x1a);
+                return Color.LightGray;
             }
         }
 
