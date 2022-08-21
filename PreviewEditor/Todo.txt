@@ -13,11 +13,16 @@ Finish up Find replace panel.
 
 Highlight all occurrences as you type
 
-Count all occurrences and show which you're at as you type (like VSCODE)
+Count all occurrences and show which you're at as you type (like VSCODE). For Replace
 
 Show find, click back to editor, press esc, should close find.
 
 Build in support to override the syntax rules with new ones. I updated the Dark-CSharp with Operators, but need to get it embedded
+
+
+DONE
+=====================
+Count all occurrences and show which you're at as you type (like VSCODE). For Find
 
 
 
