@@ -31,6 +31,7 @@ namespace PreviewEditor
         {
 			//RegisterHighlighting("XmlDoc", null, "XmlDoc.xshd");
 			RegisterHighlighting("C#", (".cs").Split(';'), "CSharp-Mode.xshd");
+			RegisterHighlighting("AutoHotkey", (".ahk").Split(';'), "AutoHotkey-Mode.xshd");
 
 			//RegisterHighlighting("JavaScript", new[] { ".js" }, "JavaScript-Mode.xshd");
 			//RegisterHighlighting("HTML", new[] { ".htm", ".html" }, "HTML-Mode.xshd");
