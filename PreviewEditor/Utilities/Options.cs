@@ -53,7 +53,7 @@ namespace PreviewEditor
             public bool ShowTabs { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
 
             [OptionDescription("Maximum Editable FileSize in bytes")]
-            public long MaxEditableFileSize { get { return this.GetProperty<long>(50 * 1000 * 1000); } set { this.SetProperty(value); } }
+            public long MaxEditableFileSize { get { return this.GetProperty<long>(5 * 1000 * 1000); } set { this.SetProperty(value); } }
 
             [OptionDescription("Find only within the current selection")]
             public bool FindInSelection { get { return this.GetProperty<bool>(false); } set { this.SetProperty(value); } }

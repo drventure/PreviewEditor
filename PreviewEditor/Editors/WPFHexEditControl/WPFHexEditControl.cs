@@ -57,6 +57,12 @@ namespace PreviewEditor.Editors
 
             _editor.ByteGrouping = WpfHexaEditor.Core.ByteSpacerGroup.FourByte;
             _editor.BytePerLine = 32;
+            _editor.AllowBuildinCtrla = true;
+            _editor.AllowBuildinCtrlc = true;
+            _editor.AllowBuildinCtrlz= true;
+            _editor.AllowBuildinCtrlv = true;
+            _editor.AllowBuildinCtrly = true;
+            _editor.AllowExtend = true;
             _editor.AllowAutoHighLightSelectionByte = false;
             _editor.AllowContextMenu = false;
 
@@ -85,10 +91,14 @@ namespace PreviewEditor.Editors
                     if (_file.IsHexEditable)
                     {
                         _editor.ReadOnlyMode = false;
-                        _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        // _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        //Load file into memory stream so it's not locked open
+                        var mstream = new MemoryStream(File.ReadAllBytes(_file.FileInfo.FullName));
+                        _editor.Stream = mstream;
                     } else
                     {
                         _editor.ReadOnlyMode = true;
+                        //in read only mode, can't necessarily load the whole file into memory.
                         _editor.Stream = _file.FileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     }
                     // _editor.FileName = _file.FileInfo.FullName;

@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -22,11 +24,19 @@ namespace PreviewEditor.Editors.TextControls
     /// </summary>
     internal class TextViewControl : TextControlBase
     {
+        private TextPager _pager;
+        private VScrollBar _vscroll;
+
         public TextViewControl(EditingFile file) : base(file)
         {
+            _pager = new TextPager(file);
         }
 
 
+        /// <summary>
+        /// parameterless constructor for internal debugging only
+        /// Should not normally be called
+        /// </summary>
         public TextViewControl() : this(null)
         {
         }
@@ -36,24 +46,67 @@ namespace PreviewEditor.Editors.TextControls
         {
             //init the control once it's sited
             _editor.IsReadOnly = true;
+            //we're going to use a custom vertical scrollbar
+            _editor.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Hidden;
+            //not sure how to support line numbers in View Only mode
+            _editor.ShowLineNumbers = false;
+            _vscroll = new VScrollBar();
+            _vscroll.Maximum = (int)_file.FileInfo.Length - 1;
+            _vscroll.Dock = DockStyle.Right;
+            _vscroll.Scroll += _vscroll_Scroll;
+            this.Controls.Add(_vscroll);
 
+            _editor.PreviewKeyDown += _editor_PreviewKeyDown;
             try
             {
-                //TODO for now, just load 2 megs worth and make it read only
-                var fstream = File.Open(_file.FileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                var bytes = new byte[2 * 1000 * 1000];
-                var mstream = new MemoryStream();
-                fstream.CopyTo(mstream, bytes.Length);
-                fstream.Close();
-                mstream.Position = 0;
-                _editor.Load(mstream);
-                mstream.Close();
-                _editor.Background = new SolidColorBrush(Colors.DarkRed);
+                LoadPage(0);
+                _editor.Background = new SolidColorBrush(Color.FromRgb(30,0,0));
             }
             catch 
             {
                 //TODO update the status label?
             }
+        }
+
+        private void _editor_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.End)
+            {
+                _vscroll.Value = _vscroll.Maximum;
+                LoadPage(_vscroll.Value);
+                e.Handled = true;
+            }
+            if (e.Key == System.Windows.Input.Key.PageUp)
+            {
+                _vscroll.Value = _vscroll.Value - 1 * 1000 * 1000;
+                LoadPage(_vscroll.Value);
+                e.Handled = true;
+            }
+            if (e.Key == System.Windows.Input.Key.PageDown)
+            {
+                _vscroll.Value = _vscroll.Value + 1 * 1000 * 1000;
+                LoadPage(_vscroll.Value);
+                e.Handled = true;
+            }
+        }
+
+        private void _editor_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+        }
+
+        private void _vscroll_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)
+        {
+            var location = e.NewValue;
+            LoadPage(location);    
+        }
+
+
+        private void LoadPage(int location)
+        {
+            var mstream = _pager.Page(location);
+            mstream.Position = 0;
+            _editor.Load(mstream);
+            mstream.Close();
         }
 
 

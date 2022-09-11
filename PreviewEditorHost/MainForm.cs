@@ -21,6 +21,7 @@ namespace PreviewEditorHost
 
         private Button btnSelect;
         private Panel pnlPreviewHost;
+        private Button btnViewFile;
 
         /// <summary>
         /// Required designer variable.
@@ -50,6 +51,7 @@ namespace PreviewEditorHost
         {
             this.btnSelect = new System.Windows.Forms.Button();
             this.pnlPreviewHost = new System.Windows.Forms.Panel();
+            this.btnViewFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSelect
@@ -73,11 +75,22 @@ namespace PreviewEditorHost
             this.pnlPreviewHost.Size = new System.Drawing.Size(1242, 583);
             this.pnlPreviewHost.TabIndex = 1;
             // 
+            // btnViewFile
+            // 
+            this.btnViewFile.Location = new System.Drawing.Point(12, 66);
+            this.btnViewFile.Name = "btnViewFile";
+            this.btnViewFile.Size = new System.Drawing.Size(172, 48);
+            this.btnViewFile.TabIndex = 2;
+            this.btnViewFile.Text = "View File";
+            this.btnViewFile.UseVisualStyleBackColor = true;
+            this.btnViewFile.Click += new System.EventHandler(this.btnViewFile_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1453, 607);
+            this.Controls.Add(this.btnViewFile);
             this.Controls.Add(this.pnlPreviewHost);
             this.Controls.Add(this.btnSelect);
             this.Name = "MainForm";
@@ -120,6 +133,26 @@ namespace PreviewEditorHost
 
                 prv.DoPreview<string>(file);
             }
+        }
+
+        private void btnViewFile_Click(object sender, EventArgs e)
+        {
+            var file = "..\\..\\..\\LargeTextFile.txt";
+
+            var prv = new PreviewEditor.PreviewEditorControl();
+            prv.Dock = DockStyle.Fill;
+
+            pnlPreviewHost.Controls.Clear();
+            pnlPreviewHost.Controls.Add(prv);
+            prv.Visible = true;
+            prv.Refresh();
+
+            //in a real host, the PreviewHandlerBase interface called IPreviewHandlerVisuals is called
+            //which then forwards the colors on to these methods on the control
+            prv.SetBackgroundColor(Color.FromArgb(0x1e, 0x1e, 0x1e));
+            prv.SetTextColor(Color.WhiteSmoke);
+
+            prv.DoPreview<string>(file);
         }
     }
 }

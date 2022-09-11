@@ -1,4 +1,7 @@
-﻿In SiteEditor, the editor is loaded with the file when the PARENTCHANGED event happens
+﻿Looks like a decent file viewer component, also WPF
+https://github.com/woanware/LogViewer2
+
+In SiteEditor, the editor is loaded with the file when the PARENTCHANGED event happens
 Need to change this because that prevents me from leaving the LOADING in place while the editor loads VERY large files.
 Also, need to make the loading of the document ASYNC and CANCELLABLE.
 

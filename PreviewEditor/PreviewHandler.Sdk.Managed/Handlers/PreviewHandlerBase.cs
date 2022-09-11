@@ -211,7 +211,7 @@ namespace PreviewHandler.Sdk.Handlers
 
             // Modify preview handler registration
             using (RegistryKey clsidKey = Registry.ClassesRoot.OpenSubKey("CLSID"))
-            using (RegistryKey idKey = clsidKey.OpenSubKey(previewerGuid, true))
+            using (RegistryKey idKey = clsidKey.OpenSubKey(previewerGuid))
             {
                 idKey.SetValue("DisplayName", name, RegistryValueKind.String);
                 idKey.SetValue("AppID", appId, RegistryValueKind.String);
