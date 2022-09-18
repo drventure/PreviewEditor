@@ -137,7 +137,7 @@ namespace PreviewEditorHost
 
         private void btnViewFile_Click(object sender, EventArgs e)
         {
-            var file = "..\\..\\..\\LargeTextFile.txt";
+            var file = "..\\..\\..\\..\\LargeTextFile.txt";
 
             var prv = new PreviewEditor.PreviewEditorControl();
             prv.Dock = DockStyle.Fill;
