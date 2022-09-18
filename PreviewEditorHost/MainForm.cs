@@ -121,8 +121,6 @@ namespace PreviewEditorHost
 
                 pnlPreviewHost.Controls.Clear();
                 pnlPreviewHost.Controls.Add(prv);
-                // ((Form)prv).TopLevel = false;
-                //((Form)prv).Parent = pnlPreviewHost;
                 prv.Visible = true;
                 prv.Refresh();
                 

@@ -161,7 +161,7 @@ namespace PreviewHandler.Sdk.Handlers
                 object[] attrs = (object[])t.GetCustomAttributes(typeof(PreviewHandlerAttribute), true);
                 if (attrs != null && attrs.Length == 1)
                 {
-                    PreviewHandlerAttribute attr = attrs[0] as PreviewHandlerAttribute;
+                    PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
                     RegisterPreviewHandler(attr.DisplayName, attr.Extension, t.GUID.ToString("B"), attr.AppId);
                 }
             }
@@ -175,7 +175,7 @@ namespace PreviewHandler.Sdk.Handlers
                 object[] attrs = (object[])t.GetCustomAttributes(typeof(PreviewHandlerAttribute), true);
                 if (attrs != null && attrs.Length == 1)
                 {
-                    PreviewHandlerAttribute attr = attrs[0] as PreviewHandlerAttribute;
+                    PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
                     UnregisterPreviewHandler(attr.Extension, t.GUID.ToString("B"), attr.AppId);
                 }
             }
