@@ -11,6 +11,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;8603;8618;8601;8602;8600;8625;8604;8765;8622</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;8603;8618;8601;8602;8600;8625;8604;8765;8622</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Editors\TextControls\FindReplace.xaml.cs" />
     <Compile Remove="Installer.cs" />

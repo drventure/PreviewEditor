@@ -343,8 +343,8 @@ namespace PreviewEditor
             {
                 try
                 {
-                    int res = (int)Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", -1);
-                    return (res == 0);
+                    var res = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", -1) as int?;
+                    return (!res.HasValue || res.Value == 0);
                 }
                 catch
                 {
@@ -354,7 +354,7 @@ namespace PreviewEditor
         }
 
 
-        internal Color DefaultForeColor
+        internal new Color DefaultForeColor
         {
             get
             {
@@ -364,7 +364,7 @@ namespace PreviewEditor
         }
 
 
-        internal Color DefaultBackColor
+        internal new Color DefaultBackColor
         {
             get
             {

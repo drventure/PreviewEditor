@@ -144,7 +144,7 @@ namespace PreviewEditor.Editors
         }
 
 
-        public new ContextMenuStrip ContextMenu
+        public ContextMenuStrip ContextMenu
         {
             get
             {
