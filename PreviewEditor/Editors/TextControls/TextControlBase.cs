@@ -81,7 +81,7 @@ namespace PreviewEditor.Editors.TextControls
             _editor.ShowLineNumbers = PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers;
             _editor.Options.ShowColumnRuler = PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler;
             _editor.Options.ColumnRulerPosition = PreviewEditor.Settings.TextEditorOptions.ColumnRulerPosition;
-            _editor.FontFamily = new FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
+            _editor.FontFamily = new System.Windows.Media.FontFamily(PreviewEditor.Settings.TextEditorOptions.FontFamily);
             _editor.FontSize = PreviewEditor.Settings.TextEditorOptions.FontSize;
 
             //load our custom highlightings
@@ -378,7 +378,7 @@ namespace PreviewEditor.Editors.TextControls
         private void SetDarkMode()
         {
             _editor.Foreground = new SolidColorBrush(Colors.WhiteSmoke);
-            _editor.Background = new SolidColorBrush(Color.FromRgb(0x1e, 0x1e, 0x1e));
+            _editor.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x1e, 0x1e, 0x1e));
             //foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
             //{
             //    var f = h.Foreground;
@@ -617,7 +617,7 @@ namespace PreviewEditor.Editors.TextControls
                 PreviewEditor.Settings.TextEditorOptions.FontFamily = font.Name;
                 PreviewEditor.Settings.TextEditorOptions.FontSize = font.Size;
 
-                _editor.FontFamily = new FontFamily(font.Name);
+                _editor.FontFamily = new System.Windows.Media.FontFamily(font.Name);
                 _editor.FontSize = font.Size;
             }
         }
@@ -745,7 +745,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void SetElementColor(string element, Color color)
+        private void SetElementColor(string element, System.Windows.Media.Color color)
         {
             var highlighting = _editor.SyntaxHighlighting;
 
