@@ -57,6 +57,7 @@ namespace PreviewEditor.Editors.TextControls
             this.Controls.Add(_vscroll);
 
             _editor.PreviewKeyDown += _editor_PreviewKeyDown;
+
             try
             {
                 LoadPage(0);
@@ -70,9 +71,15 @@ namespace PreviewEditor.Editors.TextControls
 
         private void _editor_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.End)
+            if (e.Key == System.Windows.Input.Key.End && e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
             {
                 _vscroll.Value = _vscroll.Maximum;
+                LoadPage(_vscroll.Value);
+                e.Handled = true;
+            }
+            if (e.Key == System.Windows.Input.Key.Home && e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
+            {
+                _vscroll.Value = _vscroll.Minimum;
                 LoadPage(_vscroll.Value);
                 e.Handled = true;
             }
