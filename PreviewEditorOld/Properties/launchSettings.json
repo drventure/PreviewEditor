@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PreviewEditor": {
+      "commandName": "Project",
+      "commandLineArgs": "-r"
+    }
+  }
+}

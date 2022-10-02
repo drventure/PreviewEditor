@@ -1,0 +1,284 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<TargetFrameworks>net47;net48</TargetFrameworks>
+		<UseWPF>true</UseWPF>
+		<RootNamespace>PreviewEditor</RootNamespace>
+		<AssemblyName>PreviewEditor</AssemblyName>
+		<Title>PreviewEditor</Title>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<Authors></Authors>
+		<Company></Company>
+		<Description></Description>
+		<PackageIcon></PackageIcon>
+		<PackageIconUrl />
+		<Product></Product>
+		<Copyright>Apache 2.0</Copyright>
+		<AssemblyVersion></AssemblyVersion>
+		<FileVersion></FileVersion>
+		<Version></Version>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<PackageTags></PackageTags>
+		<ApplicationIcon />
+		<LangVersion>preview</LangVersion>
+		<PackageProjectUrl></PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression></PackageLicenseExpression>
+		<PackageLicenseFile>C:\Dev\Darin\CodePreviewEditor\PreviewEditor\LICENSE.</PackageLicenseFile>
+		<IncludeSource>true</IncludeSource>
+		<IncludeSymbols>false</IncludeSymbols>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>True</UseWindowsForms>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PackageId />
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<StartupObject>PreviewEditor.Program</StartupObject>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+		<DefineConstants>TRACE;DEBUG</DefineConstants>
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net47|AnyCPU'">
+		<DebugType>embedded</DebugType>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net47|AnyCPU'">
+		<DebugType>embedded</DebugType>
+		<Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+		<DebugType>embedded</DebugType>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+		<DebugType>embedded</DebugType>
+		<Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Resources\**" />
+		<EmbeddedResource Remove="Resources\**" />
+		<None Remove="Resources\**" />
+		<Page Remove="Resources\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
+		<None Remove="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
+		<None Remove="AssemblyResources\Newtonsoft.Json.dll" />
+		<None Remove="AssemblyResources\WPFHexaEditor.dll" />
+		<None Remove="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
+		<None Remove="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
+		<None Remove="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
+		<None Remove="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
+		<None Remove="Dark-CSharp.xshd" />
+		<None Remove="LICENSE" />
+		<None Remove="OneDark-Pro-darker.json" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\ASPX.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\AutoHotkey-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Boo.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Coco-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\CPP-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\CSS-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\HTML-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Java-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\JavaScript-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Json.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\MarkDown-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\MarkDownWithFontSize-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\ModeV1.xsd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\ModeV2.xsd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Patch-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\PHP-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\PowerShell.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Python-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\Tex-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\TSQL-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\VB-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\XML-Mode.xshd" />
+		<None Remove="Editors\TextControls\SyntaxDefinitions\XmlDoc.xshd" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Dark-CSharp.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="LICENSE">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="OneDark-Pro-darker.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\ASPX.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\AutoHotkey-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Boo.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Coco-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\CPP-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\CSS-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\HTML-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Java-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\JavaScript-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Json.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\MarkDown-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\MarkDownWithFontSize-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\ModeV1.xsd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\ModeV2.xsd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Patch-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\PHP-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\PowerShell.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Python-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\Tex-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\TSQL-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\VB-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\XML-Mode.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Editors\TextControls\SyntaxDefinitions\XmlDoc.xshd">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
+		<EmbeddedResource Include="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
+		<EmbeddedResource Include="AssemblyResources\Newtonsoft.Json.dll" />
+		<EmbeddedResource Include="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
+		<EmbeddedResource Include="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
+		<EmbeddedResource Include="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
+		<EmbeddedResource Include="AssemblyResources\WPFHexaEditor.dll" />
+		<EmbeddedResource Include="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="Microsoft.VisualBasic" />
+		<Reference Include="System.Configuration.Install" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="gacutil\gacutil.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="gacutil\gacutil.exe.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="install.bat">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+		<None Update="RegAsm32\RegAsm.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="RegAsm32\regasm.exe.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="RegAsm64\RegAsm.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="RegAsm64\regasm.exe.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="uninstall.bat">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+		</Compile>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<SubType>Designer</SubType>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Editors\HexEditControl\" />
+		<Folder Include="Editors\TextControls\SyntaxDefinitions\AsResources\" />
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd" Link="Editors\TextControls\SyntaxDefinitions\AsResources\CSharp-Mode.xshd" />
+		<EmbeddedResource Include="Editors\TextControls\SyntaxDefinitions\AutoHotkey-Mode.xshd" Link="Editors\TextControls\SyntaxDefinitions\AsResources\AutoHotkey-Mode.xshd" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FontAwesome.Sharp" Version="6.1.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
+	  <ProjectReference Include="..\WPFHexaEditor\WpfHexEditorCore.csproj" />
+	</ItemGroup>
+</Project>
