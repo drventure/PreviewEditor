@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 using PreviewHandler.Sdk;
 using PreviewHandler.Sdk.Controls;
 using PreviewHandler.Sdk.Handlers;
@@ -40,7 +40,7 @@ namespace PreviewEditor
         static PreviewEditorHandler()
         {
             //System.Windows.Forms.MessageBox.Show($"Static Constructor");
-            SetupAssemblyInterceptor();
+            //SetupAssemblyInterceptor();
         }
 
 
@@ -58,7 +58,8 @@ namespace PreviewEditor
 
         public override void DoPreview()
         {
-            _control.DoPreview(FilePath);
+            MessageBox.Show("In DoPreview - " + this.FilePath);
+            _control.DoPreview(this.FilePath);
         }
 
 

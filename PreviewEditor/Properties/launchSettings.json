@@ -1,6 +1,13 @@
 {
   "profiles": {
     "PreviewEditor": {
+      "commandName": "Project"
+    },
+    "UnRegister": {
+      "commandName": "Project",
+      "commandLineArgs": "-u"
+    },
+    "Register": {
       "commandName": "Project",
       "commandLineArgs": "-r"
     }
