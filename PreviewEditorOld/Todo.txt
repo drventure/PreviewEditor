@@ -1,0 +1,39 @@
+﻿Looks like a decent file viewer component, also WPF
+https://github.com/woanware/LogViewer2
+
+In SiteEditor, the editor is loaded with the file when the PARENTCHANGED event happens
+Need to change this because that prevents me from leaving the LOADING in place while the editor loads VERY large files.
+Also, need to make the loading of the document ASYNC and CANCELLABLE.
+
+All settings are saved anytime one changes, need to queue up saves and only save after a few seconds.
+Also save needs to automatically occur before shutdown
+
+Rework syntax defs to use consistent token names (to make it easier to map VSCode or VS themes to here)
+
+Add code to load syntax defs from file system if available.
+
+Finish up Find replace panel.
+
+Highlight all occurrences as you type
+
+Count all occurrences and show which you're at as you type (like VSCODE). For Replace
+
+Show find, click back to editor, press esc, should close find.
+
+Build in support to override the syntax rules with new ones. I updated the Dark-CSharp with Operators, but need to get it embedded
+
+
+DONE
+=====================
+Count all occurrences and show which you're at as you type (like VSCODE). For Find
+
+
+
+MIGHT NOT BE POSSIBLE
+=====================
+
+Need to create each editor when necessary and cache it between invocations on viewing files, so that 
+we don't create a new viewer each time.
+Looks like the host is responsible for newing up the previewers and DOPUS at least creates one fresh
+every time so there's no way to cache them.
+

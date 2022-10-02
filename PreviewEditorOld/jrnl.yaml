@@ -1,0 +1,18 @@
+colors:
+  body: none
+  date: none
+  tags: none
+  title: none
+default_hour: 9
+default_minute: 0
+editor: 'C:\Users\darin\AppData\Local\Programs\Microsoft VS Code Insiders\Code - Insiders.exe'
+encrypt: false
+highlight: true
+indent_character: '|'
+journals:
+  default: C:\Users\darin\.local\share\jrnl\journal.txt
+linewrap: 79
+tagsymbols: '#@'
+template: false
+timeformat: '%Y-%m-%d %H:%M'
+version: v2.8.4

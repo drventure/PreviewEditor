@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<TargetFrameworks>net47;net48</TargetFrameworks>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{18E374F1-64CF-42CA-A781-25AB76A71886}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
@@ -15,7 +19,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;8618;8625;8622</NoWarn>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>PreviewEditorHost.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\PreviewEditor\PreviewEditor.csproj" />
   </ItemGroup>
