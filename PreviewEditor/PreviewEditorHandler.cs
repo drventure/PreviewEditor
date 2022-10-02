@@ -58,7 +58,7 @@ namespace PreviewEditor
 
         public override void DoPreview()
         {
-            MessageBox.Show("In DoPreview - " + this.FilePath);
+            //MessageBox.Show("In DoPreview - " + this.FilePath);
             _control.DoPreview(this.FilePath);
         }
 
