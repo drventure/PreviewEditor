@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace PreviewHandler.Sdk.Handlers
 {
@@ -153,36 +154,46 @@ namespace PreviewHandler.Sdk.Handlers
         /// <returns>Instance of the <see cref="IPreviewHandlerControl"/>.</returns>
         protected abstract IPreviewHandlerControl CreatePreviewHandlerControl();
 
+        private static bool _isRegistering = false;
         [ComRegisterFunction]
         public static void Register(Type t)
         {
+            if (_isRegistering) return;
+            _isRegistering = true;
             if (t != null && t.IsSubclassOf(typeof(PreviewHandlerBase)))
             {
                 object[] attrs = (object[])t.GetCustomAttributes(typeof(PreviewHandlerAttribute), true);
                 if (attrs != null && attrs.Length == 1)
                 {
+                    //register the com elements, this is the same as doing "regasm /codebase previeweditor.exe"
                     var svc = new System.Runtime.InteropServices.RegistrationServices();
                     svc.RegisterAssembly(t.Assembly, AssemblyRegistrationFlags.SetCodeBase);
 
-                    //PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
-                    //RegisterPreviewHandler(attr.DisplayName, attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
+                    //and add the preview handler registry entries
+                    PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
+                    RegisterPreviewHandler(attr.DisplayName, attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
                 }
             }
         }
 
+        private static bool _isUnregistering = false;
         [ComUnregisterFunction]
         public static void Unregister(Type t)
         {
+            if (_isUnregistering) return;
+            _isUnregistering = true;
             if (t != null && t.IsSubclassOf(typeof(PreviewHandlerBase)))
             {
                 object[] attrs = (object[])t.GetCustomAttributes(typeof(PreviewHandlerAttribute), true);
                 if (attrs != null && attrs.Length == 1)
                 {
+                    //unregister the com elements, this is the same as doing "regasm /unregister previeweditor.exe"
                     var svc = new System.Runtime.InteropServices.RegistrationServices();
                     svc.UnregisterAssembly(t.Assembly);
 
-                    //PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
-                    //UnregisterPreviewHandler(attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
+                    //and remove the preview handler registry entries
+                    PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
+                    UnregisterPreviewHandler(attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
                 }
             }
         }
