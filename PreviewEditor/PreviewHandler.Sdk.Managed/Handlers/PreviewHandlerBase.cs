@@ -161,8 +161,11 @@ namespace PreviewHandler.Sdk.Handlers
                 object[] attrs = (object[])t.GetCustomAttributes(typeof(PreviewHandlerAttribute), true);
                 if (attrs != null && attrs.Length == 1)
                 {
-                    PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
-                    RegisterPreviewHandler(attr.DisplayName, attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
+                    var svc = new System.Runtime.InteropServices.RegistrationServices();
+                    svc.RegisterAssembly(t.Assembly, AssemblyRegistrationFlags.SetCodeBase);
+
+                    //PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
+                    //RegisterPreviewHandler(attr.DisplayName, attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
                 }
             }
         }
@@ -175,8 +178,11 @@ namespace PreviewHandler.Sdk.Handlers
                 object[] attrs = (object[])t.GetCustomAttributes(typeof(PreviewHandlerAttribute), true);
                 if (attrs != null && attrs.Length == 1)
                 {
-                    PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
-                    UnregisterPreviewHandler(attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
+                    var svc = new System.Runtime.InteropServices.RegistrationServices();
+                    svc.UnregisterAssembly(t.Assembly);
+
+                    //PreviewHandlerAttribute attr = (PreviewHandlerAttribute)attrs[0];
+                    //UnregisterPreviewHandler(attr.Extension, t.GUID.ToString("B").ToUpper(), attr.AppId);
                 }
             }
         }
