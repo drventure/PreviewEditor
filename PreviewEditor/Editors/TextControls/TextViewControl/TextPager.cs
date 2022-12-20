@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PreviewEditor.Editors
+namespace PreviewEditor.Editors.TextControls
 {
     internal class TextPager
     {
@@ -26,7 +26,7 @@ namespace PreviewEditor.Editors
         /// Set Columns to positive number to return a "dump mode" stream
         /// where every line is x columns long
         /// </summary>
-        public int Columns { get; set; }    
+        public int Columns { get; set; }
         public int BufferStart { get; set; }
         public int Location { get; set; }
 
@@ -42,21 +42,24 @@ namespace PreviewEditor.Editors
             if (location < _pageSize / 2)
             {
                 BufferStart = 0;
-            } else if (location > _file.FileInfo.Length - _pageSize / 2) {
+            }
+            else if (location > _file.FileInfo.Length - _pageSize / 2)
+            {
                 BufferStart = (int)_file.FileInfo.Length - _pageSize;
                 if (BufferStart < 0) BufferStart = 0;
-            } else
+            }
+            else
             {
-                BufferStart = location - (_pageSize / 2);
+                BufferStart = location - _pageSize / 2;
             }
             //constrain buffer size
-            if ((_file.FileInfo.Length - BufferStart) < bufSize) bufSize = (int)_file.FileInfo.Length - BufferStart;
+            if (_file.FileInfo.Length - BufferStart < bufSize) bufSize = (int)_file.FileInfo.Length - BufferStart;
 
             var rawbuf = new char[bufSize];
             using (var fileReader = new StreamReader(new FileStream(_file.FileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
                 fileReader.BaseStream.Seek(BufferStart, SeekOrigin.Begin);
-                var l = fileReader.ReadBlock(rawbuf, 0, (int)bufSize);
+                var l = fileReader.ReadBlock(rawbuf, 0, bufSize);
             }
 
             var buf = new char[bufSize];
@@ -73,20 +76,20 @@ namespace PreviewEditor.Editors
                     case char.MinValue:
                         co = ' ';
                         //treat a 0 as a line break
-                        if ((BufferStart + i) > Location) lastCR = i;
+                        if (BufferStart + i > Location) lastCR = i;
                         break;
                     case '\r':
-                        if (firstCR ==0) firstCR = i;
-                        if ((BufferStart + i) > Location) lastCR = i;
+                        if (firstCR == 0) firstCR = i;
+                        if (BufferStart + i > Location) lastCR = i;
                         break;
                     case '\n':
                         if (firstLF == 0) firstLF = i;
-                        if ((BufferStart + i) > Location) lastLF = i;
+                        if (BufferStart + i > Location) lastLF = i;
                         break;
                     case '\t':
                         //preserve tabs
                         break;
-                    case ( > char.MinValue) when char.IsControl(co):
+                    case > char.MinValue when char.IsControl(co):
                         //filter all other control chars
                         co = ' ';
                         break;
@@ -114,7 +117,8 @@ namespace PreviewEditor.Editors
             if (lastCR < lastLF)
             {
                 bufSize = lastCR - 1;
-            } else
+            }
+            else
             {
                 bufSize = lastLF - 1;
             }
