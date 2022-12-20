@@ -24,12 +24,11 @@ namespace PreviewEditor.Editors.TextControls
     /// </summary>
     internal class TextViewControl : TextControlBase
     {
-        private TextPager _pager;
+        private FileWindow _window;
         private VScrollBar _vscroll;
 
         public TextViewControl(EditingFile file) : base(file)
         {
-            _pager = new TextPager(file);
         }
 
 
@@ -49,19 +48,22 @@ namespace PreviewEditor.Editors.TextControls
             //we're going to use a custom vertical scrollbar
             _editor.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Hidden;
             //not sure how to support line numbers in View Only mode
+            //for now, no line nums in view only mode
             _editor.ShowLineNumbers = false;
+
+            //hook up the filewindow handler
+            _window = new FileWindow(_file, _editor);
+
             _vscroll = new VScrollBar();
-            _vscroll.Maximum = (int)_file.FileInfo.Length - 1;
+            _vscroll.Maximum = (int)_file.Length - 1;
             _vscroll.Dock = DockStyle.Right;
             _vscroll.Scroll += _vscroll_Scroll;
             this.Controls.Add(_vscroll);
 
-            _editor.PreviewKeyDown += _editor_PreviewKeyDown;
-
             try
             {
-                LoadPage(0);
-                _editor.Background = new SolidColorBrush(Color.FromRgb(30,0,0));
+                _editor.Background = new SolidColorBrush(Color.FromRgb(30, 0, 0));
+                _window.JumpToHome();
             }
             catch 
             {
@@ -69,51 +71,11 @@ namespace PreviewEditor.Editors.TextControls
             }
         }
 
-        private void _editor_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == System.Windows.Input.Key.End && e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
-            {
-                _vscroll.Value = _vscroll.Maximum;
-                LoadPage(_vscroll.Value);
-                e.Handled = true;
-            }
-            if (e.Key == System.Windows.Input.Key.Home && e.KeyboardDevice.Modifiers == System.Windows.Input.ModifierKeys.Control)
-            {
-                _vscroll.Value = _vscroll.Minimum;
-                LoadPage(_vscroll.Value);
-                e.Handled = true;
-            }
-            if (e.Key == System.Windows.Input.Key.PageUp)
-            {
-                _vscroll.Value = _vscroll.Value - 1 * 1000 * 1000;
-                LoadPage(_vscroll.Value);
-                e.Handled = true;
-            }
-            if (e.Key == System.Windows.Input.Key.PageDown)
-            {
-                _vscroll.Value = _vscroll.Value + 1 * 1000 * 1000;
-                LoadPage(_vscroll.Value);
-                e.Handled = true;
-            }
-        }
-
-        private void _editor_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-        }
 
         private void _vscroll_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)
         {
-            var location = e.NewValue;
-            LoadPage(location);    
-        }
-
-
-        private void LoadPage(int location)
-        {
-            var mstream = _pager.Page(location);
-            mstream.Position = 0;
-            _editor.Load(mstream);
-            mstream.Close();
+            var offset = e.NewValue;
+            _window.JumpToOffset(offset);    
         }
 
 

@@ -17,7 +17,7 @@ namespace PreviewEditor.Editors.TextControls
     /// </summary>
     internal class FileWindow : IDisposable
     {
-        FileInfo _file;
+        EditingFile _file;
         TextEditor _editor;
         long _windowOffset;
         int _windowSize;
@@ -36,9 +36,9 @@ namespace PreviewEditor.Editors.TextControls
         bool _overridingPositionChanged = false;
 
 
-        public FileWindow(string filename, TextEditor editor)
+        public FileWindow(EditingFile file, TextEditor editor)
         {
-            _file = new FileInfo(filename);
+            _file = file;
             _windowOffset = 0;
             _windowSize = 100000;
             _caretOffset = 0;
@@ -240,6 +240,12 @@ namespace PreviewEditor.Editors.TextControls
         public void JumpToHome()
         {
             loadWindow(0);
+        }
+
+
+        public void JumpToOffset(long offset)
+        {
+            loadWindow(offset);
         }
 
 

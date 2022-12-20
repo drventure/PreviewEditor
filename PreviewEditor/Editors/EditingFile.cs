@@ -89,6 +89,24 @@ namespace PreviewEditor.Editors
         public void SetDirty() { this.IsDirty = true; }
 
 
+        public string FullName
+        {
+            get
+            {
+                return _fileInfo.FullName;
+            }
+        }
+
+
+        public long Length
+        {
+            get
+            {
+                return _fileInfo.Length;
+            }
+        }
+
+
         /// <summary>
         /// check the first 8k for any null chars
         /// If there is one, this is likely a binary file
