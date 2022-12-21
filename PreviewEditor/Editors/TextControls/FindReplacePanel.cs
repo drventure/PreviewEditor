@@ -534,7 +534,18 @@ namespace PreviewEditor.Editors.TextControls
 
         private void tbxFind_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && this.IsFindActive)
+            if (e.KeyCode == Keys.Up && e.Modifiers == 0 && this.IsFindActive)
+            {
+                OnFindPrevious(new EventArgs());
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Down && e.Modifiers == 0 && this.IsFindActive)
+            {
+                OnFindNext(new EventArgs());
+                e.Handled = true;
+            }
+
+            else if (e.KeyCode == Keys.Enter && this.IsFindActive)
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;

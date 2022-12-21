@@ -281,4 +281,8 @@
 	  <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
 	  <ProjectReference Include="..\WPFHexaEditor\WpfHexEditorCore.csproj" />
 	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="taskkill /IM prevhost.exe" />
+	</Target>
 </Project>
