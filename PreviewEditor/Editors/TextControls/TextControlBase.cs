@@ -209,7 +209,8 @@ namespace PreviewEditor.Editors.TextControls
                                 PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
                             }, Keys.Control | Keys.Shift | Keys.L)
                             {
-                                Checked = _editor.ShowLineNumbers
+                                Checked = _editor.ShowLineNumbers,
+                                Enabled = _file.IsTextLoadable
                             },
                         new ToolStripMenuItem("Show Column Ruler", null, (sender, e) =>
                             {

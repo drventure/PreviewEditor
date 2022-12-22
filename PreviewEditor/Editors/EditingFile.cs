@@ -41,9 +41,22 @@ namespace PreviewEditor.Editors
             get
             {
                 var ro = _fileInfo.Attributes.HasFlag(FileAttributes.ReadOnly) || _fileInfo.Attributes.HasFlag(FileAttributes.System);
-                return !ro && _fileInfo.Length <= PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize;
+                return !ro && this.IsTextLoadable;
             }
         }
+
+
+        /// <summary>
+        /// returns true if this file is not too big to be edited
+        /// </summary>
+        public bool IsTextLoadable
+        {
+            get
+            {
+                return _fileInfo.Length <= PreviewEditor.Settings.TextEditorOptions.MaxEditableFileSize;
+            }
+        }
+
 
         /// <summary>
         /// returns true if this file is not too big to be edited
