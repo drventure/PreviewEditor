@@ -51,14 +51,14 @@ namespace PreviewEditor.Editors.TextControls
             //for now, no line nums in view only mode
             _editor.ShowLineNumbers = false;
 
-            //hook up the filewindow handler
-            _window = new FileWindow(_file, _editor);
-
+            //setup the vertical scrollbar
             _vscroll = new VScrollBar();
-            _vscroll.Maximum = (int)_file.Length - 1;
             _vscroll.Dock = DockStyle.Right;
-            _vscroll.Scroll += _vscroll_Scroll;
             this.Controls.Add(_vscroll);
+
+            //hook up the filewindow handler
+            _window = new FileWindow(_file, _editor, _vscroll);
+
 
             try
             {
@@ -69,13 +69,6 @@ namespace PreviewEditor.Editors.TextControls
             {
                 //TODO update the status label?
             }
-        }
-
-
-        private void _vscroll_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)
-        {
-            var offset = e.NewValue;
-            _window.JumpToOffset(offset);    
         }
 
 

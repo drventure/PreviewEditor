@@ -283,6 +283,6 @@
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="taskkill /IM prevhost.exe" />
+	  <Exec Command="taskkill /F /FI &quot;IMAGENAME eq prevhost.exe&quot;" />
 	</Target>
 </Project>

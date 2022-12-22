@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 using ICSharpCode.AvalonEdit;
@@ -18,6 +19,7 @@ namespace PreviewEditor.Editors.TextControls
     internal class FileWindow : IDisposable
     {
         EditingFile _file;
+        VScrollBar _vscroll;
         TextEditor _editor;
         long _windowOffset;
         int _windowSize;
@@ -34,12 +36,13 @@ namespace PreviewEditor.Editors.TextControls
         /// </summary>
         int _activeLine = 0;
         bool _overridingPositionChanged = false;
+        private bool _syncingVScroll;
+        private bool _vscrolling;
 
-
-        public FileWindow(EditingFile file, TextEditor editor)
+        public FileWindow(EditingFile file, TextEditor editor, VScrollBar vscroll)
         {
             _file = file;
-            _windowOffset = 0;
+            _windowOffset = -1;     //must be unavailable initially to force load
             _windowSize = 100000;
             _caretOffset = 0;
             _prevCaretOffset = 0;
@@ -47,9 +50,15 @@ namespace PreviewEditor.Editors.TextControls
             //setup to track the editor used
             _editor = editor;
             _editor.Clear();
-            _editor.TextArea.Caret.PositionChanged += TextArea_Carent_PositionChanged;
+            _editor.TextArea.Caret.PositionChanged += TextArea_Caret_PositionChanged;
             _editor.PreviewKeyDown += _editor_PreviewKeyDown;
             _editor.TextArea.TextView.VisualLinesChanged += TextView_VisualLinesChanged;
+
+            //hook up the vertical scroll bar
+            _vscroll = vscroll;
+            //use file length or the max int value
+            _vscroll.Maximum = (int)_long.Min(_file.Length, int.MaxValue);
+            _vscroll.Scroll += _vscroll_Scroll;
 
             //forces load of first window
             JumpToHome();
@@ -98,7 +107,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void TextArea_Carent_PositionChanged(object? sender, EventArgs e)
+        private void TextArea_Caret_PositionChanged(object? sender, EventArgs e)
         {
             if (!_overridingPositionChanged)
             {
@@ -133,13 +142,37 @@ namespace PreviewEditor.Editors.TextControls
 
             System.Diagnostics.Debug.WriteLine($"CaretOffset={_caretOffset}");
 
+            SyncVScroll(_windowOffset);
         }
 
 
-        private string getWindow(long? windowOffset = null)
+        private void SyncVScroll(long offset)
+        {
+            if (!_vscrolling)
+            {
+                _syncingVScroll = true;
+                if (_file.Length <= int.MaxValue)
+                {
+                    //the simple case, just use the scroll value as the position
+                    //allow offset to fall through
+                }
+                else
+                {
+                    //the file is HUGE so we have to translate from long to int
+                    offset = (int)((offset / _file.Length) * int.MaxValue);
+                }
+                _vscroll.Value = (int)offset;
+                System.Diagnostics.Debug.WriteLine($"VScroll={offset}");
+                _syncingVScroll = false;
+            }
+        }
+
+
+        private string getWindow(long? offset = null)
         {
             //get offset and bufsize, then allocate
-            _windowOffset = resolveOffset(windowOffset);
+            _windowOffset = resolveOffset(offset);
+
             //now adjust for windowSize
             //generally we'd want to more or less center the offset in the middle of the window
             //but don't go negative
@@ -174,14 +207,20 @@ namespace PreviewEditor.Editors.TextControls
             //resolve the offset to a real constrained file position
             var ofs = resolveOffset(offset);
 
-            //load the text up
-            _editor.Text = getWindow(ofs);
+            //if the offset has changed, we need to load the new window
+            if (ofs != _windowOffset)
+            {
+                //load the text up
+                _editor.Text = getWindow(ofs);
+            }
 
             //reposition cursor based on current loaded window and the requested offset
             _editor.TextArea.Caret.Offset = (int)(ofs - _windowOffset);
             _editor.TextArea.Caret.BringCaretToView();
 
             _overridingPositionChanged = false;
+
+            SyncVScroll(ofs);
         }
 
 
@@ -199,20 +238,21 @@ namespace PreviewEditor.Editors.TextControls
 
         private long resolveOffset(long? offset)
         {
+            var ofs = _windowOffset;
             if (offset.HasValue)
             {
                 if (offset >= 0)
                 {
                     //constrain to no more than length of file
-                    _windowOffset = _long.Min(offset.Value, _file.Length);
+                    ofs = _long.Min(offset.Value, _file.Length);
                 }
                 else
                 {
                     //offset from EOF (where -1 means EOF, so we have to offset by one
-                    _windowOffset = _file.Length - _long.Max(offset.Value, -_file.Length) + 1;
+                    ofs = _file.Length - _long.Max(offset.Value, -_file.Length) + 1;
                 }
             }
-            return _windowOffset;
+            return ofs;
         }
 
 
@@ -249,9 +289,19 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        private void _vscroll_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (!_syncingVScroll && !_vscrolling)
+            {
+                var offset = e.NewValue;
+                JumpToOffset(offset);
+            }
+        }
+
+
         public void Dispose()
         {
-            _editor.TextArea.Caret.PositionChanged -= TextArea_Carent_PositionChanged;
+            _editor.TextArea.Caret.PositionChanged -= TextArea_Caret_PositionChanged;
             _editor.PreviewKeyDown -= _editor_PreviewKeyDown;
             _editor.TextArea.TextView.VisualLinesChanged -= TextView_VisualLinesChanged;
         }
