@@ -513,6 +513,8 @@ namespace PreviewEditor.Editors.TextControls
         public bool FindNext(string search = null, bool searchForward = true)
         {
             Regex regex = _find.RegEx(search, searchForward);
+            if (regex == null) return false;
+
             int start = regex.Options.HasFlag(RegexOptions.RightToLeft) ?
                 _editor.SelectionStart :
                 _editor.SelectionStart + _editor.SelectionLength;
@@ -536,7 +538,7 @@ namespace PreviewEditor.Editors.TextControls
                 _editor.CaretOffset = match.Index + match.Length;
                 _editor.TextArea.Caret.BringCaretToView();
 
-                var t = CountOccurances(search);
+                var t = CountOccurrances(search);
                 _find.UpdateResults(t.Item1, t.Item2);
             }
             else
@@ -557,6 +559,8 @@ namespace PreviewEditor.Editors.TextControls
         private void ReplaceNext(string search, string replacement, bool selectedonly= false)
         {
             Regex regex = _find.RegEx(search);
+            if (regex == null) return;
+
             string input = _editor.Text.Substring(_editor.SelectionStart, _editor.SelectionLength);
             Match match = regex.Match(input);
             bool replaced = false;
@@ -565,7 +569,7 @@ namespace PreviewEditor.Editors.TextControls
                 _editor.Document.Replace(_editor.SelectionStart, _editor.SelectionLength, replacement);
                 replaced = true;
 
-                var t = CountOccurances(search);
+                var t = CountOccurrances(search);
                 _find.UpdateResults(t.Item1, t.Item2);
             }
             else
@@ -585,11 +589,12 @@ namespace PreviewEditor.Editors.TextControls
         /// matches before
         /// </summary>
         /// <returns></returns>
-        private Tuple<int, int> CountOccurances(string search)
+        private Tuple<int, int> CountOccurrances(string search)
         {
-            var curIndex = _editor.CaretOffset;
-
             Regex regex = _find.RegEx(search, true);
+            if (regex == null) return Tuple.Create(0, 0); 
+
+            var curIndex = _editor.CaretOffset;
             var matches = regex.Matches(_editor.Text, 0);
 
             var c = 1;

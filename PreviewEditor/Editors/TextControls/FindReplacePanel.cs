@@ -40,6 +40,7 @@ namespace PreviewEditor.Editors.TextControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tbxFind = new System.Windows.Forms.TextBox();
             this.stripFind = new System.Windows.Forms.StatusStrip();
             this.btnCaseSensitive = new System.Windows.Forms.ToolStripStatusLabel();
@@ -56,6 +57,7 @@ namespace PreviewEditor.Editors.TextControls
             this.btnReplaceAll = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbxReplace = new System.Windows.Forms.TextBox();
             this.splitSizer = new System.Windows.Forms.Splitter();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.stripFind.SuspendLayout();
             this.stripReplace.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +94,7 @@ namespace PreviewEditor.Editors.TextControls
             this.stripFind.Location = new System.Drawing.Point(495, 13);
             this.stripFind.Name = "stripFind";
             this.stripFind.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
+            this.stripFind.ShowItemToolTips = true;
             this.stripFind.Size = new System.Drawing.Size(516, 40);
             this.stripFind.SizingGrip = false;
             this.stripFind.TabIndex = 2;
@@ -102,6 +105,7 @@ namespace PreviewEditor.Editors.TextControls
             this.btnCaseSensitive.Name = "btnCaseSensitive";
             this.btnCaseSensitive.Size = new System.Drawing.Size(41, 30);
             this.btnCaseSensitive.Text = "Aa";
+            this.btnCaseSensitive.ToolTipText = "Case Sensitive";
             this.btnCaseSensitive.Click += new System.EventHandler(this.btnCaseSensitive_Click);
             // 
             // btnWholeWord
@@ -109,6 +113,7 @@ namespace PreviewEditor.Editors.TextControls
             this.btnWholeWord.Name = "btnWholeWord";
             this.btnWholeWord.Size = new System.Drawing.Size(40, 30);
             this.btnWholeWord.Text = "ab";
+            this.btnWholeWord.ToolTipText = "Whole Word";
             this.btnWholeWord.Click += new System.EventHandler(this.btnWholeWord_Click);
             // 
             // btnRegex
@@ -116,27 +121,30 @@ namespace PreviewEditor.Editors.TextControls
             this.btnRegex.Name = "btnRegex";
             this.btnRegex.Size = new System.Drawing.Size(29, 30);
             this.btnRegex.Text = ".*";
+            this.btnRegex.ToolTipText = "Regular Expression";
             this.btnRegex.Click += new System.EventHandler(this.btnRegex_Click);
             // 
             // lblResults
             // 
             this.lblResults.Name = "lblResults";
-            this.lblResults.Size = new System.Drawing.Size(226, 30);
+            this.lblResults.Size = new System.Drawing.Size(240, 30);
             this.lblResults.Spring = true;
             this.lblResults.Text = "No results";
             // 
             // btnPrevious
             // 
             this.btnPrevious.Name = "btnPrevious";
-            this.btnPrevious.Size = new System.Drawing.Size(43, 30);
-            this.btnPrevious.Text = "UP";
+            this.btnPrevious.Size = new System.Drawing.Size(35, 30);
+            this.btnPrevious.Text = "Pr";
+            this.btnPrevious.ToolTipText = "Previous match";
             this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
             // 
             // btnNext
             // 
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(49, 30);
-            this.btnNext.Text = "DN";
+            this.btnNext.Size = new System.Drawing.Size(43, 30);
+            this.btnNext.Text = "Nx";
+            this.btnNext.ToolTipText = "Next match";
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // btnFindInSelection
@@ -144,6 +152,7 @@ namespace PreviewEditor.Editors.TextControls
             this.btnFindInSelection.Name = "btnFindInSelection";
             this.btnFindInSelection.Size = new System.Drawing.Size(30, 30);
             this.btnFindInSelection.Text = "=";
+            this.btnFindInSelection.ToolTipText = "Find in selection";
             this.btnFindInSelection.Click += new System.EventHandler(this.btnFindInSelection_Click);
             // 
             // btnClose
@@ -151,6 +160,7 @@ namespace PreviewEditor.Editors.TextControls
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(28, 30);
             this.btnClose.Text = "X";
+            this.btnClose.ToolTipText = "Close Find/Replace Panel";
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnToggleFindReplace
@@ -183,6 +193,7 @@ namespace PreviewEditor.Editors.TextControls
             this.stripReplace.Location = new System.Drawing.Point(495, 56);
             this.stripReplace.Name = "stripReplace";
             this.stripReplace.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
+            this.stripReplace.ShowItemToolTips = true;
             this.stripReplace.Size = new System.Drawing.Size(516, 38);
             this.stripReplace.SizingGrip = false;
             this.stripReplace.TabIndex = 3;
@@ -259,6 +270,7 @@ namespace PreviewEditor.Editors.TextControls
         private System.Windows.Forms.ToolStripStatusLabel btnReplaceNext;
         private System.Windows.Forms.ToolStripStatusLabel btnReplaceAll;
         private System.Windows.Forms.TextBox tbxReplace;
+        private ToolTip toolTip;
         private System.Windows.Forms.Splitter splitSizer;
 
 
@@ -341,6 +353,21 @@ namespace PreviewEditor.Editors.TextControls
             this.UseRegEx = PreviewEditor.Settings.TextEditorOptions.FindWithRegex;
             this.WholeWord = PreviewEditor.Settings.TextEditorOptions.FindWholeWordsOnly;
             this.CaseSensitive = PreviewEditor.Settings.TextEditorOptions.FindCaseSensitive;
+
+            var img = new FontAwesome.Sharp.IconButton();
+            img.IconSize = 24;
+            img.IconColor = System.Drawing.Color.White;
+            img.IconChar = FontAwesome.Sharp.IconChar.ArrowUp;
+            btnPrevious.Image = img.Image;
+            btnPrevious.Text = string.Empty;
+
+            img.IconChar = FontAwesome.Sharp.IconChar.ArrowDown;
+            btnNext.Image = img.Image;
+            btnNext.Text = string.Empty;
+
+            img.IconChar = FontAwesome.Sharp.IconChar.Xmark;
+            btnClose.Image = img.Image;
+            btnClose.Text = string.Empty;
         }
 
 
@@ -394,6 +421,7 @@ namespace PreviewEditor.Editors.TextControls
         public Regex RegEx(string search = null, bool searchForward = true)
         {
             if (search == null) search = this.FindText;
+            if (string.IsNullOrEmpty(search)) return null;
 
             RegexOptions options = RegexOptions.None;
             if (!searchForward)
