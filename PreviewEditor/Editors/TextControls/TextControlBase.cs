@@ -103,10 +103,15 @@ namespace PreviewEditor.Editors.TextControls
             this.Focus();
             _editor.Focus();
 
-            if (_file.SelectionStart != 0)
+            if (_file.SelectionStart > 0)
             {
-                _editor.SelectionStart = _file.SelectionStart >= int.MaxValue ? 0 : (int)_file.SelectionStart;
-                _editor.SelectionLength = _file.SelectionLength >= int.MaxValue ? 0 : (int)_file.SelectionLength;
+                _editor.SelectionLength = 0;
+                if (_file.SelectionStart < _file.Length) _editor.SelectionStart = (int)_file.SelectionStart;
+                if (_file.SelectionStart + _file.SelectionLength > _file.Length)
+                {
+                    _file.SelectionLength = _file.Length - _file.SelectionStart;
+                }
+                _editor.SelectionLength = (int)_file.SelectionLength;
                 _editor.TextArea.Caret.Show();
                 _editor.CaretOffset = _editor.SelectionStart + _editor.SelectionLength;
                 _editor.TextArea.Caret.BringCaretToView();
