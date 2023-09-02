@@ -57,6 +57,8 @@ namespace PreviewEditor.Editors
 
             _editor.ByteGrouping = WpfHexaEditor.Core.ByteSpacerGroup.FourByte;
             _editor.BytePerLine = 32;
+            _editor.ForegroundSecondColor = new SolidColorBrush(Colors.DarkGray);
+            _editor.ForegroundOffSetHeaderColor = new SolidColorBrush(Colors.Silver);
             _editor.AllowBuildinCtrla = true;
             _editor.AllowBuildinCtrlc = true;
             _editor.AllowBuildinCtrlz= true;

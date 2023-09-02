@@ -14,9 +14,10 @@
 		<PackageIconUrl />
 		<Product></Product>
 		<Copyright>Apache 2.0</Copyright>
-		<AssemblyVersion></AssemblyVersion>
-		<FileVersion></FileVersion>
-		<Version></Version>
+		<AssemblyVersion>0.0.0.1</AssemblyVersion>
+		<FileVersion>0.0.0.1</FileVersion>
+		<InformationalVersion>Alpha</InformationalVersion>
+		<Version>0.0.0.1</Version>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<PackageTags></PackageTags>
 		<ApplicationIcon />
@@ -283,6 +284,6 @@
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="taskkill /F /FI &quot;IMAGENAME eq prevhost.exe&quot;" />
+	  <Exec Command="taskkill /F /FI &quot;IMAGENAME eq prevhost.exe&quot;&#xD;&#xA;EXIT /B 0" />
 	</Target>
 </Project>
