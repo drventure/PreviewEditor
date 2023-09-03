@@ -215,7 +215,7 @@ namespace PreviewEditor
                 //Switching to hex editor
                 newEditor = EditorFactory.GetHexEditor(e.EditingFile);
             }
-            else if (sender is WPFHexEditControl hec)
+            else if (sender is HexEditControl hec)
             {
                 //Switching to Text editor
                 //will automatically determine whether to use a viewer or editor

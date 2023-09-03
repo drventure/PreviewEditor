@@ -1,6 +1,5 @@
 ﻿using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
-using Microsoft.VisualBasic.Logging;
 using System;
 using System.IO;
 using System.Text;
