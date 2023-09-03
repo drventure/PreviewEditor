@@ -171,7 +171,7 @@ namespace PreviewEditor.Editors.TextControls
         /// <summary>
         /// Build up the ContextMenu
         /// </summary>
-        public virtual ContextMenuStrip ContextMenu
+        public virtual new ContextMenuStrip ContextMenu
         {
             get
             {

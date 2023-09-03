@@ -21,7 +21,7 @@ namespace TestLargeFileEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        FileWindow _window = null;
+        FileWindow? _window = null;
 
         public MainWindow()
         {

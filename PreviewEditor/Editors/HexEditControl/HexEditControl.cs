@@ -15,7 +15,12 @@ namespace PreviewEditor.Editors
 {
     internal class HexEditControl : ElementHost, IPreviewEditorControl
     {
-        private FileInfo _fileInfo;
+        /// <summary>
+        /// Represents a request to switch editors
+        /// </summary>
+        public event SwitchEditorRequestedEventHandler SwitchEditorRequested; private FileInfo _fileInfo;
+
+
         private HexEditor _editor;
 
         public bool IsApplicable
