@@ -111,10 +111,7 @@ namespace PreviewEditor
                         var editor = this.pnlEditor.Controls[0] as IPreviewEditorControl;
                         if (editor != null)
                         {
-                            if (editor != null)
-                            {
-                                editor.Close();
-                            }
+                            editor.Close();
                         }
                     }
                     this.Controls.Clear();
@@ -247,7 +244,7 @@ namespace PreviewEditor
         /// <param name="color"></param>
         public override void SetTextColor(Color color)
         {
-            InvokeOnControlThread(() => 
+            InvokeOnControlThread(() =>
             {
                 base.SetTextColor(color);
                 pnlEditor.ForeColor = color;
@@ -261,7 +258,7 @@ namespace PreviewEditor
         /// <param name="argbColor"></param>
         public override void SetBackgroundColor(Color color)
         {
-            InvokeOnControlThread(() => 
+            InvokeOnControlThread(() =>
             {
                 base.SetBackgroundColor(color);
                 pnlEditor.BackColor = color;

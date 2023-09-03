@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICSharpCode.AvalonEdit;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,6 @@ using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
 
-
 using WpfHexaEditor;
 
 
@@ -17,15 +17,18 @@ namespace PreviewEditor.Editors
 {
     /// <summary>
     /// </summary>
-    internal class HexEditControl : ElementHost, IPreviewEditorControl
+    internal class HexEditControl : PreviewControlBase
     {
-        /// <summary>
-        /// Represents a request to switch editors
-        /// </summary>
-        public event SwitchEditorRequestedEventHandler SwitchEditorRequested;
-
-        private EditingFile _file;
+        #region private
         private HexEditor _editor;
+        #endregion
+
+        #region protected
+        protected override string AlternateViewName => "Text";
+
+        #endregion
+
+
 
 
         public bool IsApplicable
@@ -51,10 +54,18 @@ namespace PreviewEditor.Editors
         {
             if (this.Parent is null) return;
 
+            _host = new ElementHost();
+            this.Controls.Add(_host);
+            _host.Dock = DockStyle.Fill;
+
+            //init the control once it's sited
+            this.TabStop = true;
+            this.TabIndex = 0;
+            
             //init the control once it's sited
             _editor = new HexEditor();
             _editor.BorderThickness = new Thickness(0);
-            this.Child = _editor;
+            _host.Child = _editor;
 
             _editor.ByteGrouping = WpfHexaEditor.Core.ByteSpacerGroup.FourByte;
             _editor.BytePerLine = 32;
@@ -148,6 +159,30 @@ namespace PreviewEditor.Editors
         }
 
 
+        protected override void Cut() 
+        {
+            //TODO
+        }
+
+
+        protected override void Copy()
+        {
+            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.AsciiString);
+        }
+
+
+        protected override void Paste() 
+        { 
+            //TODO
+        }
+
+
+        protected override void Save(bool prompt = false)
+        {
+        }
+
+
+        /*
         public new ContextMenuStrip ContextMenu
         {
             get
@@ -248,6 +283,7 @@ namespace PreviewEditor.Editors
                 return menu;
             }
         }
+        */
 
 
         private void _editor_SelectionStartChanged(object sender, EventArgs e)
@@ -281,12 +317,12 @@ namespace PreviewEditor.Editors
         }
 
 
-        public void Close()
+        public override void Close()
         {
             if (_editor != null)
             {
                 _editor.CloseProvider();
-                this.Child = null;
+                _host.Child = null;
                 _editor = null;
             }
         }
@@ -295,7 +331,7 @@ namespace PreviewEditor.Editors
         /// <summary>
         /// Request to switch editors
         /// </summary>
-        private void OnSwitchEditor()
+        protected override void OnSwitchEditorRequested()
         {
             if (_editor.FileName == null)
             {
@@ -311,7 +347,7 @@ namespace PreviewEditor.Editors
             {
                 // just pass the Editing file on through
             }
-            SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
+            base.OnSwitchEditorRequested();
         }
     }
 }

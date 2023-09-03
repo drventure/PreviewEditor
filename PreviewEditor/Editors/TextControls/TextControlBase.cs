@@ -20,6 +20,7 @@ using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
+using static System.Net.WebRequestMethods;
 
 
 namespace PreviewEditor.Editors.TextControls
@@ -28,22 +29,20 @@ namespace PreviewEditor.Editors.TextControls
     /// Since both the TextEditor and the large text file viewer rely on AvalonEdit
     /// we'll use this base class to abstract out the commonalities between the two
     /// </summary>
-    internal class TextControlBase : UserControl, IPreviewEditorControl
+    internal class TextControlBase : PreviewControlBase
     {
-        /// <summary>
-        /// Represents a request to switch editors
-        /// </summary>
-        public event SwitchEditorRequestedEventHandler SwitchEditorRequested;
-
+        #region protected
         protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
-        protected EditingFile _file;
-        protected ElementHost _host;
         protected TextEditor _editor;
 
         protected DispatcherTimer _foldingUpdateTimer;
         protected FoldingManager _foldingManager;
         protected dynamic _foldingStrategy;
+        protected override string AlternateViewName => "Hex";
+
+        #endregion
+
 
 
         public TextControlBase() : base()
@@ -171,6 +170,7 @@ namespace PreviewEditor.Editors.TextControls
         /// <summary>
         /// Build up the ContextMenu
         /// </summary>
+        /*
         public virtual new ContextMenuStrip ContextMenu
         {
             get
@@ -267,6 +267,7 @@ namespace PreviewEditor.Editors.TextControls
                 return menu;
             }
         }
+        */
 
 
         public void SetColumnRuler(object sender, EventArgs e)
@@ -280,20 +281,6 @@ namespace PreviewEditor.Editors.TextControls
             _editor.Options.ColumnRulerPosition = c - 1;
             PreviewEditor.Settings.TextEditorOptions.ColumnRulerPosition = _editor.Options.ColumnRulerPosition;
             PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
-        }
-
-
-        private void mnuSave(object sender, EventArgs e)
-        {
-            try
-            {
-                //TODO automatically make writable if possible?
-                _editor.Save(_file.FileInfo.FullName);
-            }
-            catch
-            {
-                //TODO handle exception
-            }
         }
 
 
@@ -407,7 +394,7 @@ namespace PreviewEditor.Editors.TextControls
             {
                 if (e.Key == Key.T)
                 {
-                    OnSwitchEditor();
+                    OnSwitchEditorRequested();
                 }
                 else if (e.Key == Key.F)
                 {
@@ -672,17 +659,11 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        public void Close()
+        public override void Close()
         {
             _editor = null;
             _host.Child = null;
             _host = null;
-        }
-
-
-        internal virtual void OnSwitchEditor()
-        {
-            SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }
 
 

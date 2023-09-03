@@ -136,12 +136,5 @@ namespace PreviewEditor.Editors.TextControls
             //    var b = h.Background;
             //}
         }
-
-
-        internal override void OnSwitchEditor()
-        {
-            //we'll just pass the EditingFile on through with no stream
-            base.OnSwitchEditor();
-        }
     }
 }
