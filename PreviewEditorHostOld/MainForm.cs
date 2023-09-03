@@ -24,6 +24,7 @@ namespace PreviewEditorHost
         private Button btnViewLargeFile1;
         private Button btnViewLargeFile2;
         private Button btnViewLargeJSON;
+        private Button btnHexFile;
 
         /// <summary>
         /// Required designer variable.
@@ -56,6 +57,7 @@ namespace PreviewEditorHost
             this.btnViewLargeFile1 = new System.Windows.Forms.Button();
             this.btnViewLargeFile2 = new System.Windows.Forms.Button();
             this.btnViewLargeJSON = new System.Windows.Forms.Button();
+            this.btnHexFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSelect
@@ -109,11 +111,22 @@ namespace PreviewEditorHost
             this.btnViewLargeJSON.UseVisualStyleBackColor = true;
             this.btnViewLargeJSON.Click += new System.EventHandler(this.btnViewLargeJSON_Click);
             // 
+            // btnHexFile
+            // 
+            this.btnHexFile.Location = new System.Drawing.Point(12, 228);
+            this.btnHexFile.Name = "btnHexFile";
+            this.btnHexFile.Size = new System.Drawing.Size(172, 48);
+            this.btnHexFile.TabIndex = 5;
+            this.btnHexFile.Text = "Hex File";
+            this.btnHexFile.UseVisualStyleBackColor = true;
+            this.btnHexFile.Click += new System.EventHandler(this.btnHexFile_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1453, 607);
+            this.Controls.Add(this.btnHexFile);
             this.Controls.Add(this.btnViewLargeJSON);
             this.Controls.Add(this.btnViewLargeFile2);
             this.Controls.Add(this.btnViewLargeFile1);
@@ -177,6 +190,12 @@ namespace PreviewEditorHost
         private void btnViewLargeJSON_Click(object sender, EventArgs e)
         {
             View("..\\..\\..\\VeryLargeJSON.json");
+        }
+
+
+        private void btnHexFile_Click(object sender, EventArgs e)
+        {
+            View("..\\..\\..\\SampleBinaryFile.bin");
         }
     }
 }
