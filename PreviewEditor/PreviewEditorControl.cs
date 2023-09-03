@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 
 using Microsoft.Win32;
 
-using ICSharpCode.AvalonEdit;
 using PreviewHandler.Sdk.Controls;
 using PreviewEditor.Editors;
 using PreviewEditor.Editors.TextControls;
@@ -271,7 +268,7 @@ namespace PreviewEditor
         /// </summary>
         private void InitializeLoadingScreen()
         {
-            InvokeOnControlThread(() =>
+            this.InvokeOnControlThread(() =>
             {
 
                 var loading = new Label();

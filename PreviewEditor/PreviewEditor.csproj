@@ -74,11 +74,20 @@
 		<None Remove="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
 		<None Remove="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
 		<None Remove="AssemblyResources\Newtonsoft.Json.dll" />
-		<None Remove="AssemblyResources\WPFHexaEditor.dll" />
 		<None Remove="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
 		<None Remove="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
 		<None Remove="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
 		<None Remove="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\Resources\cellbackground.png" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.cur" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.png" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\Resources\palette-load.png" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\Resources\palette-save.png" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\res\ColorEditorManagerToolboxBitmap.bmp" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\res\ColorEditorToolboxBitmap.bmp" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\res\ColorGridToolboxBitmap.bmp" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\res\ColorWheelToolboxBitmap.bmp" />
+		<None Remove="Cyotek.Windows.Forms.ColorPicker\res\ScreenColorPickerToolboxBitmap.bmp" />
 		<None Remove="Dark-CSharp.xshd" />
 		<None Remove="LICENSE" />
 		<None Remove="OneDark-Pro-darker.json" />
@@ -220,8 +229,15 @@
 		<EmbeddedResource Include="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
-		<EmbeddedResource Include="AssemblyResources\WPFHexaEditor.dll" />
 		<EmbeddedResource Include="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\palette-load.png">
+		  <CustomToolNamespace></CustomToolNamespace>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ColorEditorManagerToolboxBitmap.bmp" />
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ColorEditorToolboxBitmap.bmp" />
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ColorGridToolboxBitmap.bmp" />
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ColorWheelToolboxBitmap.bmp" />
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ScreenColorPickerToolboxBitmap.bmp" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -290,6 +306,21 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Editors\TextControls\SyntaxDefinitions\CSharp-Mode.xshd" Link="Editors\TextControls\SyntaxDefinitions\AsResources\CSharp-Mode.xshd" />
 		<EmbeddedResource Include="Editors\TextControls\SyntaxDefinitions\AutoHotkey-Mode.xshd" Link="Editors\TextControls\SyntaxDefinitions\AsResources\AutoHotkey-Mode.xshd" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\cellbackground.png">
+	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.cur">
+	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.png">
+	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\palette-save.png">
+	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>

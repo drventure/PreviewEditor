@@ -1,61 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace PreviewEditor
 {
     internal static class Log
     {
-        private static string _format = "{0} {1} [CEPH] {2}";
+        public static bool Enabled = false;
+        public static string Filename = null;
+
+        private static string TAG = "[PREVIEWEDITOR]";
+        private static string _format = "{0} {1} {3} {4}\r\n";
 
         private static string date
         {
             get
             {
-                return $"{DateTime.Now:yyyy-MM-ddTHH:mm:ss:fff}";
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             }
         }
 
-        public static string Format(string message, [CallerMemberName] string type = "DEBUG")
+        private static string Format(string message, [CallerMemberName] string type = "")
         {
-            return string.Format(_format, date, type.ToUpper(), message);
+            return string.Format(_format, date, type.ToUpper(), TAG, message);
         }
 
-        public static string Format(Exception ex, [CallerMemberName] string type = "DEBUG")
+        private static string Format(Exception ex, [CallerMemberName] string type = "")
         {
-            return string.Format(_format, date, type.ToUpper(), "Exception: " + ex.ToString());
+            return string.Format(_format, date, type.ToUpper(), TAG, "Exception: " + ex.ToString());
         }
 
-        public static string Format(Exception ex, string message, [CallerMemberName] string type = "DEBUG")
+
+        private static string Format(Exception ex, string message, [CallerMemberName] string type = "")
         {
-            return string.Format(_format, date, type.ToUpper(), message + " - Exception: " + ex.ToString());
+            return string.Format(_format, date, type.ToUpper(), TAG, message + " - Exception: " + ex.ToString());
         }
 
+
+        private static void WriteBuf(string message)
+        {
+            System.Diagnostics.Debug.WriteLine(message);
+        }
+
+
+        private static void WriteFile(string message)
+        {
+            if (Filename == null) return;
+            try
+            {
+                File.AppendAllText(Filename, message);
+            }
+            catch { }
+        }
+
+
+        private static void WriteOut(string message)
+        {
+            WriteBuf(message);
+            WriteFile(message);
+        }
 
         public static void Debug(string message)
         {
-            System.Diagnostics.Debug.WriteLine(Format(message));
+            if (!Enabled) return;
+            WriteOut(Format(message));
         }
 
 
         public static void Error(string message)
         {
-            System.Diagnostics.Debug.WriteLine(Format(message));
+            if (!Enabled) return;
+            WriteOut(Format(message));
         }
-        
-        
+
+
         public static void Error(Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(Format(ex));
+            if (!Enabled) return;
+            WriteOut(Format(ex));
         }
 
 
         public static void Error(Exception ex, string message)
         {
-            System.Diagnostics.Debug.WriteLine(Format(ex, message));
+            if (!Enabled) return;
+            WriteOut(Format(ex, message));
         }
     }
 }
