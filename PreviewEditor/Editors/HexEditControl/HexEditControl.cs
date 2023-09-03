@@ -182,6 +182,202 @@ namespace PreviewEditor.Editors
         }
 
 
+        protected override ContextMenuStrip BuildContextMenu()
+        {
+            var menu = new ContextMenuStrip();
+            menu.Items.AddRange(new ToolStripItem[] {
+                new ToolStripMenuItem("Undo", null, (sender, e) =>
+                {
+                    _editor.Undo();
+                }, Keys.Control | Keys.Z),
+
+                new ToolStripMenuItem("Options", null, new ToolStripItem[] {
+                    new ToolStripMenuItem("Show Status Bar", null, (sender, e) =>
+                        {
+                            _editor.StatusBarVisibility = _editor.StatusBarVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+                            PreviewEditor.Settings.HexEditorOptions.ShowStatusBar = _editor.StatusBarVisibility == Visibility.Visible;
+                        }, Keys.Control | Keys.Shift | Keys.L)
+                        {
+                            Checked = _editor.StatusBarVisibility == Visibility.Visible,
+                            Enabled = _file.IsTextLoadable,
+                            MergeAction = MergeAction.Append,
+                            MergeIndex = 0,
+                        },
+                    })
+                    {
+                        MergeAction = MergeAction.MatchOnly,
+                    },
+
+                new ToolStripSeparator(),
+
+                new ToolStripMenuItem("Bookmarks...", null,
+                    new ToolStripItem[]
+                    {
+                        new ToolStripMenuItem("Set Bookmark", null, (sender, e) =>
+                        {
+                            _editor.SetBookMark();
+                        })
+                        {
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 6,
+                        },
+                        new ToolStripMenuItem("Clear Bookmark", null, (sender, e) =>
+                        {
+                            _editor.ClearScrollMarker(_editor.SelectionStart);
+                        })
+                        {
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 7,
+                        },
+
+                    }),
+                
+                new ToolStripSeparator()                        
+                {
+                    MergeAction = MergeAction.Insert,
+                    MergeIndex = 8,
+                },
+
+                //this is just regular copy
+                //new ToolStripMenuItem("Copy as ASCII", null, (sender, e) =>
+                //{
+                //    _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.AsciiString);
+                //}),
+
+                new ToolStripMenuItem("Copy as Hexadecimal", null, (sender, e) =>
+                    {
+                        _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.HexaString);
+                    }) 
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 9,
+                    },
+
+                new ToolStripMenuItem("Copy Selection for...", null,
+                    new ToolStripItem[] {
+                        new ToolStripMenuItem("C", null, (sender, e) =>
+                        {
+                            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.CCode);
+                        }),
+                        new ToolStripMenuItem("C#", null, (sender, e) =>
+                        {
+                            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.CSharpCode);
+                        }),
+                        new ToolStripMenuItem("F#", null, (sender, e) =>
+                        {
+                            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.FSharpCode);
+                        }),
+                        new ToolStripMenuItem("Java", null, (sender, e) =>
+                        {
+                            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.JavaCode);
+                        }),
+                        new ToolStripMenuItem("Visual Basic.Net", null, (sender, e) =>
+                        {
+                            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.VbNetCode);
+                        }),
+                        new ToolStripMenuItem("TBL string", null, (sender, e) =>
+                        {
+                            _editor.CopyToClipboard(WpfHexaEditor.Core.CopyPasteMode.TblString);
+                        }),
+                    })
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 10,
+                    },
+
+                new ToolStripSeparator()
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 11,
+                    },
+
+
+                new ToolStripMenuItem("Paste (overwrite)", null, (sender, e) =>
+                    {
+                        //TODO
+                    }, Keys.Control | Keys.V)
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 12,
+                    },
+
+                new ToolStripSeparator()
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 13,
+                    },
+
+                new ToolStripMenuItem("Fill Selection with Byte", null, (sender, e) =>
+                    {
+                        //_editor.FillWithByte();
+                    })
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 14,
+                    },
+
+                new ToolStripMenuItem("Replace Byte in Selection", null, (sender, e) =>
+                    {
+                        //_editor.FillWithByte();
+                    }, Keys.Control | Keys.H)
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 14,
+                    },
+
+                new ToolStripSeparator()
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 16,
+                    },
+
+                new ToolStripMenuItem("Delete", null, (sender, e) =>
+                    {
+                        _editor.DeleteSelection();
+                    }, Keys.Delete)
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 17,
+                    },
+
+                new ToolStripSeparator()
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 18,
+                    },
+
+                new ToolStripMenuItem("Find All Occurrences of Selection", null, (sender, e) =>
+                    {
+                        //TODO
+                    }, Keys.Control | Keys.F)
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 19,
+                    },
+
+                new ToolStripSeparator()
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 20,
+                    },
+
+                new ToolStripMenuItem("Select All", null, (sender, e) =>
+                    {
+                        //TODO
+                    }, Keys.Control | Keys.A)
+                    {
+                        MergeAction = MergeAction.Insert,
+                        MergeIndex = 21,
+                    },
+            });
+
+            //merge menu items
+            var baseMenu = base.BuildContextMenu();
+            ToolStripManager.Merge(menu, baseMenu);
+
+            return baseMenu;
+        }
+
         /*
         public new ContextMenuStrip ContextMenu
         {

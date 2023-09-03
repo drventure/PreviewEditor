@@ -132,6 +132,9 @@ namespace PreviewEditor
 
             [OptionDescription("Maximum Editable FileSize in bytes")]
             public long MaxEditableFileSize { get { return this.GetProperty<long>(50 * 1000 * 1000); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Show the StatusBar on the Hex Editor (or not)")]
+            public bool ShowStatusBar{ get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
         }
     }
 }

@@ -58,17 +58,17 @@ namespace PreviewEditor.Editors
         {
             var menu = new ContextMenuStrip();
             menu.Items.AddRange(new ToolStripItem[] {
-                    new ToolStripMenuItem("Cut", null, (sender, e) =>
+                new ToolStripMenuItem("Cut", null, (sender, e) =>
                     {
                         Cut();
                     }, Keys.Control | Keys.X),
 
-                    new ToolStripMenuItem("Copy", null, (sender, e) =>
+                new ToolStripMenuItem("Copy", null, (sender, e) =>
                     {
                         Copy();
                     }, Keys.Control | Keys.C),
 
-                    new ToolStripMenuItem("Paste", null, (sender, e) =>
+                new ToolStripMenuItem("Paste", null, (sender, e) =>
                     {
                         Paste();
                     }, Keys.Control | Keys.V)
@@ -76,39 +76,39 @@ namespace PreviewEditor.Editors
                         Enabled = System.Windows.Clipboard.ContainsText(),
                     },
 
-                    new ToolStripMenuItem("Find", null, (sender, e) =>
+                new ToolStripMenuItem("Find", null, (sender, e) =>
                     {
                         //Find();
                     }, Keys.Control | Keys.F),
 
-                    new ToolStripMenuItem("Replace", null, (sender, e) =>
+                new ToolStripMenuItem("Replace", null, (sender, e) =>
                     {
                         //Replace();
                     }, Keys.Control | Keys.H),
 
-                    new ToolStripSeparator(),
+                new ToolStripSeparator(),
 
-                    new ToolStripMenuItem("Options", null, new ToolStripMenuItem[] {
-                        new ToolStripMenuItem("Font...", null, (sender, e) =>
-                            {
-                                //this.ChooseFont();
-                            }),
-                        new ToolStripMenuItem("Theme...", null, (sender, e) =>
-                            {
-                                //this.ChooseTheme();
-                            })
+                new ToolStripMenuItem("Options", null, new ToolStripMenuItem[] {
+                    new ToolStripMenuItem("Font...", null, (sender, e) =>
+                        {
+                            //this.ChooseFont();
+                        }),
+                    new ToolStripMenuItem("Theme...", null, (sender, e) =>
+                        {
+                            //this.ChooseTheme();
+                        })
                     }),
 
-                    new ToolStripSeparator(),
+                new ToolStripSeparator(),
 
-                    new ToolStripMenuItem("Save", null, (sender, e) => { this.Save(true); }, Keys.Control | Keys.S),
-                    new ToolStripSeparator(),
+                new ToolStripMenuItem("Save", null, (sender, e) => { this.Save(true); }, Keys.Control | Keys.S),
+                new ToolStripSeparator(),
 
-                    new ToolStripMenuItem($"Show in {this.AlternateViewName} mode", null, (sender, e) =>
+                new ToolStripMenuItem($"Show in {this.AlternateViewName} mode", null, (sender, e) =>
                     {
                         OnSwitchEditorRequested();
                     })
-                });
+            });
 
             return menu;
         }

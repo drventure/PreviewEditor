@@ -175,64 +175,64 @@ namespace PreviewEditor.Editors.TextControls
             //create a container for the menu items we'll be merging
             var menu = new ContextMenuStrip();
             menu.Items.AddRange(new ToolStripItem[] {
-                    new ToolStripMenuItem("Options", null, new ToolStripItem[] {
-                        new ToolStripMenuItem("Show Line Numbers", null, (sender, e) =>
-                            {
-                                _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
-                                PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
-                            }, Keys.Control | Keys.Shift | Keys.L)
-                            {
-                                Checked = _editor.ShowLineNumbers,
-                                Enabled = _file.IsTextLoadable,
-                                MergeAction = MergeAction.Insert,
-                                MergeIndex = 0,
-                            },
-                        new ToolStripMenuItem("Show Column Ruler", null, (sender, e) =>
-                            {
-                                _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
-                                _editor.Options.ColumnRulerPosition = 80;
-                                PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
-                            }, Keys.Control | Keys.Shift | Keys.C)
-                            {
-                                Checked = _editor.Options.ShowColumnRuler,
-                                MergeAction = MergeAction.Insert,
-                                MergeIndex = 1,
-                            },
-                        new ToolStripMenuItem("Set Column Ruler", null, SetColumnRuler)
-                            {
-                                MergeAction = MergeAction.Insert,
-                                MergeIndex = 2,
-                            },
-                        new ToolStripMenuItem("Show Spaces", null, (sender, e) =>
-                            {
-                                _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
-                                PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
-                            })
-                            {
-                                Checked = _editor.Options.ShowSpaces,
-                                MergeAction = MergeAction.Insert,
-                                MergeIndex = 3,
-                            },
-                        new ToolStripMenuItem("Show Tabs", null, (sender, e) =>
-                            {
-                                _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
-                                PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
-                            })
-                            {
-                                Checked = _editor.Options.ShowTabs,
-                                MergeAction = MergeAction.Insert,
-                                MergeIndex = 4,
-                            },
-                        new ToolStripSeparator()
+                new ToolStripMenuItem("Options", null, new ToolStripItem[] {
+                    new ToolStripMenuItem("Show Line Numbers", null, (sender, e) =>
                         {
-                                MergeAction = MergeAction.Insert,
-                                MergeIndex = 5,
+                            _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
+                            PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
+                        }, Keys.Control | Keys.Shift | Keys.L)
+                        {
+                            Checked = _editor.ShowLineNumbers,
+                            Enabled = _file.IsTextLoadable,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 0,
                         },
-                    })
+                    new ToolStripMenuItem("Show Column Ruler", null, (sender, e) =>
+                        {
+                            _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
+                            _editor.Options.ColumnRulerPosition = 80;
+                            PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
+                        }, Keys.Control | Keys.Shift | Keys.C)
+                        {
+                            Checked = _editor.Options.ShowColumnRuler,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 1,
+                        },
+                    new ToolStripMenuItem("Set Column Ruler", null, SetColumnRuler)
+                        {
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 2,
+                        },
+                    new ToolStripMenuItem("Show Spaces", null, (sender, e) =>
+                        {
+                            _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
+                            PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
+                        })
+                        {
+                            Checked = _editor.Options.ShowSpaces,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 3,
+                        },
+                    new ToolStripMenuItem("Show Tabs", null, (sender, e) =>
+                        {
+                            _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
+                            PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
+                        })
+                        {
+                            Checked = _editor.Options.ShowTabs,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 4,
+                        },
+                    new ToolStripSeparator()
                     {
-                        MergeAction = MergeAction.MatchOnly,
-                    }
-                });
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 5,
+                    },
+                })
+                {
+                    MergeAction = MergeAction.MatchOnly,
+                }
+            });
 
             //merge menu items
             var baseMenu = base.BuildContextMenu();
