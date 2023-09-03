@@ -128,6 +128,9 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        protected override void Copy() { _editor.Copy(); }
+
+
         private void SetDarkMode()
         {
             //foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)

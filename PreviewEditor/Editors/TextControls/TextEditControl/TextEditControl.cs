@@ -152,22 +152,16 @@ namespace PreviewEditor.Editors.TextControls
         protected override void Cut() { _editor.Cut(); }
 
 
-        protected override void Copy() { _editor.Copy(); }
-
-
         protected override void Paste() { _editor.Paste(); }
 
 
         /// <summary>
         /// Build up the ContextMenu
         /// </summary>
-        /*
-        public override ContextMenuStrip ContextMenu
+        protected override ContextMenuStrip BuildContextMenu()
         {
-            get
-            {
-                var menu = new ContextMenuStrip();
-                menu.Items.AddRange(new ToolStripItem[] {
+            var menu = new ContextMenuStrip();
+            menu.Items.AddRange(new ToolStripItem[] {
                     new ToolStripMenuItem("Undo", null, (sender, e) =>
                     {
                         _editor.Undo();
@@ -187,16 +181,14 @@ namespace PreviewEditor.Editors.TextControls
                         MergeIndex = 4,
                         Enabled = _editor.CanRedo
                     }
-                }); 
+                });
 
-                //merge menu items
-                var baseMenu = base.ContextMenu;
-                ToolStripManager.Merge(menu, baseMenu);
+            //merge menu items
+            var baseMenu = base.BuildContextMenu();
+            ToolStripManager.Merge(menu, baseMenu);
 
-                return baseMenu;
-            }
+            return baseMenu;
         }
-        */
 
 
         protected override void Save(bool prompt = false)
