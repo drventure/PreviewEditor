@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 
 using Microsoft.Win32;
 
-using ICSharpCode.AvalonEdit;
 using PreviewHandler.Sdk.Controls;
 using PreviewEditor.Editors;
 using PreviewEditor.Editors.TextControls;
@@ -111,10 +108,7 @@ namespace PreviewEditor
                         var editor = this.pnlEditor.Controls[0] as IPreviewEditorControl;
                         if (editor != null)
                         {
-                            if (editor != null)
-                            {
-                                editor.Close();
-                            }
+                            editor.Close();
                         }
                     }
                     this.Controls.Clear();
@@ -215,7 +209,7 @@ namespace PreviewEditor
                 //Switching to hex editor
                 newEditor = EditorFactory.GetHexEditor(e.EditingFile);
             }
-            else if (sender is WPFHexEditControl hec)
+            else if (sender is HexEditControl hec)
             {
                 //Switching to Text editor
                 //will automatically determine whether to use a viewer or editor
@@ -247,7 +241,7 @@ namespace PreviewEditor
         /// <param name="color"></param>
         public override void SetTextColor(Color color)
         {
-            InvokeOnControlThread(() => 
+            InvokeOnControlThread(() =>
             {
                 base.SetTextColor(color);
                 pnlEditor.ForeColor = color;
@@ -261,7 +255,7 @@ namespace PreviewEditor
         /// <param name="argbColor"></param>
         public override void SetBackgroundColor(Color color)
         {
-            InvokeOnControlThread(() => 
+            InvokeOnControlThread(() =>
             {
                 base.SetBackgroundColor(color);
                 pnlEditor.BackColor = color;
@@ -274,7 +268,7 @@ namespace PreviewEditor
         /// </summary>
         private void InitializeLoadingScreen()
         {
-            InvokeOnControlThread(() =>
+            this.InvokeOnControlThread(() =>
             {
 
                 var loading = new Label();

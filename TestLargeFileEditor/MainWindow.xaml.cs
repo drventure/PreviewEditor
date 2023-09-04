@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace TestLargeFileEditor
 {
     /// <summary>
@@ -21,7 +22,7 @@ namespace TestLargeFileEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        FileWindow _window = null;
+        FileWindow? _window = null;
 
         public MainWindow()
         {

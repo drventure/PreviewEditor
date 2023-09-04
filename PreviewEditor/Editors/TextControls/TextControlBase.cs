@@ -20,6 +20,7 @@ using ICSharpCode.AvalonEdit.Folding;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Search;
+using static System.Net.WebRequestMethods;
 
 
 namespace PreviewEditor.Editors.TextControls
@@ -28,22 +29,20 @@ namespace PreviewEditor.Editors.TextControls
     /// Since both the TextEditor and the large text file viewer rely on AvalonEdit
     /// we'll use this base class to abstract out the commonalities between the two
     /// </summary>
-    internal class TextControlBase : UserControl, IPreviewEditorControl
+    internal class TextControlBase : PreviewControlBase
     {
-        /// <summary>
-        /// Represents a request to switch editors
-        /// </summary>
-        public event SwitchEditorRequestedEventHandler SwitchEditorRequested;
-
+        #region protected
         protected string[] EXTENSIONS = new string[] { ".txt", ".log", ".cs", ".vb", ".csproj", ".vbproj", ".c", ".cpp", ".bat", ".ps", ".h" };
 
-        protected EditingFile _file;
-        protected ElementHost _host;
         protected TextEditor _editor;
 
         protected DispatcherTimer _foldingUpdateTimer;
         protected FoldingManager _foldingManager;
         protected dynamic _foldingStrategy;
+        protected override string AlternateViewName => "Hex";
+
+        #endregion
+
 
 
         public TextControlBase() : base()
@@ -98,7 +97,7 @@ namespace PreviewEditor.Editors.TextControls
 
             //once we've initialized, unhook the event
             this.OnParentChanged();
-            
+
 
             this.Focus();
             _editor.Focus();
@@ -170,102 +169,76 @@ namespace PreviewEditor.Editors.TextControls
 
         /// <summary>
         /// Build up the ContextMenu
-        /// </summary>
-        public virtual ContextMenuStrip ContextMenu
+        /// </summary>    
+        protected override ContextMenuStrip BuildContextMenu()
         {
-            get
-            {
-                var menu = new ContextMenuStrip();
-                menu.Items.AddRange(new ToolStripItem[] {
-                    new ToolStripMenuItem("Cut", null, (sender, e) =>
+            //create a container for the menu items we'll be merging
+            var menu = new ContextMenuStrip();
+            menu.Items.AddRange(new ToolStripItem[] {
+                new ToolStripMenuItem("Options", null, new ToolStripItem[] {
+                    new ToolStripMenuItem("Show Line Numbers", null, (sender, e) =>
+                        {
+                            _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
+                            PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
+                        }, Keys.Control | Keys.Shift | Keys.L)
+                        {
+                            Checked = _editor.ShowLineNumbers,
+                            Enabled = _file.IsTextLoadable,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 0,
+                        },
+                    new ToolStripMenuItem("Show Column Ruler", null, (sender, e) =>
+                        {
+                            _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
+                            _editor.Options.ColumnRulerPosition = 80;
+                            PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
+                        }, Keys.Control | Keys.Shift | Keys.C)
+                        {
+                            Checked = _editor.Options.ShowColumnRuler,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 1,
+                        },
+                    new ToolStripMenuItem("Set Column Ruler", null, SetColumnRuler)
+                        {
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 2,
+                        },
+                    new ToolStripMenuItem("Show Spaces", null, (sender, e) =>
+                        {
+                            _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
+                            PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
+                        })
+                        {
+                            Checked = _editor.Options.ShowSpaces,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 3,
+                        },
+                    new ToolStripMenuItem("Show Tabs", null, (sender, e) =>
+                        {
+                            _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
+                            PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
+                        })
+                        {
+                            Checked = _editor.Options.ShowTabs,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 4,
+                        },
+                    new ToolStripSeparator()
                     {
-                        _editor.Cut();
-                    }, Keys.Control | Keys.X),
-
-                    new ToolStripMenuItem("Copy", null, (sender, e) =>
-                    {
-                        _editor.Copy();
-                    }, Keys.Control | Keys.C),
-
-                    new ToolStripMenuItem("Paste", null, (sender, e) =>
-                    {
-                        _editor.Paste();
-                    }, Keys.Control | Keys.V)
-                    {
-                        Enabled = System.Windows.Clipboard.ContainsText(),
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 5,
                     },
+                })
+                {
+                    MergeAction = MergeAction.MatchOnly,
+                }
+            });
 
-                    new ToolStripMenuItem("Find", null, (sender, e) =>
-                    {
-                        Find();
-                    }, Keys.Control | Keys.F),
+            //merge menu items
+            var baseMenu = base.BuildContextMenu();
+            ToolStripManager.Merge(menu, baseMenu);
 
-                    new ToolStripMenuItem("Replace", null, (sender, e) =>
-                    {
-                        Replace();
-                    }, Keys.Control | Keys.H),
-
-                    new ToolStripSeparator(),
-
-                    new ToolStripMenuItem("Options", null, new ToolStripMenuItem[] {
-                        new ToolStripMenuItem("Show Line Numbers", null, (sender, e) =>
-                            {
-                                _editor.ShowLineNumbers = !_editor.ShowLineNumbers;
-                                PreviewEditor.Settings.TextEditorOptions.ShowLineNumbers = _editor.ShowLineNumbers;
-                            }, Keys.Control | Keys.Shift | Keys.L)
-                            {
-                                Checked = _editor.ShowLineNumbers,
-                                Enabled = _file.IsTextLoadable
-                            },
-                        new ToolStripMenuItem("Show Column Ruler", null, (sender, e) =>
-                            {
-                                _editor.Options.ShowColumnRuler = !_editor.Options.ShowColumnRuler;
-                                _editor.Options.ColumnRulerPosition = 80;
-                                PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
-                            }, Keys.Control | Keys.Shift | Keys.C)
-                            {
-                                Checked = _editor.Options.ShowColumnRuler
-                            },
-                        new ToolStripMenuItem("Set Column Ruler", null, SetColumnRuler),
-                        new ToolStripMenuItem("Show Spaces", null, (sender, e) =>
-                            {
-                                _editor.Options.ShowSpaces = !_editor.Options.ShowSpaces;
-                                PreviewEditor.Settings.TextEditorOptions.ShowSpaces = _editor.Options.ShowSpaces;
-                            })
-                            {
-                                Checked = _editor.Options.ShowSpaces
-                            },
-                        new ToolStripMenuItem("Show Tabs", null, (sender, e) =>
-                            {
-                                _editor.Options.ShowTabs = !_editor.Options.ShowTabs;
-                                PreviewEditor.Settings.TextEditorOptions.ShowTabs = _editor.Options.ShowTabs;
-                            })
-                            {
-                                Checked = _editor.Options.ShowTabs
-                            },
-                        new ToolStripMenuItem("Font...", null, (sender, e) =>
-                            {
-                                this.ChooseFont();
-                            }),
-                        new ToolStripMenuItem("Theme...", null, (sender, e) =>
-                            {
-                                this.ChooseTheme();
-                            })
-                    }),
-
-                    new ToolStripSeparator(),
-
-                    new ToolStripMenuItem("Save", null, mnuSave, Keys.Control | Keys.S),
-                    new ToolStripSeparator(),
-
-                    new ToolStripMenuItem("Show in Hex", null, (sender, e) =>
-                    {
-                        OnSwitchEditor();
-                    })
-                });
-
-                return menu;
-            }
+            return baseMenu;
         }
 
 
@@ -280,20 +253,6 @@ namespace PreviewEditor.Editors.TextControls
             _editor.Options.ColumnRulerPosition = c - 1;
             PreviewEditor.Settings.TextEditorOptions.ColumnRulerPosition = _editor.Options.ColumnRulerPosition;
             PreviewEditor.Settings.TextEditorOptions.ShowColumnRuler = _editor.Options.ShowColumnRuler;
-        }
-
-
-        private void mnuSave(object sender, EventArgs e)
-        {
-            try
-            {
-                //TODO automatically make writable if possible?
-                _editor.Save(_file.FileInfo.FullName);
-            }
-            catch
-            {
-                //TODO handle exception
-            }
         }
 
 
@@ -407,7 +366,7 @@ namespace PreviewEditor.Editors.TextControls
             {
                 if (e.Key == Key.T)
                 {
-                    OnSwitchEditor();
+                    OnSwitchEditorRequested();
                 }
                 else if (e.Key == Key.F)
                 {
@@ -561,7 +520,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void ReplaceNext(string search, string replacement, bool selectedonly= false)
+        private void ReplaceNext(string search, string replacement, bool selectedonly = false)
         {
             Regex regex = _find.RegEx(search);
             if (regex == null) return;
@@ -597,7 +556,7 @@ namespace PreviewEditor.Editors.TextControls
         private Tuple<int, int> CountOccurrances(string search)
         {
             Regex regex = _find.RegEx(search, true);
-            if (regex == null) return Tuple.Create(0, 0); 
+            if (regex == null) return Tuple.Create(0, 0);
 
             var curIndex = _editor.CaretOffset;
             var matches = regex.Matches(_editor.Text, 0);
@@ -672,17 +631,11 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        public void Close()
+        public override void Close()
         {
             _editor = null;
             _host.Child = null;
             _host = null;
-        }
-
-
-        internal virtual void OnSwitchEditor()
-        {
-            SwitchEditorRequested.Invoke(this, new SwitchEditorRequestedEventArgs(_file));
         }
 
 

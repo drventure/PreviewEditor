@@ -1,6 +1,5 @@
 ﻿using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
-using Microsoft.VisualBasic.Logging;
 using System;
 using System.IO;
 using System.Text;
@@ -40,7 +39,7 @@ namespace TestLargeFileEditor
             //setup to track the editor used
             _editor = editor;
             _editor.Clear();
-            _editor.TextArea.Caret.PositionChanged += TextArea_Carent_PositionChanged;
+            _editor.TextArea.Caret.PositionChanged += TextArea_Caret_PositionChanged;
             _editor.PreviewKeyDown += _editor_PreviewKeyDown;
             _editor.TextArea.TextView.VisualLinesChanged += TextView_VisualLinesChanged;
 
@@ -87,11 +86,11 @@ namespace TestLargeFileEditor
         private DocumentLine CaretLine(long? offset = null)
         {
             var ofs = resolveOffset(offset);
-            return _editor.Document.GetLineByOffset((int)(offset - _windowOffset + 1));
+            return _editor.Document.GetLineByOffset((int)(ofs - _windowOffset + 1));
         }
 
 
-        private void TextArea_Carent_PositionChanged(object? sender, EventArgs e)
+        private void TextArea_Caret_PositionChanged(object? sender, EventArgs e)
         {
             if (!_overridingPositionChanged)
             {
@@ -239,7 +238,7 @@ namespace TestLargeFileEditor
 
         public void Dispose()
         {
-            _editor.TextArea.Caret.PositionChanged -= TextArea_Carent_PositionChanged;
+            _editor.TextArea.Caret.PositionChanged -= TextArea_Caret_PositionChanged;
             _editor.PreviewKeyDown -= _editor_PreviewKeyDown;
             _editor.TextArea.TextView.VisualLinesChanged -= TextView_VisualLinesChanged;
         }

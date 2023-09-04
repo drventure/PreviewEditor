@@ -46,7 +46,7 @@ namespace PreviewEditor.Editors.TextControls
                     _isDirty = true;
                 };
             }
-            catch 
+            catch
             {
                 //TODO update the status label?
             }
@@ -145,19 +145,23 @@ namespace PreviewEditor.Editors.TextControls
                 }
             }
 
-            base.GeneralKeyDown(sender, e); 
+            base.GeneralKeyDown(sender, e);
         }
+
+
+        protected override void Cut() { _editor.Cut(); }
+
+
+        protected override void Paste() { _editor.Paste(); }
 
 
         /// <summary>
         /// Build up the ContextMenu
         /// </summary>
-        public override ContextMenuStrip ContextMenu
+        protected override ContextMenuStrip BuildContextMenu()
         {
-            get
-            {
-                var menu = new ContextMenuStrip();
-                menu.Items.AddRange(new ToolStripItem[] {
+            var menu = new ContextMenuStrip();
+            menu.Items.AddRange(new ToolStripItem[] {
                     new ToolStripMenuItem("Undo", null, (sender, e) =>
                     {
                         _editor.Undo();
@@ -177,34 +181,35 @@ namespace PreviewEditor.Editors.TextControls
                         MergeIndex = 4,
                         Enabled = _editor.CanRedo
                     }
-                }); 
+                });
 
-                //merge menu items
-                var baseMenu = base.ContextMenu;
-                ToolStripManager.Merge(menu, baseMenu);
+            //merge menu items
+            var baseMenu = base.BuildContextMenu();
+            ToolStripManager.Merge(menu, baseMenu);
 
-                return baseMenu;
-            }
+            return baseMenu;
         }
 
 
-        public void Save()
+        protected override void Save(bool prompt = false)
         {
-            if (_isDirty)
+            var doSave = false;
+            if (_isDirty && prompt)
             {
-                if (MessageBox.Show("Save Changes?", "File has changed", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                if (MessageBox.Show("Save Changes?", "File has changed", MessageBoxButtons.OKCancel) == DialogResult.OK) doSave = true;
+            }
+            if (doSave)
+            {
+                try
                 {
-                    try
-                    {
-                        _editor.Save(_file.FileInfo.FullName);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error saving changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    _editor.Save(_file.FileInfo.FullName);
+                    _isDirty = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error saving changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            _isDirty = false;
         }
 
 
@@ -228,12 +233,13 @@ namespace PreviewEditor.Editors.TextControls
             }
         }
 
-        internal override void OnSwitchEditor()
+
+        protected override void OnSwitchEditorRequested()
         {
             _file.Stream = new MemoryStream();
             _editor.Save(_file.Stream);
             _file.Stream.Position = 0;
-            base.OnSwitchEditor();
+            base.OnSwitchEditorRequested();
         }
     }
 }

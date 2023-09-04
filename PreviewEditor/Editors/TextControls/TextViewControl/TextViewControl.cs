@@ -128,6 +128,9 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
+        protected override void Copy() { _editor.Copy(); }
+
+
         private void SetDarkMode()
         {
             //foreach (var h in _editor.SyntaxHighlighting.NamedHighlightingColors)
@@ -135,13 +138,6 @@ namespace PreviewEditor.Editors.TextControls
             //    var f = h.Foreground;
             //    var b = h.Background;
             //}
-        }
-
-
-        internal override void OnSwitchEditor()
-        {
-            //we'll just pass the EditingFile on through with no stream
-            base.OnSwitchEditor();
         }
     }
 }

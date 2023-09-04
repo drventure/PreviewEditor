@@ -51,15 +51,29 @@ namespace PreviewEditor
             //it each time, but it appears to depend on the host.
             //some hosts (explorer) appear to dispose the previewhandler itself
             //(ie this object), so there wouldn't be any way to cache the control internally
-            _control = new PreviewEditorControl();
+            _control = null;
+            try
+            {
+                _control = new PreviewEditorControl();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+            }
             return _control;
         }
 
 
         public override void DoPreview()
         {
-            //MessageBox.Show("In DoPreview - " + this.FilePath);
-            _control.DoPreview(this.FilePath);
+            try
+            {
+                _control.DoPreview(this.FilePath);
+            }
+            catch (Exception ex )
+            {
+                Log.Error(ex, $"File to preview={this.FilePath}");
+            }
         }
 
 
@@ -82,7 +96,6 @@ namespace PreviewEditor
                 var internalDlls = new string[]
                 {
                     "ICSharpCode.AvalonEdit",
-                    "WPFHexaEditor",
                     "Newtonsoft.Json"
                 };
 
@@ -115,6 +128,7 @@ namespace PreviewEditor
             };
 
         }
+
 
         /// <summary>
         /// Load missing assemblies from compiled-in resources instead

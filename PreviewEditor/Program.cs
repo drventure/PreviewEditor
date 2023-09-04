@@ -33,7 +33,7 @@ namespace PreviewEditor
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("PreviewEditor Windows PreviewHandler for editing Text and Binary files");
-            Console.WriteLine("(c) 2022 drVenture and Associates, all rights reserved");
+            Console.WriteLine("(c) 2023 drVenture and Associates, all rights reserved");
             Console.WriteLine("");
 
             foreach (var arg in args)

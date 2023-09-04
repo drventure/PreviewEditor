@@ -40,7 +40,7 @@ namespace PreviewEditor.Editors
 
         internal static IPreviewEditorControl GetHexEditor(EditingFile file)
         {
-            return new WPFHexEditControl(file);
+            return new HexEditControl(file);
         }
     }
 }

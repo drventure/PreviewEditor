@@ -37,7 +37,6 @@ namespace PreviewEditor.Editors.TextControls
         int _activeLine = 0;
         bool _overridingPositionChanged = false;
         private bool _syncingVScroll;
-        private bool _vscrolling;
 
         public FileWindow(EditingFile file, TextEditor editor, VScrollBar vscroll)
         {
@@ -72,7 +71,7 @@ namespace PreviewEditor.Editors.TextControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TextView_VisualLinesChanged(object? sender, EventArgs e)
+        private void TextView_VisualLinesChanged(object sender, EventArgs e)
         {
             var topLine = _editor.TextArea.TextView.GetDocumentLineByVisualTop(_editor.TextArea.TextView.ScrollOffset.Y);
             //var topLine = _editor.TextArea.TextView.VisualLines[0].FirstDocumentLine;
@@ -107,7 +106,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void TextArea_Caret_PositionChanged(object? sender, EventArgs e)
+        private void TextArea_Caret_PositionChanged(object sender, EventArgs e)
         {
             if (!_overridingPositionChanged)
             {
@@ -148,23 +147,20 @@ namespace PreviewEditor.Editors.TextControls
 
         private void SyncVScroll(long offset)
         {
-            if (!_vscrolling)
+            _syncingVScroll = true;
+            if (_file.Length <= int.MaxValue)
             {
-                _syncingVScroll = true;
-                if (_file.Length <= int.MaxValue)
-                {
-                    //the simple case, just use the scroll value as the position
-                    //allow offset to fall through
-                }
-                else
-                {
-                    //the file is HUGE so we have to translate from long to int
-                    offset = (int)((offset / _file.Length) * int.MaxValue);
-                }
-                _vscroll.Value = (int)offset;
-                System.Diagnostics.Debug.WriteLine($"VScroll={offset}");
-                _syncingVScroll = false;
+                //the simple case, just use the scroll value as the position
+                //allow offset to fall through
             }
+            else
+            {
+                //the file is HUGE so we have to translate from long to int
+                offset = (int)((offset / _file.Length) * int.MaxValue);
+            }
+            _vscroll.Value = (int)offset;
+            System.Diagnostics.Debug.WriteLine($"VScroll={offset}");
+            _syncingVScroll = false;
         }
 
 
@@ -291,7 +287,7 @@ namespace PreviewEditor.Editors.TextControls
 
         private void _vscroll_Scroll(object sender, ScrollEventArgs e)
         {
-            if (!_syncingVScroll && !_vscrolling)
+            if (!_syncingVScroll)
             {
                 var offset = e.NewValue;
                 JumpToOffset(offset);
