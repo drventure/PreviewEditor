@@ -156,6 +156,20 @@ namespace PreviewEditor.Editors
             {
                 var mnu = this.ContextMenu;
             }
+
+            if (isCtrl && !isShift && !isAlt)
+            {
+                if (e.Key == Key.Home)
+                {
+                    _editor.SetPosition(0);
+                    _editor.Focus();
+                }
+                else if (e.Key == Key.End) 
+                {
+                    _editor.SetPosition(_editor.Length);
+                    _editor.Focus();
+                }
+            }
         }
 
 
