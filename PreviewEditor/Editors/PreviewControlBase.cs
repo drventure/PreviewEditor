@@ -28,6 +28,12 @@ namespace PreviewEditor.Editors
         protected virtual void Paste() { }
 
         protected virtual void Save(bool prompt = false) { }
+
+        protected virtual void Find() { }
+        protected virtual void Replace() { }
+
+        protected virtual void ChooseFont() { }
+        protected virtual void ChooseTheme() { }
         #endregion
 
 
@@ -76,14 +82,16 @@ namespace PreviewEditor.Editors
                         Enabled = System.Windows.Clipboard.ContainsText(),
                     },
 
+                new ToolStripSeparator(),
+
                 new ToolStripMenuItem("Find", null, (sender, e) =>
                     {
-                        //Find();
+                        Find();
                     }, Keys.Control | Keys.F),
 
                 new ToolStripMenuItem("Replace", null, (sender, e) =>
                     {
-                        //Replace();
+                        Replace();
                     }, Keys.Control | Keys.H),
 
                 new ToolStripSeparator(),
@@ -91,11 +99,11 @@ namespace PreviewEditor.Editors
                 new ToolStripMenuItem("Options", null, new ToolStripMenuItem[] {
                     new ToolStripMenuItem("Font...", null, (sender, e) =>
                         {
-                            //this.ChooseFont();
+                            this.ChooseFont();
                         }),
                     new ToolStripMenuItem("Theme...", null, (sender, e) =>
                         {
-                            //this.ChooseTheme();
+                            this.ChooseTheme();
                         })
                     }),
 

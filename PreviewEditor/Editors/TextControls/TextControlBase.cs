@@ -408,14 +408,14 @@ namespace PreviewEditor.Editors.TextControls
 
 
         private FindReplacePanel _find;
-        private void Find()
+        protected override void Find()
         {
             SetupFindPanel();
             _find.Mode = FindReplacePanel.Modes.Find;
         }
 
 
-        private void Replace()
+        protected override void Replace()
         {
             SetupFindPanel();
             _find.Mode = FindReplacePanel.Modes.Replace;
@@ -574,7 +574,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void ChooseFont()
+        protected override void ChooseFont()
         {
             var dlg = new FontDialog();
             dlg.ShowApply = false;
@@ -593,7 +593,7 @@ namespace PreviewEditor.Editors.TextControls
         }
 
 
-        private void ChooseTheme()
+        protected override void ChooseTheme()
         {
             var dlg = new OpenFileDialog();
             if (dlg.ShowDialog() == DialogResult.OK && dlg.FileName != null)

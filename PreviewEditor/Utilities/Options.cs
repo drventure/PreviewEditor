@@ -135,6 +135,13 @@ namespace PreviewEditor
 
             [OptionDescription("Show the StatusBar on the Hex Editor (or not)")]
             public bool ShowStatusBar{ get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Font Name to use")]
+            public string FontFamily { get { return this.GetProperty<string>("Consolas"); } set { this.SetProperty(value); } }
+
+            [OptionDescription("Font Size to use")]
+            public float FontSize { get { return this.GetProperty<float>(8); } set { this.SetProperty(value); } }
+
         }
     }
 }

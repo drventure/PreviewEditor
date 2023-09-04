@@ -71,6 +71,14 @@ namespace PreviewEditor.Editors
             _editor.BytePerLine = 32;
             _editor.ForegroundSecondColor = new SolidColorBrush(Colors.DarkGray);
             _editor.ForegroundOffSetHeaderColor = new SolidColorBrush(Colors.Silver);
+            _editor.ForegroundHighLightOffSetHeaderColor = new SolidColorBrush(Colors.WhiteSmoke);
+            _editor.ByteAddedColor = new SolidColorBrush(Colors.LightBlue);
+            _editor.ByteDeletedColor = new SolidColorBrush(Colors.LightPink);
+            _editor.ByteModifiedColor = new SolidColorBrush(Colors.LightGreen);
+            _editor.HighLightColor = new SolidColorBrush(Colors.Cyan);
+            _editor.MouseOverColor = new SolidColorBrush(Colors.LightBlue);
+            _editor.SelectionFirstColor = new SolidColorBrush(Colors.DarkCyan);
+            _editor.SelectionSecondColor = new SolidColorBrush(Colors.DarkTurquoise);
             _editor.AllowBuildinCtrla = true;
             _editor.AllowBuildinCtrlc = true;
             _editor.AllowBuildinCtrlz = true;
@@ -79,6 +87,9 @@ namespace PreviewEditor.Editors
             _editor.AllowExtend = true;
             _editor.AllowAutoHighLightSelectionByte = false;
             _editor.AllowContextMenu = false;
+
+            _editor.FontFamily = new System.Windows.Media.FontFamily(PreviewEditor.Settings.HexEditorOptions.FontFamily);
+            _editor.FontSize = PreviewEditor.Settings.HexEditorOptions.FontSize;
 
             _editor.BytesDeleted += _editor_BytesDeleted;
             _editor.BytesModified += _editor_BytesModified;
@@ -179,6 +190,25 @@ namespace PreviewEditor.Editors
 
         protected override void Save(bool prompt = false)
         {
+        }
+
+
+        protected override void ChooseFont()
+        {
+            var dlg = new FontDialog();
+            dlg.ShowApply = false;
+            dlg.ShowColor = false;
+            dlg.ShowEffects = false;
+            dlg.Font = new System.Drawing.Font(_editor.FontFamily.Source, (float)_editor.FontSize);
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                var font = dlg.Font;
+                PreviewEditor.Settings.HexEditorOptions.FontFamily = font.Name;
+                PreviewEditor.Settings.HexEditorOptions.FontSize = font.Size;
+
+                _editor.FontFamily = new System.Windows.Media.FontFamily(font.Name);
+                _editor.FontSize = font.Size;
+            }
         }
 
 
@@ -356,7 +386,7 @@ namespace PreviewEditor.Editors
 
                 new ToolStripMenuItem("Select All", null, (sender, e) =>
                     {
-                        //TODO
+                        _editor.SelectAll();
                     }, Keys.Control | Keys.A)
                     {
                         MergeAction = MergeAction.Insert,
