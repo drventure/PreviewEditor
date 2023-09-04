@@ -230,8 +230,8 @@ namespace PreviewEditor.Editors
                         {
                             Checked = _editor.StatusBarVisibility == Visibility.Visible,
                             Enabled = _file.IsTextLoadable,
-                            MergeAction = MergeAction.Append,
-                            MergeIndex = 0,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 2,
                         },
                     })
                     {

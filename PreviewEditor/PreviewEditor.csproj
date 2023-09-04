@@ -8,7 +8,7 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<PackageIcon></PackageIcon>
 		<PackageIconUrl />
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
 		<PackageTags></PackageTags>
 		<ApplicationIcon />
 		<LangVersion>preview</LangVersion>
@@ -43,12 +43,12 @@
 		<Optimize>True</Optimize>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net481|AnyCPU'">
 		<DebugType>embedded</DebugType>
 		<Optimize>False</Optimize>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net481|AnyCPU'">
 		<DebugType>embedded</DebugType>
 		<Optimize>True</Optimize>
 	</PropertyGroup>
@@ -245,10 +245,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Properties\Settings.Designer.cs">
-			<DesignTimeSharedInput>True</DesignTimeSharedInput>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Settings.settings</DependentUpon>
+		<Compile Update="Properties\Resources.Designer.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
 		<Compile Update="WpfHexaEditor\Properties\Resources.Designer.cs">
 		  <DesignTime>True</DesignTime>
@@ -289,6 +289,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+		  <Generator>ResXFileCodeGenerator</Generator>
+		  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 		<EmbeddedResource Update="WpfHexaEditor\Properties\Resources.resx">
 		  <CustomToolNamespace>WpfHexaEditor.Properties</CustomToolNamespace>
 		  <Generator>PublicResXFileCodeGenerator</Generator>

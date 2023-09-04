@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PreviewEditor.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,11 @@ namespace PreviewEditor.Editors
 
         protected virtual void ChooseFont() { }
         protected virtual void ChooseTheme() { }
+
+        protected virtual void About() 
+        {
+            (new AboutBox()).ShowDialog();
+        }
         #endregion
 
 
@@ -96,7 +102,7 @@ namespace PreviewEditor.Editors
 
                 new ToolStripSeparator(),
 
-                new ToolStripMenuItem("Options", null, new ToolStripMenuItem[] {
+                new ToolStripMenuItem("Options", null, new ToolStripItem[] {
                     new ToolStripMenuItem("Font...", null, (sender, e) =>
                         {
                             this.ChooseFont();
@@ -104,7 +110,12 @@ namespace PreviewEditor.Editors
                     new ToolStripMenuItem("Theme...", null, (sender, e) =>
                         {
                             this.ChooseTheme();
-                        })
+                        }),
+                    new ToolStripSeparator(),
+                    new ToolStripMenuItem("About...", null, (sender, e) =>
+                        {
+                            this.About();
+                        }),
                     }),
 
                 new ToolStripSeparator(),
