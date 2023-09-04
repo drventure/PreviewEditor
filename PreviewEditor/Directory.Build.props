@@ -1,0 +1,21 @@
+<Project>
+    <PropertyGroup>
+        <Company>drVenture and Associates</Company>
+		<Authors>drVenture and Associates</Authors>
+        <Description>A Text and Hex Preview Editor for Explorer</Description>
+        <Copyright>Copyright © 2023 drVenture and Associates</Copyright>
+        <AssemblyVersion>0.0.1.1</AssemblyVersion>
+        <FileVersion>$(AssemblyVersion)-alpha</FileVersion>
+		<Product>PreviewEditor</Product>
+        <Version>$(FileVersion)</Version>
+		<InformationalVersion>$(FileVersion)</InformationalVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <PackageLicenseUrl>License URL</PackageLicenseUrl>
+        <PackageProjectUrl>Project URL</PackageProjectUrl>
+        <PackageIconUrl>Icon URL</PackageIconUrl>
+        <RepositoryUrl>Repo URL</RepositoryUrl>
+        <RepositoryType>Repo type</RepositoryType>
+        <PackageTags>Tags</PackageTags>
+        <PackageReleaseNotes>Release Notes</PackageReleaseNotes>
+    </PropertyGroup>
+</Project>

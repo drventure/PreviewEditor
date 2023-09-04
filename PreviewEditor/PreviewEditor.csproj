@@ -6,17 +6,8 @@
 		<AssemblyName>PreviewEditor</AssemblyName>
 		<Title>PreviewEditor</Title>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-		<Authors></Authors>
-		<Company></Company>
-		<Description></Description>
 		<PackageIcon></PackageIcon>
 		<PackageIconUrl />
-		<Product></Product>
-		<Copyright>Apache 2.0</Copyright>
-		<AssemblyVersion>0.0.0.1</AssemblyVersion>
-		<FileVersion>0.0.0.1</FileVersion>
-		<InformationalVersion>Alpha</InformationalVersion>
-		<Version>0.0.0.1</Version>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<PackageTags></PackageTags>
 		<ApplicationIcon />
@@ -27,7 +18,6 @@
 		<PackageLicenseFile>C:\Dev\Darin\CodePreviewEditor\PreviewEditor\LICENSE.</PackageLicenseFile>
 		<IncludeSource>true</IncludeSource>
 		<IncludeSymbols>false</IncludeSymbols>
-		<NeutralLanguage>en-US</NeutralLanguage>
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>True</UseWindowsForms>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -61,6 +51,14 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
 		<DebugType>embedded</DebugType>
 		<Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <Deterministic>True</Deterministic>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Deterministic>True</Deterministic>
 	</PropertyGroup>
 
 	<ItemGroup>
