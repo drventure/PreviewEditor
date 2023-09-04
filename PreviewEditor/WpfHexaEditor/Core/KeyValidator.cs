@@ -114,6 +114,10 @@ namespace WpfHexaEditor.Core
 
         public static bool IsLeftKey(Key key) => key == Key.Left;
 
+        public static bool IsHomeKey(Key key) => key == Key.Home;
+
+        public static bool IsEndKey(Key key) => key == Key.End;
+
         public static bool IsPageDownKey(Key key) => key == Key.PageDown;
 
         public static bool IsPageUpKey(Key key) => key == Key.PageUp;

@@ -1171,6 +1171,66 @@ namespace WpfHexaEditor
             }
         }
 
+        private void Control_MoveHome(object sender, ByteEventArgs e)
+        {
+            //Prevent infinite loop
+            _setFocusTest = false;
+
+            //Get the new position from SelectionStart
+            long newPosition = 0;
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {}
+            else
+            {
+                newPosition = (long)Math.Floor((decimal)SelectionStart / BytePerLine) * BytePerLine;
+            }
+
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
+                SelectionStart = newPosition;
+            else
+            {
+                FixSelectionStartStop();
+
+                SelectionStart = SelectionStop = newPosition;
+            }
+
+            SetFocusAtSelectionStart();
+        }
+
+
+        private void Control_MoveEnd(object sender, ByteEventArgs e)
+        {
+            //Prevent infinite loop
+            _setFocusTest = false;
+
+            //Get the new position from SelectionStart
+            long newPosition = _provider.Length - 1;
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            { }
+            else
+            {
+                newPosition = ((SelectionStart + BytePerLine) / BytePerLine) * BytePerLine - 1;
+            }
+
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
+                SelectionStart = newPosition <= _provider.Length ? newPosition : _provider.Length;
+            else
+            {
+                FixSelectionStartStop();
+
+                SelectionStart = SelectionStop = newPosition;
+            }
+
+            if (SelectionStart > LastVisibleBytePosition)
+                VerticalScrollBar.Value = Math.Max(VerticalScrollBar.Maximum - HexDataStackPanel.Children.Count, 0);
+
+            if (sender is HexByte || sender is StringByte)
+            {
+                SetFocusAtSelectionStart();
+            }
+        }
+
+
         private void Control_MovePageUp(object sender, ByteEventArgs e)
         {
             //Prevent infinite loop
@@ -1725,10 +1785,14 @@ namespace WpfHexaEditor
         /// </remarks>
         public void SetPosition(long position, long byteLength)
         {
+            _setFocusTest = false;
+
             SelectionStart = position;
             SelectionStop = position + byteLength - 1;
 
             VerticalScrollBar.Value = CheckIsOpen(_provider) ? GetLineNumber(position) : 0;
+
+            SetFocusAtSelectionStart();
         }
 
         /// <summary>
@@ -2816,6 +2880,8 @@ namespace WpfHexaEditor
                         c.MoveDown -= Control_MoveDown;
                         c.MoveLeft -= Control_MoveLeft;
                         c.MoveRight -= Control_MoveRight;
+                        c.MoveHome -= Control_MoveHome;
+                        c.MoveEnd -= Control_MoveEnd;
                         c.MovePageDown -= Control_MovePageDown;
                         c.MovePageUp -= Control_MovePageUp;
                         c.ByteDeleted -= Control_ByteDeleted;
@@ -2839,6 +2905,8 @@ namespace WpfHexaEditor
                         c.MoveDown += Control_MoveDown;
                         c.MoveLeft += Control_MoveLeft;
                         c.MoveRight += Control_MoveRight;
+                        c.MoveHome += Control_MoveHome;
+                        c.MoveEnd += Control_MoveEnd;
                         c.MovePageDown += Control_MovePageDown;
                         c.MovePageUp += Control_MovePageUp;
                         c.ByteDeleted += Control_ByteDeleted;

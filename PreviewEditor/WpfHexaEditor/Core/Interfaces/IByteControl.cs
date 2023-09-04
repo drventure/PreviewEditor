@@ -41,6 +41,8 @@ namespace WpfHexaEditor.Core.Interfaces
         event EventHandler<ByteEventArgs> MoveLeft;
         event EventHandler<ByteEventArgs> MoveUp;
         event EventHandler<ByteEventArgs> MoveDown;
+        event EventHandler<ByteEventArgs> MoveHome;
+        event EventHandler<ByteEventArgs> MoveEnd;
         event EventHandler<ByteEventArgs> MovePageDown;
         event EventHandler<ByteEventArgs> MovePageUp;
         event EventHandler ByteDeleted;

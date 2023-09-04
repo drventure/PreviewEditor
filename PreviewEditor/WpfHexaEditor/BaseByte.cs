@@ -48,6 +48,8 @@ namespace WpfHexaEditor
         public event EventHandler<ByteEventArgs> MoveLeft;
         public event EventHandler<ByteEventArgs> MoveUp;
         public event EventHandler<ByteEventArgs> MoveDown;
+        public event EventHandler<ByteEventArgs> MoveHome;
+        public event EventHandler<ByteEventArgs> MoveEnd;
         public event EventHandler<ByteEventArgs> MovePageDown;
         public event EventHandler<ByteEventArgs> MovePageUp;
         public event EventHandler ByteDeleted;
@@ -485,6 +487,20 @@ namespace WpfHexaEditor
             {
                 e.Handled = true;
                 MoveRight?.Invoke(this, new ByteEventArgs(BytePositionInStream));
+
+                return true;
+            }
+            if (KeyValidator.IsHomeKey(e.Key))
+            {
+                e.Handled = true;
+                MoveHome?.Invoke(this, new ByteEventArgs(BytePositionInStream));
+
+                return true;
+            }
+            if (KeyValidator.IsEndKey(e.Key))
+            {
+                e.Handled = true;
+                MoveEnd?.Invoke(this, new ByteEventArgs(BytePositionInStream));
 
                 return true;
             }
