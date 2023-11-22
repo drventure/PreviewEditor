@@ -95,7 +95,7 @@ namespace PreviewEditor
 
                 var internalDlls = new string[]
                 {
-                    "ICSharpCode.AvalonEdit",
+                    //"ICSharpCode.AvalonEdit",
                     "Newtonsoft.Json"
                 };
 

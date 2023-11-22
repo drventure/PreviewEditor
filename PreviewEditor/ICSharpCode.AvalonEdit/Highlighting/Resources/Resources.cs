@@ -22,7 +22,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 {
 	static class Resources
 	{
-		static readonly string Prefix = typeof(Resources).FullName + ".";
+		static readonly string Prefix = "PreviewEditor." + typeof(Resources).FullName + ".";
 
 		public static Stream OpenStream(string name)
 		{

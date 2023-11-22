@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:editing="clr-namespace:ICSharpCode.AvalonEdit.Editing">
+	<ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PreviewEditor;component/ICSharpCode.AvalonEdit/TextEditor.xaml" />
+        <ResourceDictionary Source="/PreviewEditor;component/ICSharpCode.AvalonEdit/Search/DropDownButton.xaml" />
+        <ResourceDictionary Source="/PreviewEditor;component/ICSharpCode.AvalonEdit/Search/SearchPanel.xaml" />
+        <ResourceDictionary Source="/PreviewEditor;component/ICSharpCode.AvalonEdit/CodeCompletion/CompletionList.xaml" />
+        <ResourceDictionary Source="/PreviewEditor;component/ICSharpCode.AvalonEdit/CodeCompletion/InsightWindow.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
+	<Style TargetType="{x:Type editing:LineNumberMargin}">
+        <Setter Property="Control.Cursor" Value="/PreviewEditor;component/themes/RightArrow.cur"/>
+	</Style>
+</ResourceDictionary>

@@ -24,8 +24,9 @@
 		<PackageId />
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<StartupObject>PreviewEditor.Program</StartupObject>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<TargetFramework>net481</TargetFramework>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<SignAssembly>False</SignAssembly>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
@@ -50,15 +51,17 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net481|AnyCPU'">
 		<DebugType>embedded</DebugType>
-		<Optimize>True</Optimize>
+		<Optimize>False</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <Deterministic>True</Deterministic>
+		<Deterministic>True</Deterministic>
+		<IsPublishable>True</IsPublishable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <Deterministic>True</Deterministic>
+		<Deterministic>True</Deterministic>
+		<IsPublishable>True</IsPublishable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -69,8 +72,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="ICSharpCode.AvalonEdit\Search\next.png" />
+		<None Remove="ICSharpCode.AvalonEdit\Search\prev.png" />
+		<None Remove="themes\RightArrow.cur" />
+		<None Include="ICSharpCode.AvalonEdit\AvalonEditNuGetPackageIcon.png">
+			<Pack>True</Pack>
+			<PackagePath>images</PackagePath>
+		</None>
+		<Resource Include="ICSharpCode.AvalonEdit\Search\next.png" />
+		<Resource Include="ICSharpCode.AvalonEdit\Search\prev.png" />
+		<Resource Include="themes\RightArrow.cur" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
-		<None Remove="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
 		<None Remove="AssemblyResources\Newtonsoft.Json.dll" />
 		<None Remove="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
 		<None Remove="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
@@ -128,6 +143,12 @@
 		<None Remove="WpfHexaEditor\Resources\Icon\Sans titre.png" />
 		<None Remove="WpfHexaEditor\Resources\Icon\Settings-Icon.ico" />
 		<None Remove="WpfHexaEditor\Resources\Icon\Undo-Icon.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="ICSharpCode.AvalonEdit\Highlighting\Resources\*" />
+		<EmbeddedResource Include="ICSharpCode.AvalonEdit\Highlighting\Resources\*" />
+		<EmbeddedResource Remove="ICSharpCode.AvalonEdit\Highlighting\Resources\Resources.cs" />
+		<Resource Include="ICSharpCode.AvalonEdit\Highlighting\Resources\Resources.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -213,23 +234,22 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="WpfHexaEditor\Resources\EBCDIC-NoSpecialChar.tbl">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="WpfHexaEditor\Resources\EBCDIC.tbl">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
-		<EmbeddedResource Include="AssemblyResources\ICSharpCode.AvalonEdit.dll" />
 		<EmbeddedResource Include="AssemblyResources\Newtonsoft.Json.dll" />
 		<EmbeddedResource Include="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="AssemblyResources\pt-BR\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="AssemblyResources\ru-RU\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="AssemblyResources\zh-CN\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\palette-load.png">
-		  <CustomToolNamespace></CustomToolNamespace>
+			<CustomToolNamespace></CustomToolNamespace>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ColorEditorManagerToolboxBitmap.bmp" />
 		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\res\ColorEditorToolboxBitmap.bmp" />
@@ -246,14 +266,14 @@
 
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
-		  <DependentUpon>Resources.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
 		<Compile Update="WpfHexaEditor\Properties\Resources.Designer.cs">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
-		  <DependentUpon>Resources.resx</DependentUpon>
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
@@ -290,13 +310,13 @@
 
 	<ItemGroup>
 		<EmbeddedResource Update="Properties\Resources.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 		<EmbeddedResource Update="WpfHexaEditor\Properties\Resources.resx">
-		  <CustomToolNamespace>WpfHexaEditor.Properties</CustomToolNamespace>
-		  <Generator>PublicResXFileCodeGenerator</Generator>
-		  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+			<CustomToolNamespace>WpfHexaEditor.Properties</CustomToolNamespace>
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 	</ItemGroup>
 
@@ -311,18 +331,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\cellbackground.png">
-	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.cur">
-	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.png">
-	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\palette-save.png">
-	    <CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
-	  </EmbeddedResource>
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\cellbackground.png">
+			<CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.cur">
+			<CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\eyedropper.png">
+			<CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Cyotek.Windows.Forms.ColorPicker\Resources\palette-save.png">
+			<CustomToolNamespace>Cyotek.Windows.Forms.Resources</CustomToolNamespace>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -331,26 +351,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Resource Include="WpfHexaEditor\Resources\Icon\0x-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Add-Bookmark-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Clear-Bookmark-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Copy-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Delete-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Find-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Logo-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Logo-Icon.png" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Paste-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Remove-Bookmark-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Sans titre.png" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Settings-Icon.ico" />
-	  <Resource Include="WpfHexaEditor\Resources\Icon\Undo-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\0x-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Add-Bookmark-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Clear-Bookmark-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Copy-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Delete-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Find-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Logo-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Logo-Icon.png" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Paste-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Remove-Bookmark-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Sans titre.png" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Settings-Icon.ico" />
+		<Resource Include="WpfHexaEditor\Resources\Icon\Undo-Icon.ico" />
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="taskkill /F /FI &quot;IMAGENAME eq prevhost.exe&quot;&#xD;&#xA;EXIT /B 0" />
+		<Exec Command="taskkill /F /FI &quot;IMAGENAME eq prevhost.exe&quot;&#xD;&#xA;EXIT /B 0" />
 	</Target>
 </Project>
