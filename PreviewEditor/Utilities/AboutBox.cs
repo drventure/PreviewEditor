@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace PreviewEditor.Utilities
 {
-    public partial class AboutBox : Form
+    internal partial class AboutBox : Form
     {
         public AboutBox()
         {

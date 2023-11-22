@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace PreviewEditor.Editors.TextControls
 {
-    public class FindReplacePanel : UserControl
+    internal class FindReplacePanel : UserControl
     {
         /// <summary> 
         /// Required designer variable.

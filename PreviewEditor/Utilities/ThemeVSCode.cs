@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PreviewEditor
 {
-    public class ThemeVSCode
+    internal class ThemeVSCode
     {
         public string name { get; set; }
         public string type { get; set; }
@@ -16,7 +16,7 @@ namespace PreviewEditor
     }
 
 
-    public class VSCodeTokenColor
+    internal class VSCodeTokenColor
     {
         public string name { get; set; }
         [JsonConverter(typeof(SingleOrArrayConverter<string>))]
@@ -25,13 +25,13 @@ namespace PreviewEditor
     }
 
 
-    public class VSCodeTokenColorSettings
+    internal class VSCodeTokenColorSettings
     {
         public string foreground { get; set; }
     }
 
 
-    public class VSCodeColors
+    internal class VSCodeColors
     {
         [JsonProperty("editor.foreground")]
         public string foreground { get; set; }
