@@ -1,4 +1,6 @@
-﻿Looks like a decent file viewer component, also WPF
+﻿Still getting a BLUE color for the xmlns element in XSHD files. Not sure where the blue is coming from.
+
+Looks like a decent file viewer component, also WPF
 https://github.com/woanware/LogViewer2
 
 In SiteEditor, the editor is loaded with the file when the PARENTCHANGED event happens
@@ -27,6 +29,8 @@ DONE
 =====================
 Count all occurrences and show which you're at as you type (like VSCODE). For Find
 Move AvalonEdit code into main project to reduce another dependent DLL
+Relocated all Syntaxdef and color files.
+	Compiled as resources as well and dropped as content for users to customize.
 
 
 
