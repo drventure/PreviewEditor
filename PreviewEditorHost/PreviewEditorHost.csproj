@@ -90,4 +90,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>REM Remove these for testing. They should be referenced from the embedded dll images.
+del $(TargetDir)FontAwesome.Sharp.dll
+del $(TargetDir)Newtonsoft.Json.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>

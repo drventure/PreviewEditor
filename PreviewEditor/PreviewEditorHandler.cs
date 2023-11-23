@@ -33,17 +33,6 @@ namespace PreviewEditor
     [ComVisible(true)]
     public sealed class PreviewEditorHandler : FileBasedPreviewHandler
     {
-        /// <summary>
-        /// This static constructor allows me to override
-        /// assembly resolution and load assemblies from embedded resources
-        /// </summary>
-        static PreviewEditorHandler()
-        {
-            //System.Windows.Forms.MessageBox.Show($"Static Constructor");
-            //SetupAssemblyInterceptor();
-        }
-
-
         private PreviewEditorControl _control;
         protected override IPreviewHandlerControl CreatePreviewHandlerControl()
         {
@@ -77,12 +66,16 @@ namespace PreviewEditor
         }
 
 
+        private static bool _intercepted = false;
         /// <summary>
         /// Intercept loading of assemblies to load certain versions and
         /// to load from resources instead of the file system
         /// </summary>
-        private static void SetupAssemblyInterceptor()
+        internal static void SetupAssemblyInterceptor()
         {
+            if (_intercepted) return;
+            
+            _intercepted = true;
             var curdir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             //we have to manually help resolve certain assembly references because this is a plugin
@@ -90,19 +83,26 @@ namespace PreviewEditor
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 var name = args.Name;
+                MessageBox.Show($"Loading {args.Name}");
 
                 //App.Write($"Resolving {name}");
 
                 var internalDlls = new string[]
                 {
                     //"ICSharpCode.AvalonEdit",
+                    "FontAwesome.Sharp",
                     "Newtonsoft.Json"
+                };
+                var skipFiles = new string[]
+                {
+                    "FontAwesome.Sharp.resources"
                 };
 
                 //System.Windows.Forms.MessageBox.Show($"Loading {name}");
 
-                if (internalDlls.Any(s => name.Contains(s)))
+                if (internalDlls.Any(s => name.Contains(s)) && !skipFiles.Any(f => f == args.Name))
                 {
+                    MessageBox.Show($"Using embedded {args.Name}");
                     //App.Write("   loaded from resource...");
                     return LoadResourceAssembly(args.Name);
                     //name = name.Replace("4.0.0.0", "5.0.0.0");

@@ -72,6 +72,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="AssemblyResources\FontAwesome.Sharp.dll" />
 		<None Remove="ICSharpCode.AvalonEdit\Search\next.png" />
 		<None Remove="ICSharpCode.AvalonEdit\Search\prev.png" />
 		<None Remove="themes\RightArrow.cur" />
@@ -242,6 +243,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="AssemblyResources\FontAwesome.Sharp.dll" />
 		<EmbeddedResource Include="AssemblyResources\fr-CA\WPFHexaEditor.resources.dll" />
 		<EmbeddedResource Include="AssemblyResources\Newtonsoft.Json.dll" />
 		<EmbeddedResource Include="AssemblyResources\pl-PL\WPFHexaEditor.resources.dll" />

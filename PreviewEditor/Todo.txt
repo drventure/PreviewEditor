@@ -26,6 +26,7 @@ Build in support to override the syntax rules with new ones. I updated the Dark-
 DONE
 =====================
 Count all occurrences and show which you're at as you type (like VSCODE). For Find
+Move AvalonEdit code into main project to reduce another dependent DLL
 
 
 

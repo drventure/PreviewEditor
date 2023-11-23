@@ -41,6 +41,8 @@ namespace PreviewEditor
 
         public PreviewEditorControl()
         {
+            PreviewEditorHandler.SetupAssemblyInterceptor();
+
             InitializeComponent();
             this.TopLevel = false;
 
