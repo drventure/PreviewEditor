@@ -16,7 +16,7 @@ namespace PreviewEditor
 	internal static class CustomHighlighting
 	{
 		//TODO Some way to may this hardwired string not hardwired
-		static readonly string Prefix = "PreviewEditor.Editors.TextControls.SyntaxDefinitions.AsResources.";
+		static readonly string Prefix = "PreviewEditor.SyntaxDefinitions.";
 
 		public static Stream OpenStream(string name)
 		{

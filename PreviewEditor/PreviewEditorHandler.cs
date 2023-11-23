@@ -83,13 +83,11 @@ namespace PreviewEditor
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 var name = args.Name;
-                MessageBox.Show($"Loading {args.Name}");
 
                 //App.Write($"Resolving {name}");
 
                 var internalDlls = new string[]
                 {
-                    //"ICSharpCode.AvalonEdit",
                     "FontAwesome.Sharp",
                     "Newtonsoft.Json"
                 };
@@ -102,7 +100,6 @@ namespace PreviewEditor
 
                 if (internalDlls.Any(s => name.Contains(s)) && !skipFiles.Any(f => f == args.Name))
                 {
-                    MessageBox.Show($"Using embedded {args.Name}");
                     //App.Write("   loaded from resource...");
                     return LoadResourceAssembly(args.Name);
                     //name = name.Replace("4.0.0.0", "5.0.0.0");

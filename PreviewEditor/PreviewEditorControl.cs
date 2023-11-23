@@ -41,6 +41,8 @@ namespace PreviewEditor
 
         public PreviewEditorControl()
         {
+            //register to intercept assembly load calls so that we can redirect them to 
+            //our embedded DLLs
             PreviewEditorHandler.SetupAssemblyInterceptor();
 
             InitializeComponent();
