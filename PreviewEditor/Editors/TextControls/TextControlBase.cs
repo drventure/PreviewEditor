@@ -693,6 +693,7 @@ namespace PreviewEditor.Editors.TextControls
                 SetElementColor("ParameterModifiers", c.Visibility);
                 SetElementColor("MethodCall", c.Functions);
                 SetElementColor("NumberLiteral", c.Integers);
+                SetElementColor("TextLinks", c.Links);
 
                 // Set the syntaxHighlighting
                 //_editor.SyntaxHighlighting = highlighting;
@@ -718,6 +719,12 @@ namespace PreviewEditor.Editors.TextControls
             {
                 hlt.Foreground = new SimpleHighlightingBrush(color);
                 hlt.FontWeight = FontWeights.UltraLight;
+            }
+            else if (element.Equals("TextLinks", StringComparison.InvariantCultureIgnoreCase))
+            {
+                //This appears to be the only color that's not technically part of a theme
+                //so we have to wire it in
+                _editor.TextArea.TextView.LinkTextForegroundBrush = new SolidColorBrush(color);
             }
         }
 

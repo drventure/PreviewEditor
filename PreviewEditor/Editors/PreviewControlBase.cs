@@ -1,11 +1,16 @@
-﻿using PreviewEditor.Utilities;
+﻿using FontAwesome.Sharp;
+using ICSharpCode.AvalonEdit.Highlighting;
+using PreviewEditor.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using System.Windows.Media;
 
 
 namespace PreviewEditor.Editors
@@ -111,6 +116,13 @@ namespace PreviewEditor.Editors
                         {
                             this.ChooseTheme();
                         }),
+                    new ToolStripMenuItem("Colors", null, new ToolStripItem[]
+                        {
+                            new ToolStripMenuItem("Link Text", MakeColorIcon(PreviewEditor.Settings.TextEditorOptions.Colors.Links), (sender, e) =>
+                                {
+                                    this.ChooseColor(nameof(PreviewEditor.Settings.TextEditorOptions.Colors.Links));
+                                }),
+                        }),
                     new ToolStripSeparator(),
                     new ToolStripMenuItem("About...", null, (sender, e) =>
                         {
@@ -130,6 +142,28 @@ namespace PreviewEditor.Editors
             });
 
             return menu;
+        }
+
+
+        private Image MakeColorIcon(System.Windows.Media.Color color)
+        {
+            Bitmap result = new Bitmap(16, 16);
+            using (Graphics g = Graphics.FromImage((Image)result))
+            {
+                g.FillRectangle(new System.Drawing.SolidBrush(color.ToDrawColor()), new Rectangle(0, 0, 16, 16));
+            }
+            return result;
+        }
+
+        private void ChooseColor(string propName)
+        {
+            var f = new Cyotek.Windows.Forms.ColorPickerDialog();
+            f.Color = PreviewEditor.Settings.TextEditorOptions.Colors.GetProperty<System.Windows.Media.Color>(System.Windows.Media.Colors.Black, propName).ToDrawColor();
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                var c = System.Windows.Media.Color.FromRgb(f.Color.R, f.Color.G, f.Color.B);    
+                PreviewEditor.Settings.TextEditorOptions.Colors.SetProperty(c, propName);
+            }
         }
     }
 }

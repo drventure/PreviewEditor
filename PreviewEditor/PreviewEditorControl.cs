@@ -366,7 +366,7 @@ namespace PreviewEditor
         {
             get
             {
-                if (this.IsDarkModeActive) return Color.FromArgb(0x1a, 0x1a, 0x1a);
+                if (this.IsDarkModeActive) return Color.FromArgb(0x10, 0x10, 0x10);
                 return Color.LightGray;
             }
         }

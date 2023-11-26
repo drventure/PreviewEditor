@@ -111,9 +111,11 @@ namespace PreviewEditor
                 [OptionDescription("Visibility")]
                 public Color Visibility { get { return this.GetProperty<Color>(System.Windows.Media.Colors.DarkMagenta); } set { this.SetProperty(value); } }
                 [OptionDescription("Functions")]
-                public Color Functions { get { return this.GetProperty<Color>(System.Windows.Media.Colors.CornflowerBlue); } set { this.SetProperty(value); } }
+                public Color Functions { get { return this.GetProperty<Color>(System.Windows.Media.Colors.Gold); } set { this.SetProperty(value); } }
                 [OptionDescription("Integers")]
                 public Color Integers { get { return this.GetProperty<Color>(System.Windows.Media.Colors.Goldenrod); } set { this.SetProperty(value); } }
+                [OptionDescription("Links")]
+                public Color Links { get { return this.GetProperty<Color>(System.Windows.Media.Colors.CornflowerBlue); } set { this.SetProperty(value); } }
             }
         }
 
