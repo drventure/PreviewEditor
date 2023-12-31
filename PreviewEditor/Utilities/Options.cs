@@ -24,6 +24,10 @@ namespace PreviewEditor
         public Options() : base("PreviewEditor", "PreviewEditor.config") { }
 
 
+        [OptionDescription("Enable or disable logging for troubleshooting")]
+        public bool Logging { get { return this.GetProperty<bool>(true); } set { this.SetProperty(value); } }
+
+
         /// <summary>
         /// 
         /// </summary>

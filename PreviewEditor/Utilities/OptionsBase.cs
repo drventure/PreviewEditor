@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
-
 namespace SimpleJSONOptions
 {
     internal class NestedOptionsBase
@@ -28,6 +27,8 @@ namespace SimpleJSONOptions
         protected Dictionary<string, object> _props = new Dictionary<string, object>();
         public void SetProperty(object value, [CallerMemberName] string name = null)
         {
+            //must be sure to load properties before saving
+            if (!this.IsLoaded) this.Load();
             _props[name] = value;
             this.Save();
         }
@@ -52,7 +53,20 @@ namespace SimpleJSONOptions
             }
             set
             {
-                throw new NotSupportedException("Setting the Loading property on a NestedOptions object is not allowed");
+                throw new NotSupportedException("Setting the IsLoading property on a NestedOptions object is not allowed");
+            }
+        }
+
+
+        protected virtual bool IsLoaded
+        {
+            get
+            {
+                return _parent.IsLoaded;
+            }
+            set
+            {
+                throw new NotSupportedException("Setting the IsLoaded property on a NestedOptions object is not allowed");
             }
         }
 
@@ -110,6 +124,20 @@ namespace SimpleJSONOptions
         }
 
 
+        private bool _isLoaded = false;
+        protected override bool IsLoaded
+        {
+            get
+            {
+                return _isLoaded;
+            }
+            set
+            {
+                _isLoaded = value;
+            }
+        }
+
+
         internal delegate void LoadHandlerDelegate(string filename, OptionsBase options);
 
         private LoadHandlerDelegate _loadHandler;
@@ -151,6 +179,7 @@ namespace SimpleJSONOptions
             finally
             {
                 this.IsLoading = false;
+                this.IsLoaded = true;
             }
         }
 
