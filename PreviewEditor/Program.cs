@@ -51,6 +51,12 @@ namespace PreviewEditor
                         Console.WriteLine("Registered PreviewEditor successfully");
                         Environment.Exit(0);
                     }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Console.WriteLine("Unable to register PreviewEditor. You must run this command in administrator's mode.");
+                        Console.WriteLine("");
+                        Environment.Exit(1);
+                    }
                     catch (Exception ex)
                     {
                         Console.WriteLine("Unable to register PreviewEditor");
@@ -66,6 +72,12 @@ namespace PreviewEditor
                         PreviewEditor.Unregister(typeof(PreviewEditorHandler));
                         Console.WriteLine("Unregistered PreviewEditor successfully");
                         Environment.Exit(0);
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Console.WriteLine("Unable to unregister PreviewEditor. You must run this command in administrator's mode.");
+                        Console.WriteLine("");
+                        Environment.Exit(1);
                     }
                     catch (Exception ex)
                     {

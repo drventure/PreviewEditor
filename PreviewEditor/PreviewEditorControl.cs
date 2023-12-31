@@ -48,18 +48,24 @@ namespace PreviewEditor
             //set logging if it hasn't already been set
             Log.Enabled = PreviewEditor.Settings.Logging;
 
+            Log.Debug("PreviewEditorControl ctor");
             InitializeComponent();
             this.TopLevel = false;
+            Log.Debug("Initialized Components");
 
             pnlEditor = new Panel();
             pnlEditor.Dock = DockStyle.Fill;
+            Log.Debug("Setup editor panel");
 
             this.SetBackgroundColor(this.DefaultBackColor);
             this.SetTextColor(this.DefaultForeColor);
+            Log.Debug("Set Default colors");
 
             InitializeLoadingScreen();
+            Log.Debug("Setup Loading screen");
 
             this.Controls.Add(pnlEditor);
+            Log.Debug("PreviewEditorControl ctor finished");
         }
 
 
@@ -69,6 +75,7 @@ namespace PreviewEditor
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            Log.Debug("PreviewEditorControl Dispose");
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -92,8 +99,11 @@ namespace PreviewEditor
 
         public override void Unload()
         {
+            Log.Debug("PreviewEditorControl Unload");
             Shutdown();
+            Log.Debug("PreviewEditorControl Unload Shutdown");
             base.Unload();
+            Log.Debug("PreviewEditorControl Unload Finished");
         }
 
 
@@ -133,6 +143,7 @@ namespace PreviewEditor
         {
             try
             {
+                Log.Debug("PreviewEditorControl.DoPreview");
                 string filename = null;
                 _file = null;
 
@@ -140,6 +151,7 @@ namespace PreviewEditor
                 {
                     if (File.Exists(stringVal))
                     {
+                        Log.Debug($"PreviewEditorControl.DoPreview file '{stringVal}' will be loaded");
                         filename = stringVal;
                     }
                 }
@@ -152,19 +164,25 @@ namespace PreviewEditor
                 }
 
                 // at this point, we have the filename and we know the file exists
+                Log.Debug($"PreviewEditorControl.DoPreview initialize EditingFile");
                 _file = new EditingFile(filename);
 
                 this.InvokeOnControlThread(() =>
                 {
                     try
                     {
+                        Log.Debug($"PreviewEditorControl.DoPreview getting editor for file");
                         var editor = EditorFactory.GetEditor(_file);
 
                         //set the editor into the parent window
                         //NOTE the datasource argument is not used
+                        Log.Debug($"PreviewEditorControl.DoPreview siting editor");
                         SiteEditor(string.Empty, editor);
 
+                        Log.Debug($"PreviewEditorControl.DoPreview hiding status");
                         HideStatus();
+
+                        Log.Debug($"PreviewEditorControl.DoPreview done");
                     }
                     catch (Exception ex)
                     {
@@ -187,6 +205,8 @@ namespace PreviewEditor
 
         private void SiteEditor<T>(T dataSource, IPreviewEditorControl editor)
         {
+            Log.Debug($"PreviewEditorControl.SiteEditor");
+
             var editorControl = (Control)editor;
             editorControl.Dock = DockStyle.Fill;
             editorControl.Visible = true;
@@ -195,10 +215,15 @@ namespace PreviewEditor
             editor.SwitchEditorRequested += Editor_SwitchEditorRequested;
 
             //call the base class to finish out
+            Log.Debug($"PreviewEditorControl.SiteEditor calling DoPreview");
             base.DoPreview(dataSource);
 
             this.pnlEditor.Controls.Clear();
+
+            Log.Debug($"PreviewEditorControl.SiteEditor adding editor to panel");
             this.pnlEditor.Controls.Add(editorControl);
+
+            Log.Debug($"PreviewEditorControl.SiteEditor done");
         }
 
 
@@ -275,6 +300,7 @@ namespace PreviewEditor
         /// </summary>
         private void InitializeLoadingScreen()
         {
+            Log.Debug($"PreviewEditorControl.InitializeLoadingScreen");
             this.InvokeOnControlThread(() =>
             {
 
@@ -290,12 +316,14 @@ namespace PreviewEditor
                 this.pnlEditor.Controls.Add(loading);
                 this.pnlEditor.Refresh();
             });
+            Log.Debug($"PreviewEditorControl.InitializeLoadingScreen done");
         }
 
 
         private Timer _statusMsgTimer;
         private void ShowStatus(string message)
         {
+            Log.Debug($"PreviewEditorControl.ShowStatus");
             var label = this.pnlEditor.Controls[0] as Label;
             if (label != null)
             {
@@ -312,11 +340,13 @@ namespace PreviewEditor
                     _statusMsgTimer.Start();
                 });
             }
+            Log.Debug($"PreviewEditorControl.ShowStatus done");
         }
 
 
         private void HideStatus()
         {
+            Log.Debug($"PreviewEditorControl.HideStatus");
             var label = this.pnlEditor.Controls[0] as Label;
             if (label != null)
             {
@@ -335,6 +365,7 @@ namespace PreviewEditor
                     }
                 });
             }
+            Log.Debug($"PreviewEditorControl.HideStatus done");
         }
 
 

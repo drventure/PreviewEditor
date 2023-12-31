@@ -44,7 +44,9 @@ namespace PreviewEditor
             try
             {
                 Log.Enabled = PreviewEditor.Settings.Logging;
+                Log.Debug("Creating PreviewHandler");
                 _control = new PreviewEditorControl();
+                Log.Debug("Created PreviewHandler");
             }
             catch (Exception ex)
             {
@@ -60,6 +62,7 @@ namespace PreviewEditor
             try
             {
                 _control.DoPreview(this.FilePath);
+                Log.Debug($"Finished DoPreview");
             }
             catch (Exception ex )
             {
