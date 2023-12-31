@@ -172,8 +172,11 @@ namespace SimpleJSONOptions
         {
             try
             {
-                this.IsLoading = true;
-                this.LoadHandler(this.SettingsFile, this);
+                if (!this._isLoading)
+                {
+                    this.IsLoading = true;
+                    this.LoadHandler(this.SettingsFile, this);
+                }
             }
             catch { }
             finally

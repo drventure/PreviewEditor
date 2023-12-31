@@ -346,8 +346,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FontAwesome.Sharp" Version="6.1.1" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="FontAwesome.Sharp" Version="6.3.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
