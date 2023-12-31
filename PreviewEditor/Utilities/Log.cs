@@ -10,33 +10,33 @@ namespace PreviewEditor
     internal static class Log
     {
         public static bool Enabled = false;
-        public static string Filename = null;
+        public static string Filename = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "PreviewEditor.log");
 
-        private static string TAG = "[PREVIEWEDITOR]";
-        private static string _format = "{0} {1} {3} {4}\r\n";
+        private static string TAG = "PREVIEWEDITOR";
+        private static string _format = "{0} [{1}] {2} - {3}\r\n";
 
         private static string date
         {
             get
             {
-                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ff");
             }
         }
 
-        private static string Format(string message, [CallerMemberName] string type = "")
+        private static string Format(string message, string caller)
         {
-            return string.Format(_format, date, type.ToUpper(), TAG, message);
+            return string.Format(_format, date, TAG, caller, message);
         }
 
-        private static string Format(Exception ex, [CallerMemberName] string type = "")
+        private static string Format(Exception ex, string caller)
         {
-            return string.Format(_format, date, type.ToUpper(), TAG, "Exception: " + ex.ToString());
+            return string.Format(_format, date, TAG, caller, "Exception: " + ex.ToString());
         }
 
 
-        private static string Format(Exception ex, string message, [CallerMemberName] string type = "")
+        private static string Format(Exception ex, string message, string caller)
         {
-            return string.Format(_format, date, type.ToUpper(), TAG, message + " - Exception: " + ex.ToString());
+            return string.Format(_format, date, TAG, caller, message + " - Exception: " + ex.ToString());
         }
 
 
@@ -63,31 +63,31 @@ namespace PreviewEditor
             WriteFile(message);
         }
 
-        public static void Debug(string message)
+        public static void Debug(string message, [CallerMemberName] string caller = "")
         {
             if (!Enabled) return;
-            WriteOut(Format(message));
+            WriteOut(Format(message, caller));
         }
 
 
-        public static void Error(string message)
+        public static void Error(string message, [CallerMemberName] string caller = "")
         {
             if (!Enabled) return;
-            WriteOut(Format(message));
+            WriteOut(Format(message, caller));
         }
 
 
-        public static void Error(Exception ex)
+        public static void Error(Exception ex, [CallerMemberName] string caller = "")
         {
             if (!Enabled) return;
-            WriteOut(Format(ex));
+            WriteOut(Format(ex, caller));
         }
 
 
-        public static void Error(Exception ex, string message)
+        public static void Error(Exception ex, string message, [CallerMemberName] string caller = "")
         {
             if (!Enabled) return;
-            WriteOut(Format(ex, message));
+            WriteOut(Format(ex, message, caller));
         }
     }
 }

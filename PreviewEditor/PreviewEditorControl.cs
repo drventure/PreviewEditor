@@ -41,6 +41,9 @@ namespace PreviewEditor
 
         public PreviewEditorControl()
         {
+            //set logging if it hasn't already been set
+            Log.Enabled = PreviewEditor.Settings.Logging;
+
             //register to intercept assembly load calls so that we can redirect them to 
             //our embedded DLLs
             PreviewEditorHandler.SetupAssemblyInterceptor();

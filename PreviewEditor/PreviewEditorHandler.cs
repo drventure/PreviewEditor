@@ -43,6 +43,7 @@ namespace PreviewEditor
             _control = null;
             try
             {
+                Log.Enabled = PreviewEditor.Settings.Logging;
                 _control = new PreviewEditorControl();
             }
             catch (Exception ex)
@@ -55,13 +56,14 @@ namespace PreviewEditor
 
         public override void DoPreview()
         {
+            Log.Debug($"Starting Preview of '{this.FilePath}'");
             try
             {
                 _control.DoPreview(this.FilePath);
             }
             catch (Exception ex )
             {
-                Log.Error(ex, $"File to preview={this.FilePath}");
+                Log.Error(ex, $"Previewing '{this.FilePath}'");
             }
         }
 

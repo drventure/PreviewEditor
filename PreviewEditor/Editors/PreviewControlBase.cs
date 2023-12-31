@@ -124,6 +124,29 @@ namespace PreviewEditor.Editors
                                 }),
                         }),
                     new ToolStripSeparator(),
+                    new ToolStripMenuItem("Logging", null, (sender, e) =>
+                        {
+                            Log.Enabled = !Log.Enabled;
+                            PreviewEditor.Settings.Logging = Log.Enabled;
+                                    
+                            if (Log.Enabled)
+                            {
+                                MessageBox.Show("PreviewEditor Logging is now enabled\r\n\r\n" +
+                                    "With logging on, a PreviewEditor.log file will be written to\r\n" +
+                                    "the current user's Desktop.\r\n\r\n" +
+                                    "It is recommended to only turn on logging when asked to by\r\n" +
+                                    "the PreviewEditor development team."
+                                    , "PreviewEditor", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                            Log.Debug("PreviewEditor Logging Started");
+                        })
+                        {
+                            Checked = Log.Enabled,
+                            MergeAction = MergeAction.Insert,
+                            MergeIndex = 1,
+                        },                    
+                    new ToolStripSeparator(),
                     new ToolStripMenuItem("About...", null, (sender, e) =>
                         {
                             this.About();
