@@ -77,6 +77,7 @@
 		<None Remove="ICSharpCode.AvalonEdit\Search\prev.png" />
 		<None Remove="SyntaxDefinitions\ASPX.xshd" />
 		<None Remove="SyntaxDefinitions\AutoHotkey-Mode.xshd" />
+		<None Remove="SyntaxDefinitions\Batch-Mode.xshd" />
 		<None Remove="SyntaxDefinitions\Boo.xshd" />
 		<None Remove="SyntaxDefinitions\Coco-Mode.xshd" />
 		<None Remove="SyntaxDefinitions\CPP-Mode.xshd" />
@@ -239,6 +240,9 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="SyntaxDefinitions\PHP-Mode.xshd">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="SyntaxDefinitions\Batch-Mode.xshd">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="SyntaxDefinitions\PowerShell.xshd">
