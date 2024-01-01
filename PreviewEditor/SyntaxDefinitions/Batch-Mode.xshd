@@ -13,7 +13,7 @@
 
 	<RuleSet ignoreCase="true">
 		<Span color="Comment">
-			<Begin>rem</Begin>
+			<Begin>\bREM\b</Begin>
 		</Span>
 
 		<Span color="Comment">
@@ -52,11 +52,58 @@
 			<Word>begin</Word>
 			<Word>else</Word>
 			<Word>if</Word>
+			<Word>ASSOC</Word>
+			<Word>ATTRIB</Word>
+			<Word>CD</Word>
+			<Word>CHKDSK</Word>
+			<Word>CHOICE</Word>
+			<Word>CLS</Word>
+			<Word>CMD</Word>
+			<Word>COMP</Word>
+			<Word>CONVERT</Word>
+			<Word>COPY</Word>
+			<Word>DATE</Word>
+			<Word>DEL</Word>
+			<Word>DIR</Word>
+			<Word>DISKPART</Word>
+			<Word>DRIVERQUERY</Word>
+			<Word>ECHO</Word>
+			<Word>EXPAND</Word>
+			<Word>FC</Word>
+			<Word>FIND</Word>
+			<Word>FORMAT</Word>
+			<Word>HELP</Word>
+			<Word>IPCONFIG</Word>
+			<Word>LABEL</Word>
+			<Word>MD</Word>
+			<Word>MORE</Word>
+			<Word>MOVE</Word>
+			<Word>NET</Word>
+			<Word>PATH</Word>
+			<Word>PAUSE</Word>
+			<Word>PING</Word>
+			<Word>PROMPT</Word>
+			<Word>RD</Word>
+			<Word>REN</Word>
+			<Word>SET</Word>
+			<Word>SHUTDOWN</Word>
+			<Word>SORT</Word>
+			<Word>START</Word>
+			<Word>SUBST</Word>
+			<Word>SYSTEMINFO</Word>
+			<Word>TASKKILL</Word>
+			<Word>TASKLIST</Word>
+			<Word>TIME</Word>
+			<Word>TITLE</Word>
+			<Word>TREE</Word>
+			<Word>TYPE</Word>
+			<Word>VER</Word>
+			<Word>VOL</Word>
+			<Word>XCOPY</Word>
 		</Keywords>
 
 		<Keywords color="GotoKeywords">
-			<Word>break</Word>
-			<Word>continue</Word>
+			<Word>goto</Word>
 			<Word>return</Word>
 			<Word>exit</Word>
 		</Keywords>
