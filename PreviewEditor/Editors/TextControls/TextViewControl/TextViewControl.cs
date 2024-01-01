@@ -56,7 +56,7 @@ namespace PreviewEditor.Editors.TextControls
             _vscroll.Dock = DockStyle.Right;
             this.Controls.Add(_vscroll);
 
-            //hook up the filewindow handler
+            //hook up the file window handler
             _window = new FileWindow(_file, _editor, _vscroll);
 
 

@@ -63,6 +63,7 @@ namespace PreviewEditor.Editors.TextControls
 
         private void editor_ParentChanged(object sender, EventArgs e)
         {
+            Log.Debug("Enter ParentChanged");
             if (this.Parent is null) return;
             if (LicenseManager.UsageMode != LicenseUsageMode.Runtime) return;
 
@@ -87,12 +88,17 @@ namespace PreviewEditor.Editors.TextControls
             CustomHighlighting.Load();
 
             //Apply syntax file based on extension of viewed file
-            _editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
+            Log.Debug($"Loading highlighter for '{_file.FileInfo.Extension}'");
+            var highlighter = HighlightingManager.Instance.GetDefinitionByExtension(_file.FileInfo.Extension);
+            Log.Debug($"Loaded highlighter '{highlighter?.Name}'");
+            if (highlighter != null) _editor.SyntaxHighlighting = highlighter;
+            
             //and apply theme given the syntax
             ApplyTheme();
 
             //SetDarkMode();
 
+            Log.Debug($"Setting folding strategy");
             SetFoldingStrategy();
 
             //once we've initialized, unhook the event
@@ -127,6 +133,8 @@ namespace PreviewEditor.Editors.TextControls
             //monitor this event and forward to the subclass
             //which will then call back to this base class if needed
             _editor.KeyDown += GeneralKeyDown;
+
+            Log.Debug("Exit ParentChanged");
         }
 
 

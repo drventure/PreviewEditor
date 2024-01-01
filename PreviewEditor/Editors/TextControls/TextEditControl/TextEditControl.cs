@@ -81,12 +81,16 @@ namespace PreviewEditor.Editors.TextControls
                 }
             }
 
+            //NOTE for the editor to be active, it looks like we HAVE to setup
+            //a folding manager, even if the file type has no folding strategy
+            //Otherwise, files like BAT files will display but won't be editable.
+            if (_foldingManager == null)
+            {
+                _foldingManager = FoldingManager.Install(_editor.TextArea);
+            }
+
             if (_foldingStrategy != null)
             {
-                if (_foldingManager == null)
-                {
-                    _foldingManager = FoldingManager.Install(_editor.TextArea);
-                }
                 _foldingStrategy?.UpdateFoldings(_foldingManager, _editor.Document);
 
                 //setup up a timer to refold periodically
@@ -100,11 +104,6 @@ namespace PreviewEditor.Editors.TextControls
                     }
                 };
                 _foldingUpdateTimer.Start();
-            }
-            else if (_foldingManager != null)
-            {
-                FoldingManager.Uninstall(_foldingManager);
-                _foldingManager = null;
             }
         }
 

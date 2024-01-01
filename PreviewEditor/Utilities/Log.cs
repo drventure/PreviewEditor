@@ -12,7 +12,7 @@ namespace PreviewEditor
         public static bool Enabled = false;
         public static string Filename = System.IO.Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "PreviewEditor.log");
 
-        private static string TAG = "PREVIEWEDITOR";
+        private static string TAG = "PRVWED";
         private static string _format = "{0} [{1}] {2} - {3}\r\n";
 
         private static string date
